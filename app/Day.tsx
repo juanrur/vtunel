@@ -11,12 +11,15 @@ export default function Day () {
     }
   ]
 
-  console.log()
-  return <ul>
-    {dayEvents.map(({ startTime, endTime, name, id }) => (
-      <li key={id}>
 
+  return <ul>
+    {dayEvents.map(({ startTime, endTime, name, id }) => {
+     const time = startTime - endTime
+      return <li key={id} className='bg-blue-400 ' style={{ height:  }}>
+        <button>
+          {name}
+        </button>
       </li>
-    ))}
+    })}
   </ul>
 }
