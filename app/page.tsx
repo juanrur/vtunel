@@ -1,5 +1,11 @@
-import Day from '@/components/day'
+import Day from '@/components/day';
+import AddEvent from '@/components/add-event-form'
 
 export default function Home () {
-  return <Day />
+  return (
+    <div>
+      <AddEvent />
+      <Day />
+    </div>
+  )
 }
