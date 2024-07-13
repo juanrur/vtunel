@@ -1,7 +1,8 @@
 import Event from '@/components/event'
-import { events } from '@/db/client'
+import { getEvents } from '@/db/client'
 
-export default function Day () {
+export default async function Day () {
+  const events = await getEvents()
   return <ul className='w-56 flex flex-col'>
     {events.map(({ startTime, endTime, name, id }) => {
       const milliseconds = endTime.getTime() - startTime.getTime()
