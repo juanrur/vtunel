@@ -6,3 +6,5 @@ export interface Event {
 }
 
 export type Day = Event[]
+
+export type Week = Day[]
