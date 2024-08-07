@@ -1,13 +1,11 @@
 import Week from '@/components/week'
-import AddEvent from '@/components/add-event-form'
-
-export const fetchCache = 'force-no-store'
+import EventAdderForm from '@/components/event-adder-form'
 
 export default function Home () {
   return (
-    <div>
-      <AddEvent />
+    <>
+      <EventAdderForm />
       <Week />
-    </div>
+    </>
   )
 }

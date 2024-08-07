@@ -1,6 +1,7 @@
 # Cosas que hacer
 
-- [ ] Quitar el caret (^) de la dependencia de eslint
-- [ ] Quitar el extra semicolon de page
-- [ ] Componente event primera en mayúscula (event > Event)
-- [ ] Change the name file from add-event-form to event-adder-event
+### Event component
+- [ ] Add resize feature to the event component
+- [ ] Make that when change height change hour on the client and on the database
+- [ ] Make well the relation between the time and the height of event
+- [ ] Implement drag feature

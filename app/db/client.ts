@@ -1,20 +1,41 @@
+'use server'
 import { Day, Event } from '@/types/event-types'
 import { createClient } from '@libsql/client'
+import { revalidatePath } from 'next/cache'
 
 const client = createClient({
   url: 'libsql://vtunel-events-system-juanr-12.turso.io',
   authToken: process.env.DATABASE_TOKEN ?? ''
 })
 
-export async function getEvents (): Promise<Day> {
-  const eventsResponde = await client.execute('SELECT * FROM Events;')
-  return eventsResponde.rows.map<Event>((
+export async function getAllEvents (): Promise<Day> {
+  const eventsResponse = await client.execute('SELECT * FROM Events;')
+  return eventsResponse.rows.map<Event>((
     { id, startTime, endTime, name }) => ({
     id: Number(id),
     name: String(name),
     startTime: new Date(String(startTime)),
     endTime: new Date(String(endTime))
   }))
+}
+
+export async function getEventsWeek (week : string|Date = 'now'): Promise<Event[]> {
+  try {
+    const eventsResponse = await client.execute({
+      sql: "SELECT * FROM Events WHERE STRFTIME('%Y', startTime) = '2024' AND STRFTIME('%W', startTime) = STRFTIME('%W', ?);",
+      args: [typeof week === 'string' ? week : convertDateToSqlDate(week)]
+    })
+
+    return eventsResponse.rows.map<Event>((
+      { id, startTime, endTime, name }) => ({
+      id: Number(id),
+      name: String(name),
+      startTime: new Date(String(startTime)),
+      endTime: new Date(String(endTime))
+    }))
+  } catch (error) {
+    throw new Error('error' + error)
+  }
 }
 
 export async function insertEvent ({ startTime, endTime, name } : Omit<Event, 'id'>) {
@@ -26,18 +47,14 @@ export async function insertEvent ({ startTime, endTime, name } : Omit<Event, 'i
       name
     }
   })
-  console.log('se ha subido')
+
+  revalidatePath('/')
 }
 
-function convertDateToSqlDate (date : Date) {
-  const pad = (number : number) => (number < 10 ? '0' : '') + number
-
-  const year = date.getFullYear()
-  const month = pad(date.getMonth() + 1)
-  const day = pad(date.getDate())
-  const hours = pad(date.getHours())
-  const minutes = pad(date.getMinutes())
-  const seconds = pad(date.getSeconds())
+const convertDateToSqlDate = (date : Date) => {
+  const [dayDate, time] = date.toISOString().split('T')
+  const [year, month, day] = dayDate.split('-')
+  const [hours, minutes, seconds] = time.split(':')
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
 }
