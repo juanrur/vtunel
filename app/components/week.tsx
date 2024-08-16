@@ -66,7 +66,7 @@ export default function Week () {
           <tbody className='align-top'>
             <tr>
               {weekEvents.map((day, idx) =>
-                  <Day changeEventDay={changeEventDay} key={idx} events={day} />
+                  <Day key={idx} events={day} />
               )}
             </tr>
           </tbody>
