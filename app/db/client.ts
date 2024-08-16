@@ -2,6 +2,7 @@
 import { Day, Event } from '@/types/event-types'
 import { createClient } from '@libsql/client'
 import { revalidatePath } from 'next/cache'
+import { uuid } from 'uuidv4'
 
 const client = createClient({
   url: 'libsql://vtunel-events-system-juanr-12.turso.io',
@@ -12,7 +13,7 @@ export async function getAllEvents (): Promise<Day> {
   const eventsResponse = await client.execute('SELECT * FROM Events;')
   return eventsResponse.rows.map<Event>((
     { id, startTime, endTime, name }) => ({
-    id: Number(id),
+    id: String(id),
     name: String(name),
     startTime: new Date(String(startTime)),
     endTime: new Date(String(endTime))
@@ -28,7 +29,7 @@ export async function getEventsWeek (week : string|Date = 'now'): Promise<Event[
 
     return eventsResponse.rows.map<Event>((
       { id, startTime, endTime, name }) => ({
-      id: Number(id),
+      id: String(id),
       name: String(name),
       startTime: new Date(String(startTime)),
       endTime: new Date(String(endTime))
@@ -40,11 +41,12 @@ export async function getEventsWeek (week : string|Date = 'now'): Promise<Event[
 
 export async function insertEvent ({ startTime, endTime, name } : Omit<Event, 'id'>) {
   await client.execute({
-    sql: 'INSERT INTO Events (startTime, endTime, name) VALUES ($startTime, $endTime, $name);',
+    sql: 'INSERT INTO Events (startTime, endTime, name, id) VALUES ($startTime, $endTime, $name, $id);',
     args: {
       startTime: convertDateToSqlDate(startTime),
       endTime: convertDateToSqlDate(endTime),
-      name
+      name,
+      id: uuid()
     }
   })
 
