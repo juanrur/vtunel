@@ -8,7 +8,12 @@ import Arrow from '@icons/arrow'
 export default function Week () {
   const [week, setWeek] = useState(new Date())
   const [events, setEvents] = useState<Event[]>([])
-  console.log(events)
+
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
     async function fetchEvents () {
@@ -50,27 +55,29 @@ export default function Week () {
   return (
     <section>
       <h2>{week.toDateString()}</h2>
-      <article className='flex h-96'>
+      <article className='flex justify-between h-96'>
         <button
           className='border-white border-2 rounded-full size-fit p-2 self-center'
           onClick={() => handleWeekChange(-1)}
         >
           <Arrow />
         </button>
-        <table className='w-full table-fixed'>
-          <thead>
-            <tr>
+
+        {isClient &&
+          <article className='grid-cols-7 grid grid-rows-2'>
+            <div>
               {weekdays.map((day, idx) => <th key={idx}>{day}</th>)}
-            </tr>
-          </thead>
-          <tbody className='align-top'>
-            <tr>
-              {weekEvents.map((day, idx) =>
-                  <Day key={idx} events={day} />
-              )}
-            </tr>
-          </tbody>
-        </table>
+            </div>
+            <div className='h-10'>
+                {weekEvents.map((day, idx) =>
+                  <div className='overflow-hidden' key={idx}>
+                    <Day events={day} />
+                  </div>
+                )}
+            </div>
+          </article>
+        }
+
         <button
           className='border-white border-2 rounded-full size-fit p-2 self-center'
           onClick={() => handleWeekChange(1)}
