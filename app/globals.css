@@ -30,4 +30,8 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .grid-rows-fit-content {
+    grid-template-rows: fit-content(1) auto;
+  }
 }

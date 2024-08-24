@@ -1,5 +1,5 @@
 'use server'
-import { Day, Event } from '@/types/event-types'
+import { Day, Event } from '@/types'
 import { createClient } from '@libsql/client'
 import { revalidatePath } from 'next/cache'
 import { uuid } from 'uuidv4'

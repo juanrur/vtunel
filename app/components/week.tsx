@@ -1,13 +1,16 @@
 'use client'
-import Day from '@components/day'
+import Day from '@/components/day'
 import { getEventsWeek } from '@/db/client'
-import { Week as WeekType, Event } from '@/types/event-types'
+import { Week as WeekType, Event } from '@/types'
 import { useEffect, useState } from 'react'
 import Arrow from '@icons/arrow'
+import HoursCol from './hours-col'
 
 export default function Week () {
   const [week, setWeek] = useState(new Date())
   const [events, setEvents] = useState<Event[]>([])
+
+  console.log(events)
 
   const [isClient, setIsClient] = useState(false)
 
@@ -53,9 +56,9 @@ export default function Week () {
   ] as const
 
   return (
-    <section>
+    <section className='flex-1'>
       <h2>{week.toDateString()}</h2>
-      <article className='flex justify-between h-96'>
+      <article className='flex h-full'>
         <button
           className='border-white border-2 rounded-full size-fit p-2 self-center'
           onClick={() => handleWeekChange(-1)}
@@ -64,18 +67,23 @@ export default function Week () {
         </button>
 
         {isClient &&
-          <article className='grid-cols-7 grid grid-rows-2'>
-            <div>
-              {weekdays.map((day, idx) => <th key={idx}>{day}</th>)}
+          <div className='grid grid-rows-fit-content flex-1'>
+            <div className='grid grid-cols-8'>
+            <h2>hours</h2>
+            {weekdays.map((day, idx) =>
+              <h2 className='text-center' key={idx}>{day}</h2>
+            )}
             </div>
-            <div className='h-10'>
-                {weekEvents.map((day, idx) =>
-                  <div className='overflow-hidden' key={idx}>
-                    <Day events={day} />
-                  </div>
-                )}
+
+            <div className='grid grid-cols-8 overflow-auto'>
+              <HoursCol />
+
+            {weekEvents.map((day, idx) =>
+              <Day key={idx} events={day} />
+            )}
             </div>
-          </article>
+
+          </div>
         }
 
         <button

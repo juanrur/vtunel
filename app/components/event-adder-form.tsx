@@ -1,8 +1,8 @@
 'use client'
 import { insertEvent } from '@/db/client'
-import { Event } from '@/types/event-types'
-import DayInput from '@components/day-input'
-import TimeInput from '@components/time-input'
+import { Event } from '@/types'
+import DayInput from '@/components/day-input'
+import TimeInput from '@/components/time-input'
 
 export default function AddEvent () {
   async function addEventInDB (formData: FormData) {
