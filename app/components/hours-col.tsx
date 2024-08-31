@@ -1,14 +1,14 @@
 import { pad } from '@/utils'
 
 export default function HoursCol () {
-  const FifteenMinutePX = 50
+  const FifteenMinutePX = 60
 
   function getHours (splitPerMinutes: number) {
     const hours = []
     let currentHour = 0
     let currentMinutes = 0
 
-    while (currentHour <= 24) {
+    while (currentHour < 24) {
       hours[hours.length] = pad(currentHour) + ':' + pad(currentMinutes)
 
       if (currentMinutes + splitPerMinutes >= 60) {
@@ -22,7 +22,7 @@ export default function HoursCol () {
     return hours
   }
 
-  return <ul>
+  return <ul className='text-end px-4 tabular-nums'>
     {getHours(15).map(v =>
       <li style={{ height: FifteenMinutePX + 'px' }} key={v}>
         {v}

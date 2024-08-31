@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+*, *::after, *::before {
+  box-sizing: border-box;
+  gap: 0;
+  margin: 0;
+}
+
 :root {
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 214, 219, 220;
@@ -29,9 +35,5 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-  }
-
-  .grid-rows-fit-content {
-    grid-template-rows: fit-content(1) auto;
   }
 }

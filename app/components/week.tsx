@@ -3,6 +3,7 @@ import Day from '@/components/day'
 import { getEventsWeek } from '@/db/client'
 import { Week as WeekType, Event } from '@/types'
 import { useEffect, useState } from 'react'
+import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import Arrow from '@icons/arrow'
 import HoursCol from './hours-col'
 
@@ -11,12 +12,6 @@ export default function Week () {
   const [events, setEvents] = useState<Event[]>([])
 
   console.log(events)
-
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
 
   useEffect(() => {
     async function fetchEvents () {
@@ -66,25 +61,23 @@ export default function Week () {
           <Arrow />
         </button>
 
-        {isClient &&
-          <div className='grid grid-rows-fit-content flex-1'>
-            <div className='grid grid-cols-8'>
-            <h2>hours</h2>
-            {weekdays.map((day, idx) =>
-              <h2 className='text-center' key={idx}>{day}</h2>
-            )}
-            </div>
+          <div className='grid flex-1'>
+            <header className='grid text-center grid-cols-8'>
+              <h2>hours</h2>
+              {weekdays.map((day, idx) =>
+                <h2 key={idx}>{day}</h2>
+              )}
+            </header>
 
             <div className='grid grid-cols-8 overflow-auto'>
               <HoursCol />
 
-            {weekEvents.map((day, idx) =>
-              <Day key={idx} events={day} />
-            )}
+              {weekEvents.map((day, idx) =>
+                <Day key={idx} events={day} />
+              )}
             </div>
 
           </div>
-        }
 
         <button
           className='border-white border-2 rounded-full size-fit p-2 self-center'

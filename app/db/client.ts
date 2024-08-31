@@ -2,7 +2,6 @@
 import { Day, Event } from '@/types'
 import { createClient } from '@libsql/client'
 import { revalidatePath } from 'next/cache'
-import { uuid } from 'uuidv4'
 
 const client = createClient({
   url: 'libsql://vtunel-events-system-juanr-12.turso.io',
@@ -21,22 +20,31 @@ export async function getAllEvents (): Promise<Day> {
 }
 
 export async function getEventsWeek (week : string|Date = 'now'): Promise<Event[]> {
-  try {
-    const eventsResponse = await client.execute({
-      sql: "SELECT * FROM Events WHERE STRFTIME('%Y', startTime) = '2024' AND STRFTIME('%W', startTime) = STRFTIME('%W', ?);",
-      args: [typeof week === 'string' ? week : convertDateToSqlDate(week)]
-    })
+  // try {
+  //   const eventsResponse = await client.execute({
+  //     sql: "SELECT * FROM Events WHERE STRFTIME('%Y', startTime) = '2024' AND STRFTIME('%W', startTime) = STRFTIME('%W', ?);",
+  //     args: [typeof week === 'string' ? week : convertDateToSqlDate(week)]
+  //   })
 
-    return eventsResponse.rows.map<Event>((
-      { id, startTime, endTime, name }) => ({
-      id: String(id),
-      name: String(name),
-      startTime: new Date(String(startTime)),
-      endTime: new Date(String(endTime))
-    }))
-  } catch (error) {
-    throw new Error('error' + error)
-  }
+  //   return eventsResponse.rows.map<Event>((
+  //     { id, startTime, endTime, name }) => ({
+  //     id: String(id),
+  //     name: String(name),
+  //     startTime: new Date(String(startTime)),
+  //     endTime: new Date(String(endTime))
+  //   }))
+  // } catch (error) {
+  //   throw new Error('error' + error)
+  // }
+
+  return [
+    {
+      id: '123124125',
+      name: 'ejemplo sin wifi',
+      startTime: new Date(),
+      endTime: new Date(new Date().getTime() + 1000 * 60 * 40)
+    }
+  ]
 }
 
 export async function insertEvent ({ startTime, endTime, name } : Omit<Event, 'id'>) {
@@ -46,7 +54,7 @@ export async function insertEvent ({ startTime, endTime, name } : Omit<Event, 'i
       startTime: convertDateToSqlDate(startTime),
       endTime: convertDateToSqlDate(endTime),
       name,
-      id: uuid()
+      id: '341241235213512'
     }
   })
 
