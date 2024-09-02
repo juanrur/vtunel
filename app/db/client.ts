@@ -19,7 +19,7 @@ export async function getAllEvents (): Promise<Day> {
   }))
 }
 
-export async function getEventsWeek (week : string|Date = 'now'): Promise<Event[]> {
+export async function fetchEvents (week : string|Date = 'now'): Promise<Event[]> {
   // try {
   //   const eventsResponse = await client.execute({
   //     sql: "SELECT * FROM Events WHERE STRFTIME('%Y', startTime) = '2024' AND STRFTIME('%W', startTime) = STRFTIME('%W', ?);",

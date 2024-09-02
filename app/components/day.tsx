@@ -6,6 +6,20 @@ export default function Day ({ events }: {events: DayType}) {
   const PXMinute = 4
   const MinutesPerDivided = 15
 
+  const handleDrop = (event) => {
+    event.preventDefault()
+    const eventID = event.dataTransfer.getData('text/plain')
+    event.target.innerHTML 
+  }
+
+  const handleDragOver = (event) => {
+    event.preventDefault()
+  }
+
+  const handleDragLeave = (event) => {
+    event.preventDefault()
+  }
+
   return <ul className='bg-blue-500 border'>
       {
         Array.from({ length: 24 * 4 }).map((_, idx) => {
@@ -16,9 +30,9 @@ export default function Day ({ events }: {events: DayType}) {
             margin = event?.startTime.getMinutes() % MinutesPerDivided
           }
 
-          return <li className='border border-black bg-orange-500' style={{ height: PXMinute * MinutesPerDivided }} key={idx}>
+          return <li onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave} className='border border-black bg-orange-500' style={{ height: PXMinute * MinutesPerDivided }} key={idx}>
 
-            {event && <Event name={event.name} height={PXMinute * height!} margin={PXMinute * margin!}/>}
+            {event && <Event name={event.name} id={event.id} height={PXMinute * height!} margin={PXMinute * margin!}/>}
           </li>
         }
 

@@ -11,17 +11,8 @@ export default function Week () {
   const [week, setWeek] = useState(new Date())
   const [events, setEvents] = useState<Event[]>([])
 
-  console.log(events)
-
   useEffect(() => {
-    async function fetchEvents () {
-      try {
-        const eventsResponse = await getEventsWeek(week)
-        setEvents(eventsResponse)
-      } catch (error) {
-        throw new Error('error' + error)
-      }
-    }
+    
 
     fetchEvents()
   }, [week])
@@ -69,7 +60,7 @@ export default function Week () {
               )}
             </header>
 
-            <div className='grid grid-cols-8 overflow-auto'>
+            <div className={`${RemoveScrollbar.remove} grid grid-cols-8 overflow-auto`}>
               <HoursCol />
 
               {weekEvents.map((day, idx) =>
