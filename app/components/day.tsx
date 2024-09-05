@@ -1,22 +1,55 @@
 'use client'
 import Event from '@/components/event'
+import { useEventsStore } from '@/store'
 import { type Day as DayType } from '@/types'
+import { pad } from '@/utils'
 
-export default function Day ({ events }: {events: DayType}) {
+export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: number }) {
+  const { week, changeEventStartTime } = useEventsStore()
   const PXMinute = 4
   const MinutesPerDivided = 15
 
-  const handleDrop = (event) => {
+  const handleDrop = (event: any) => {
+    event.target = event.target.closest('li')
+    console.log(event.target)
     event.preventDefault()
     const eventID = event.dataTransfer.getData('text/plain')
-    event.target.innerHTML 
+
+    function getHours (splitPerMinutes: number) {
+      const hours = []
+      let currentHour = 0
+      let currentMinutes = 0
+
+      while (currentHour < 24) {
+        hours[hours.length] = pad(currentHour) + ':' + pad(currentMinutes)
+
+        if (currentMinutes + splitPerMinutes >= 60) {
+          currentMinutes = currentMinutes + splitPerMinutes - 60
+          currentHour++
+        } else {
+          currentMinutes += splitPerMinutes
+        }
+      }
+
+      return hours
+    }
+    const [hour, minutes] = getHours(15)[event.target.dataset.index].split(':')
+    const deference = dayIndex - week.getDay()
+    const day = week.getDate() + deference + 1
+
+    console.log(deference, week.getDate())
+
+    const newDate = new Date(Date.UTC(week.getFullYear(), week.getMonth(), day, Number(hour), Number(minutes)))
+    newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
+
+    changeEventStartTime(newDate, eventID)
   }
 
-  const handleDragOver = (event) => {
+  const handleDragOver = (event: any) => {
     event.preventDefault()
   }
 
-  const handleDragLeave = (event) => {
+  const handleDragLeave = (event: any) => {
     event.preventDefault()
   }
 
@@ -30,7 +63,7 @@ export default function Day ({ events }: {events: DayType}) {
             margin = event?.startTime.getMinutes() % MinutesPerDivided
           }
 
-          return <li onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave} className='border border-black bg-orange-500' style={{ height: PXMinute * MinutesPerDivided }} key={idx}>
+          return <li data-index={idx} onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave} className='border border-black bg-orange-500' style={{ height: PXMinute * MinutesPerDivided }} key={idx}>
 
             {event && <Event name={event.name} id={event.id} height={PXMinute * height!} margin={PXMinute * margin!}/>}
           </li>

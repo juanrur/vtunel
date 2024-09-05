@@ -1,34 +1,27 @@
 'use client'
 import Day from '@/components/day'
-import { getEventsWeek } from '@/db/client'
-import { Week as WeekType, Event } from '@/types'
-import { useEffect, useState } from 'react'
+import { useEventsStore } from '@/store'
+import { Week as WeekType } from '@/types'
+import { useEffect } from 'react'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import Arrow from '@icons/arrow'
 import HoursCol from './hours-col'
 
 export default function Week () {
-  const [week, setWeek] = useState(new Date())
-  const [events, setEvents] = useState<Event[]>([])
+  const {
+    currentWeekEvents,
+    week,
+    decreaseWeek,
+    increaseWeek,
+    getWeeklyEvents
+  } = useEventsStore()
 
-  useEffect(() => {
-    
-
-    fetchEvents()
-  }, [week])
-
-  function handleWeekChange (number: 1 | -1) {
-    setWeek((actualDate) => {
-      const newDate = new Date(actualDate)
-      newDate.setDate(actualDate.getDate() + 7 * number)
-      return newDate
-    })
-  }
+  useEffect(() => { getWeeklyEvents(week) }, [week, getWeeklyEvents])
 
   const weekEvents : WeekType = Array.from({ length: 7 }, () => [])
-  events.forEach((event) => {
-    const day = event.startTime.getDay()
-    if (day) weekEvents[day - 1].push(event)
+  currentWeekEvents.forEach((event) => {
+    const day = (event.startTime.getDay() || 7) - 1
+    weekEvents[day].push(event)
   })
 
   const weekdays = [
@@ -47,7 +40,7 @@ export default function Week () {
       <article className='flex h-full'>
         <button
           className='border-white border-2 rounded-full size-fit p-2 self-center'
-          onClick={() => handleWeekChange(-1)}
+          onClick={decreaseWeek}
         >
           <Arrow />
         </button>
@@ -64,7 +57,7 @@ export default function Week () {
               <HoursCol />
 
               {weekEvents.map((day, idx) =>
-                <Day key={idx} events={day} />
+                <Day key={idx} dayIndex={idx} events={day} />
               )}
             </div>
 
@@ -72,7 +65,7 @@ export default function Week () {
 
         <button
           className='border-white border-2 rounded-full size-fit p-2 self-center'
-          onClick={() => handleWeekChange(1)}
+          onClick={increaseWeek}
         >
           <Arrow className='rotate-180'/>
         </button>

@@ -36,6 +36,7 @@ export async function fetchEvents (week : string|Date = 'now'): Promise<Event[]>
   // } catch (error) {
   //   throw new Error('error' + error)
   // }
+  console.log('fetchEvnts', week)
 
   return [
     {
