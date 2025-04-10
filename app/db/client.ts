@@ -37,13 +37,18 @@ export async function fetchEvents (week : string|Date = 'now'): Promise<Event[]>
   //   throw new Error('error' + error)
   // }
   console.log('fetchEvnts', week)
+  const date = new Date()
+  date.setHours(2, 0, 0, 0)
+
+  const endDate = new Date(date)
+  endDate.setMinutes(endDate.getMinutes() + 30)
 
   return [
     {
       id: '123124125',
       name: 'ejemplo sin wifi',
-      startTime: new Date(),
-      endTime: new Date(new Date().getTime() + 1000 * 60 * 40)
+      startTime: date,
+      endTime: endDate
     }
   ]
 }
