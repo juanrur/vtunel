@@ -35,41 +35,43 @@ export default function Week () {
   ] as const
 
   return (
-    <section className='flex-1'>
-      <h2>{week.toDateString()}</h2>
-      <article className='flex h-full'>
+    <section className='flex-1 flex h-full'>
+      <div className='relative grid place-content-center'>
+        <h2 className='absolute top-0 left-0'>{week.toDateString()}</h2>
+
         <button
-          className='border-white border-2 rounded-full size-fit p-2 self-center'
+          className='border-white border-2 rounded-full size-fit p-2 self-center justify-self-center'
           onClick={decreaseWeek}
         >
           <Arrow />
         </button>
 
-          <div className='grid flex-1'>
-            <header className='grid text-center grid-cols-8'>
-              <h2>hours</h2>
-              {weekdays.map((day, idx) =>
-                <h2 key={idx}>{day}</h2>
-              )}
-            </header>
+      </div>
 
-            <div className={`${RemoveScrollbar.remove} grid grid-cols-8 overflow-auto`}>
-              <HoursCol />
+      <section className='grid flex-1'>
+        <header className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3'>
+          <h2 className='text-end px-4'>Hours</h2>
+          {weekdays.map((day, idx) =>
+            <h2 key={idx}>{day}</h2>
+          )}
+        </header>
 
-              {weekEvents.map((day, idx) =>
-                <Day key={idx} dayIndex={idx} events={day} />
-              )}
-            </div>
+        <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto`}>
+          <HoursCol />
 
-          </div>
+          {weekEvents.map((day, idx) =>
+            <Day key={idx} dayIndex={idx} events={day} />
+          )}
+        </div>
 
-        <button
-          className='border-white border-2 rounded-full size-fit p-2 self-center'
-          onClick={increaseWeek}
-        >
-          <Arrow className='rotate-180'/>
-        </button>
-      </article>
+      </section>
+
+      <button
+        className='border-white border-2 rounded-full size-fit p-2 self-center'
+        onClick={increaseWeek}
+      >
+        <Arrow className='rotate-180'/>
+      </button>
     </section>
   )
 }
