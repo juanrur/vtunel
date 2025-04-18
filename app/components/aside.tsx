@@ -2,7 +2,6 @@
 import { useEventsStore } from '@/store'
 
 export default function Aside () {
-  // TODO: un aside para hacer la lista de los eventos a un lado
   const { currentWeekEvents } = useEventsStore()
 
   return <aside className='w-full h-full'>
