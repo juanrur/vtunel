@@ -1,4 +1,4 @@
-# Cosas que hacer
+# TODOS
 
 ### Event component
 - [ ] Add resize feature to the event component
