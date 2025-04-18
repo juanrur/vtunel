@@ -53,9 +53,11 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
     event.preventDefault()
   }
 
-  return <ul className='bg-blue-500 border'>
+  return <ul className='bg-blue-500 border-r border-black last:border-r-0'>
       {
+        // make a list of 24 hours with 4 divisions each
         Array.from({ length: 24 * 4 }).map((_, idx) => {
+          // find the event that starts at this hour
           const event = events.find(({ startTime }) => idx === (startTime.getHours() * 4) + Math.floor(startTime.getMinutes() / 60 * 4))
           let height, margin
           if (event) {
@@ -63,7 +65,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
             margin = event?.startTime.getMinutes() % MinutesPerDivided
           }
 
-          return <li data-index={idx} onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave} className='border border-black bg-orange-500' style={{ height: PXMinute * MinutesPerDivided }} key={idx}>
+          return <li data-index={idx} onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave} className='last:border-b-0 border-b border-black bg-orange-500' style={{ height: PXMinute * MinutesPerDivided }} key={idx}>
 
             {event && <Event name={event.name} id={event.id} height={PXMinute * height!} margin={PXMinute * margin!}/>}
           </li>
