@@ -48,23 +48,23 @@ export default function Week () {
 
       </div>
 
-      <table className='grid flex-1'>
-        <thead className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3'>
+      <section className='grid flex-1'>
+        <div className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3'>
           <h2 className='text-end px-4'>Hours</h2>
           {weekdays.map((day, idx) =>
             <h2 key={idx}>{day}</h2>
           )}
-        </thead>
+        </div>
 
-        <tbody className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto`}>
+        <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto`}>
           <HoursCol />
 
           {weekEvents.map((day, idx) =>
             <Day key={idx} dayIndex={idx} events={day} />
           )}
-        </tbody>
+        </div>
 
-      </table>
+      </section>
 
       <button
         className='border-white border-2 rounded-full size-fit p-2 self-center'
