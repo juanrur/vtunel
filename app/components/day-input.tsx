@@ -1,6 +1,6 @@
 export default function DayInput ({ name } : {name: string}) {
   return <>
-    <label className='text-white block' htmlFor='date'>{name}</label>
+    <label className='block' htmlFor='date'>{name}</label>
     <input
       type='date'
       id='date'

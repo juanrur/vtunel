@@ -7,7 +7,7 @@ export default function Aside () {
   return <aside className='w-full h-full'>
     <ul>
       {currentWeekEvents.map((event) => (
-        <li className='border border-white rounded px-2 py-2 pt-1' key={event.id}>
+        <li className='border border-black dark:border-white rounded px-2 py-2 pt-1' key={event.id}>
           <h2>{event.name}</h2>
           <div className='text-sm text-gray-500'>
             <span>{event.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>

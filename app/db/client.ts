@@ -2,6 +2,7 @@
 import { Day, Event } from '@/types'
 import { createClient } from '@libsql/client'
 import { revalidatePath } from 'next/cache'
+import { uuid } from 'uuidv4'
 
 const client = createClient({
   url: 'libsql://vtunel-events-system-juanr-12.turso.io',
@@ -60,7 +61,7 @@ export async function insertEvent ({ startTime, endTime, name } : Omit<Event, 'i
       startTime: convertDateToSqlDate(startTime),
       endTime: convertDateToSqlDate(endTime),
       name,
-      id: '341241235213512'
+      id: uuid()
     }
   })
 

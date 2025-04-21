@@ -5,3 +5,4 @@
 - [ ] Make that when change height change hour on the client and on the database
 - [ ] Change dates on database when do DD
 - [ ] Add types to drag functions
+- [ ] Fix bug about first border on days

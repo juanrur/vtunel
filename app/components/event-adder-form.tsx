@@ -26,7 +26,7 @@ export default function AddEvent () {
   }
 
   return (
-    <form className='w-60 text-black' action={addEventInDB}>
+    <form className='w-72 text-black' action={addEventInDB}>
       <input type='text' name='name' />
       <div>
         <div>

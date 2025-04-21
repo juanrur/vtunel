@@ -48,7 +48,7 @@ export default function Week () {
 
       </div>
 
-      <section className='grid flex-1'>
+      <section className='grid flex-1 pt-5'>
         <div className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3'>
           <h2 className='text-end px-4'>Hours</h2>
           {weekdays.map((day, idx) =>
@@ -58,7 +58,6 @@ export default function Week () {
 
         <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto`}>
           <HoursCol />
-
           {weekEvents.map((day, idx) =>
             <Day key={idx} dayIndex={idx} events={day} />
           )}
