@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { fetchEvents } from './db/client'
+import { fetchEvents, getAllEvents } from './db/client'
 import { Event } from './types'
 
 interface EventsStore {
@@ -11,6 +11,7 @@ interface EventsStore {
   increaseWeek: () => void
   decreaseWeek: () => void
   getWeeklyEvents: (week: Date) => void
+  getAllEvents: () => void
 }
 
 export const useEventsStore = create<EventsStore>((set) => ({
@@ -47,6 +48,11 @@ export const useEventsStore = create<EventsStore>((set) => ({
 
   getWeeklyEvents: async (week) => {
     const eventsResponse = await fetchEvents(week)
+    set(() => ({ currentWeekEvents: eventsResponse }))
+  },
+
+  getAllEvents: async () => {
+    const eventsResponse = await getAllEvents()
     set(() => ({ currentWeekEvents: eventsResponse }))
   }
 })
