@@ -13,6 +13,8 @@ export default function Aside () {
             <span>{event.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
             -
             <span>{event.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            <br />
+            <span>{event.startTime.toDateString()}</span>
           </div>
         </li>
       ))}

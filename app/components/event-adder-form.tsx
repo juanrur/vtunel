@@ -1,10 +1,12 @@
 'use client'
-import { insertEvent } from '@/db/client'
+import { useEventsStore } from '@/store.ts'
 import { Event } from '@/types'
 import DayInput from '@/components/day-input'
 import TimeInput from '@/components/time-input'
 
 export default function AddEvent () {
+  const { insertEvent } = useEventsStore()
+
   async function addEventInDB (formData: FormData) {
     const startDay = formData.get('start day')
     const startHour = formData.get('start hour')
