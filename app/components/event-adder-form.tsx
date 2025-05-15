@@ -1,5 +1,5 @@
 'use client'
-import { useEventsStore } from '@/store.ts'
+import { useEventsStore } from '@/store'
 import { Event } from '@/types'
 import DayInput from '@/components/day-input'
 import TimeInput from '@/components/time-input'
