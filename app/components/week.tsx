@@ -7,7 +7,7 @@ import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import Arrow from '@icons/arrow'
 import HoursCol from './hours-col'
 
-export default function Week () {
+export default function Week ({ token } : { token: any }) {
   const {
     currentWeekEvents,
     week,
@@ -16,7 +16,7 @@ export default function Week () {
     getWeeklyEvents
   } = useEventsStore()
 
-  useEffect(() => { getWeeklyEvents(week) }, [week, getWeeklyEvents])
+  useEffect(() => { getWeeklyEvents(token, week) }, [week, getWeeklyEvents, token])
 
   const weekEvents : WeekType = Array.from({ length: 7 }, () => [])
   currentWeekEvents.forEach((event) => {

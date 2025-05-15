@@ -3,7 +3,7 @@ import { Day, Event } from '@/types'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(process.env.DATABASE_URL ?? '', process.env.DATABASE_TOKEN ?? '')
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '')
 
 export async function getAllEvents (): Promise<Day> {
   const { data, error } = await supabase
@@ -24,10 +24,12 @@ export async function getAllEvents (): Promise<Day> {
   } else return []
 }
 
-export async function fetchEvents (week : string|Date = 'now'): Promise<Event[]> {
+export async function fetchEvents (token: string, week: string | Date = 'now'): Promise<Event[]> {
+  const user = await supabase.auth.getUser(token)
   const { data, error } = await supabase
     .from('events')
     .select('*')
+    .eq('user_id', user.data.user?.id)
 
   if (error) console.error('Error fetching events:', error)
 

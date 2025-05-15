@@ -10,7 +10,7 @@ interface EventsStore {
   changeEventStartTime: (newStartTime: Date, eventID: string) => void
   increaseWeek: () => void
   decreaseWeek: () => void
-  getWeeklyEvents: (week: Date) => void
+  getWeeklyEvents: (token: any, week: Date) => void
   getAllEvents: () => void
   insertEvent: (event: Omit<Event, 'id'>) => void
 }
@@ -47,8 +47,8 @@ export const useEventsStore = create<EventsStore>((set) => ({
     return { week: newDate }
   }),
 
-  getWeeklyEvents: async (week) => {
-    const eventsResponse = await fetchEvents(week)
+  getWeeklyEvents: async (token, week) => {
+    const eventsResponse = await fetchEvents(token, week)
     set(() => ({ currentWeekEvents: eventsResponse }))
   },
 
