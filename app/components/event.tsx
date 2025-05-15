@@ -1,7 +1,7 @@
 'use client'
 
 export default function Event ({ name, height, margin, id }: { name: string, height: number, margin: number, id: string }) {
-  const handleDragStart = (event: DragEvent) => {
+  const handleDragStart = (event: any) => {
     event.dataTransfer?.setData('text/plain', id)
   }
 
