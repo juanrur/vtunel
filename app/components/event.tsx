@@ -5,7 +5,7 @@ export default function Event ({ name, height, margin, id }: { name: string, hei
     event.dataTransfer?.setData('text/plain', id)
   }
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: any) => {
   }
 
   return (
