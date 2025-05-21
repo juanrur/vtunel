@@ -3,6 +3,7 @@ export interface Event {
   endTime: Date
   name: string
   id: string
+  userId: string
 }
 
 export type Day = Event[]

@@ -1,5 +1,6 @@
 'use client'
 
+import { useEventsStore } from '@/store'
 import { createBrowserClient } from '@supabase/ssr'
 import { Session } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
@@ -7,6 +8,7 @@ import { useEffect, useState } from 'react'
 
 export default function AuthButton () {
   const [session, setSession] = useState<Session|null>(null)
+  const { setToken } = useEventsStore()
 
   const router = useRouter()
 
@@ -18,12 +20,15 @@ export default function AuthButton () {
   useEffect(() => {
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
-      setSession(session)
+      if (session) {
+        setSession(session)
+        setToken(session.access_token)
+      }
       console.log('session', session)
     }
 
     getSession()
-  }, [supabase.auth])
+  }, [supabase.auth, setToken])
 
   const handleSignIn = async () => {
     try {

@@ -1,5 +1,5 @@
 const arrow = ({ className } : {className?: string}) => <svg
-  className={className}
+  className={className + ' size-7'}
   width="50px"
   height="50px"
   viewBox="0 0 24 24"

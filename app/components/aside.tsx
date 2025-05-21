@@ -1,24 +1,58 @@
 'use client'
 import { useEventsStore } from '@/store'
+import AddEventButton from './add-event-button'
+import AuthButton from './auth-button'
+import { useEffect, useState } from 'react'
+import EventList from './event-list'
+import '@/remove-scrollbar.module.css'
+
+const FILTER = {
+  ALL: 'all',
+  TODAY: 'today',
+  WEEK: 'week',
+  MONTH: 'month'
+} as const
+
+type Filter = typeof FILTER[keyof typeof FILTER]
 
 export default function Aside () {
-  const { currentWeekEvents } = useEventsStore()
+  const [filter, setFilter] = useState<Filter>(FILTER.ALL)
 
-  return <aside className='w-full h-full'>
-    <ul>
-      {currentWeekEvents.map((event) => (
-        <li className='border border-black dark:border-white rounded px-2 py-2 pt-1' key={event.id}>
-          <h2>{event.name}</h2>
-          <div className='text-sm text-gray-500'>
-            <span>{event.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-            -
-            <span>{event.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-            <br />
-            <span>{event.startTime.toDateString()}</span>
-          </div>
-        </li>
-      ))}
-      {currentWeekEvents.length === 0 && <li>No events</li>}
-    </ul>
+  const { currentWeekEvents, allEvents, getAllEvents } = useEventsStore()
+
+  useEffect(() => {
+    getAllEvents()
+  }
+  , [getAllEvents])
+
+  const events = filter === FILTER.ALL ? allEvents : currentWeekEvents
+
+  return <aside className='flex flex-col gap-10 p-6 pr-0 h-full overflow-auto'>
+    <div className='flex justify-around items-center'>
+      <AddEventButton />
+      <AuthButton />
+    </div>
+
+    <div className='flex justify-around gap-2'>
+      <FilterButton onClick={setFilter} filterState={filter} value={FILTER.ALL} />
+      <FilterButton onClick={setFilter} filterState={filter} value={FILTER.WEEK} />
+    </div>
+
+    <EventList events={events}/>
+
   </aside>
+}
+
+function FilterButton ({ value, filterState, onClick }: { value: Filter, filterState: Filter, onClick: (value: Filter) => void }) {
+  const isActive = value === filterState
+
+  return (
+    <button
+      className='text-center items-center rounded px-2'
+      style={isActive ? { backgroundColor: 'white', color: 'black' } : {}}
+      onClick={() => onClick(value)}
+    >
+      {value}
+    </button>
+  )
 }

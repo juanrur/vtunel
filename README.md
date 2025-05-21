@@ -10,3 +10,4 @@
 - [X] meterle gap al los eventos en el aside
 - [ ] gestionar varios eventos en un li (espacio de 15m o cuadrante de tiempo)
 - [ ] meter un polyfill de closed by (dialog)
+- [ ] hacer un componente con el botón para cambiar de semana

@@ -10,7 +10,7 @@ export default function Event ({ name, height, margin, id }: { name: string, hei
 
   return (
     <button draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd}
-    className='bg-blue-500'
+    className='bg-blue-500 w-2/3 inline-flex'
     style={{ height: height + 'px', marginTop: margin + 'px' }}
     >
       {name}

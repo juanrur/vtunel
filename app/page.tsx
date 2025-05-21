@@ -1,7 +1,5 @@
 import Week from '@/components/week'
-import EventAdderForm from '@/components/event-adder-form'
 import Aside from '@/components/aside'
-import AuthButton from './components/auth-button'
 import { redirect } from 'next/navigation'
 import { createServerClient } from '@/utils'
 import { cookies } from 'next/headers'
@@ -13,17 +11,9 @@ export default async function Home () {
   if (session === null) redirect('/login')
 
   return (
-    <main className='flex justify-between h-full'>
-      <aside className='flex flex-col'>
-        <AuthButton />
-        <EventAdderForm />
-        <div className='relative mt-4'>
-          <div className='absolute top-0 left-0 w-full h-full [line-break:anywhere]'>
-            <Aside />
-          </div>
-        </div>
-      </aside>
-      <Week token={session.access_token} />
+    <main className='grid grid-cols-[20%,1fr] h-full overflow-hidden'>
+      <Aside />
+      <Week />
     </main>
   )
 }

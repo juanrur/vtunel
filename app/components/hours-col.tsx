@@ -22,7 +22,7 @@ export default function HoursCol () {
     return hours
   }
 
-  return <ul className='tabular-nums text-right px-4'>
+  return <ul className='tabular-nums text-right pr-4'>
     {getHours(15).map(v =>
       <li style={{ height: FifteenMinutePX + 'px' }} key={v}>
         {v}

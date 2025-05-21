@@ -4,19 +4,20 @@ import { useEventsStore } from '@/store'
 import { Week as WeekType } from '@/types'
 import { useEffect } from 'react'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
-import Arrow from '@icons/arrow'
 import HoursCol from './hours-col'
+import ChangeWeekButton from './change-week-button'
 
-export default function Week ({ token } : { token: any }) {
+export default function Week () {
   const {
     currentWeekEvents,
     week,
+    token,
     decreaseWeek,
     increaseWeek,
     getWeeklyEvents
   } = useEventsStore()
 
-  useEffect(() => { getWeeklyEvents(token, week) }, [week, getWeeklyEvents, token])
+  useEffect(() => { if (token) getWeeklyEvents(token, week) }, [week, getWeeklyEvents, token])
 
   const weekEvents : WeekType = Array.from({ length: 7 }, () => [])
   currentWeekEvents.forEach((event) => {
@@ -34,25 +35,39 @@ export default function Week ({ token } : { token: any }) {
     'Sunday'
   ] as const
 
+  function getWeekDays (dateInput: Date | string) {
+    const date = new Date(dateInput)
+    const day = date.getDay() // 0 (domingo) a 6 (sábado)
+
+    // Ajustar para que el lunes sea el primer día
+    const diffToMonday = (day === 0 ? -6 : 1) - day
+
+    const monday = new Date(date)
+    monday.setDate(date.getDate() + diffToMonday)
+
+    const daysOfWeek = []
+    for (let i = 0; i < 7; i++) {
+      const current = new Date(monday)
+      current.setDate(monday.getDate() + i)
+      daysOfWeek.push(current.getDate())
+    }
+
+    return daysOfWeek
+  }
+
+  const weekDayNumbers = getWeekDays(week)
+
   return (
-    <section className='flex-1 flex h-full'>
-      <div className='relative grid place-content-center'>
-        <h2 className='absolute top-0 left-0'>{week.toDateString()}</h2>
+    <section className='flex h-full overflow-auto'>
+      <ChangeWeekButton action={decreaseWeek} />
 
-        <button
-          className='border-white border-2 rounded-full size-fit p-2 self-center justify-self-center'
-          onClick={decreaseWeek}
-        >
-          <Arrow />
-        </button>
-
-      </div>
-
-      <section className='grid flex-1 pt-5'>
+      <article className='grid flex-1 pt-5'>
         <div className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3'>
           <h2 className='text-end px-4'>Hours</h2>
-          {weekdays.map((day, idx) =>
-            <h2 key={idx}>{day}</h2>
+          {weekdays.map((day, idx) => <div key={idx}>
+              <h2>{weekDayNumbers[idx]}</h2>
+              <p>{day}</p>
+            </div>
           )}
         </div>
 
@@ -63,14 +78,9 @@ export default function Week ({ token } : { token: any }) {
           )}
         </div>
 
-      </section>
+      </article>
 
-      <button
-        className='border-white border-2 rounded-full size-fit p-2 self-center'
-        onClick={increaseWeek}
-      >
-        <Arrow className='rotate-180'/>
-      </button>
+      <ChangeWeekButton action={increaseWeek} rotate />
     </section>
   )
 }
