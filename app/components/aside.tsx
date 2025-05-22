@@ -5,6 +5,7 @@ import AuthButton from './auth-button'
 import { useEffect, useState } from 'react'
 import EventList from './event-list'
 import '@/remove-scrollbar.module.css'
+import { getWeekStartEndDates } from '@/utils'
 
 const FILTER = {
   ALL: 'all',
@@ -18,14 +19,21 @@ type Filter = typeof FILTER[keyof typeof FILTER]
 export default function Aside () {
   const [filter, setFilter] = useState<Filter>(FILTER.ALL)
 
-  const { currentWeekEvents, allEvents, getAllEvents } = useEventsStore()
+  const { events, getAllEvents, token, week } = useEventsStore()
 
-  useEffect(() => {
-    getAllEvents()
-  }
-  , [getAllEvents])
+  useEffect(() => { if (token) getAllEvents(token) }, [getAllEvents, token])
+  useEffect(() => {}, [filter])
 
-  const events = filter === FILTER.ALL ? allEvents : currentWeekEvents
+  const eventsFiltered = events.filter((event) => {
+    const eventDate = new Date(event.startTime)
+    const { startOfWeek, endOfWeek } = getWeekStartEndDates(week)
+
+    if (filter === FILTER.ALL) return true
+    if (filter === FILTER.TODAY) return eventDate.toDateString() === week.toDateString()
+    if (filter === FILTER.MONTH) return eventDate.getMonth() === week.getMonth() && eventDate.getFullYear() === week.getFullYear()
+    if (filter === FILTER.WEEK) return eventDate >= startOfWeek && eventDate <= endOfWeek
+    return false
+  })
 
   return <aside className='flex flex-col gap-10 p-6 pr-0 h-full overflow-auto'>
     <div className='flex justify-around items-center'>
@@ -35,10 +43,11 @@ export default function Aside () {
 
     <div className='flex justify-around gap-2'>
       <FilterButton onClick={setFilter} filterState={filter} value={FILTER.ALL} />
+      <FilterButton onClick={setFilter} filterState={filter} value={FILTER.TODAY} />
       <FilterButton onClick={setFilter} filterState={filter} value={FILTER.WEEK} />
     </div>
 
-    <EventList events={events}/>
+    <EventList events={eventsFiltered}/>
 
   </aside>
 }

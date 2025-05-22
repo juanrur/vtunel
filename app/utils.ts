@@ -25,3 +25,14 @@ export const createServerClient = (cookies: any) => {
       }
     })
 }
+
+export const getWeekStartEndDates = (date: Date) => {
+  const dayOfWeek = date.getDay()
+  const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+  const startOfWeek = new Date(date)
+  startOfWeek.setDate(date.getDate() + diffToMonday)
+
+  const endOfWeek = new Date(startOfWeek)
+  endOfWeek.setDate(startOfWeek.getDate() + 6)
+  return { startOfWeek, endOfWeek }
+}

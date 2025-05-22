@@ -1,9 +1,9 @@
 'use client'
 import { useEventsStore } from '@/store'
-import { Day } from '@/types'
+import { type Event } from '@/types'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
 
-export default function EventList ({ events } : {events: Day}) {
+export default function EventList ({ events } : { events: Event[] }) {
   const { deleteEvent } = useEventsStore()
 
   return <ul className={`${RemoveScrollbar.remove} flex flex-col gap-2 overflow-auto`}>

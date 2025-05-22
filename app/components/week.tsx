@@ -1,26 +1,28 @@
 'use client'
 import Day from '@/components/day'
 import { useEventsStore } from '@/store'
-import { Week as WeekType } from '@/types'
-import { useEffect } from 'react'
+import { type Week as WeekType } from '@/types'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import HoursCol from './hours-col'
 import ChangeWeekButton from './change-week-button'
+import { getWeekStartEndDates } from '@/utils'
 
 export default function Week () {
   const {
-    currentWeekEvents,
+    events,
     week,
-    token,
     decreaseWeek,
-    increaseWeek,
-    getWeeklyEvents
+    increaseWeek
   } = useEventsStore()
 
-  useEffect(() => { if (token) getWeeklyEvents(token, week) }, [week, getWeeklyEvents, token])
+  const { startOfWeek, endOfWeek } = getWeekStartEndDates(week)
 
   const weekEvents : WeekType = Array.from({ length: 7 }, () => [])
-  currentWeekEvents.forEach((event) => {
+
+  events.filter((event) => {
+    const eventDate = new Date(event.startTime)
+    return eventDate >= startOfWeek && eventDate <= endOfWeek
+  }).forEach((event) => {
     const day = (event.startTime.getDay() || 7) - 1
     weekEvents[day].push(event)
   })

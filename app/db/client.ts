@@ -3,6 +3,7 @@
 import { Day, Event } from '@/types'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@supabase/supabase-js'
+import { getWeekStartEndDates } from '@/utils'
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '')
 
@@ -30,21 +31,14 @@ export async function getAllEvents (token: string): Promise<Day> {
 
 export async function fetchEvents (token: string, week: Date = new Date()): Promise<Event[]> {
   const user = await supabase.auth.getUser(token)
-  // Calcular el inicio de la semana (lunes) y el final de la semana (domingo)
-  const dayOfWeek = week.getDay() // 0 (domingo) a 6 (sábado)
-  const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek // Ajustar para que lunes sea el primer día
-  const startOfWeek = new Date(week)
-  startOfWeek.setDate(week.getDate() + diffToMonday) // Mover al lunes
-
-  const endOfWeek = new Date(startOfWeek)
-  endOfWeek.setDate(startOfWeek.getDate() + 6) // Mover al domingo
+  const { startOfWeek, endOfWeek } = getWeekStartEndDates(week)
 
   const { data, error } = await supabase
     .from('events')
     .select('*')
     .eq('user_id', user.data.user?.id)
-    .gte('startTime', startOfWeek.toISOString()) // Mayor o igual al lunes
-    .lte('startTime', endOfWeek.toISOString()) // Menor o igual al domingo
+    .gte('startTime', startOfWeek.toISOString())
+    .lte('startTime', endOfWeek.toISOString())
 
   if (error) console.error('Error fetching events:', error)
 
