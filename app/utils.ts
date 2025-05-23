@@ -1,7 +1,5 @@
 import { createServerClient as createServerClientSupabase } from '@supabase/ssr'
 
-export const pad = (number: number) => number < 10 ? '0' + number : number
-
 export const createServerClient = (cookies: any) => {
   const cookieStore = cookies()
 
