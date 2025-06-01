@@ -32,7 +32,9 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
       return hours
     }
     const [hour, minutes] = getHours(15)[event.target.dataset.index].split(':')
-    const deference = dayIndex - week.getDay()
+    // Here you have to take into account that the first day of the week is Monday,
+    // should have some function to change between Monday and Sunday
+    const deference = dayIndex - (week.getDay() === 0 ? 7 : week.getDay())
     const day = week.getDate() + deference + 1
 
     console.log(deference, week.getDate())

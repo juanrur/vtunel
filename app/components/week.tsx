@@ -27,11 +27,6 @@ export default function Week () {
     weekEvents[day].push(event)
   })
 
-  console.log(events.filter((event) => {
-    const eventDate = new Date(event.startTime)
-    return eventDate >= startOfWeek && eventDate <= endOfWeek
-  }))
-
   const weekdays = [
     'Monday',
     'Tuesday',
