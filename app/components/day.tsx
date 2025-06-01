@@ -2,7 +2,6 @@
 import Event from '@/components/event'
 import { useEventsStore } from '@/store'
 import { type Day as DayType } from '@/types'
-import { pad } from '@/utils'
 
 export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: number }) {
   const { week, changeEventStartTime } = useEventsStore()
@@ -21,8 +20,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
       let currentMinutes = 0
 
       while (currentHour < 24) {
-        hours[hours.length] = pad(currentHour) + ':' + pad(currentMinutes)
-
+        hours[hours.length] = currentHour.toString().padStart(2, '0') + ':' + currentMinutes.toString().padStart(2, '0')
         if (currentMinutes + splitPerMinutes >= 60) {
           currentMinutes = currentMinutes + splitPerMinutes - 60
           currentHour++

@@ -1,5 +1,3 @@
-import { pad } from '@/utils'
-
 export default function HoursCol () {
   const FifteenMinutePX = 60
 
@@ -9,7 +7,7 @@ export default function HoursCol () {
     let currentMinutes = 0
 
     while (currentHour < 24) {
-      hours[hours.length] = pad(currentHour) + ':' + pad(currentMinutes)
+      hours[hours.length] = currentHour.toString().padStart(2, '0') + ':' + currentMinutes.toString().padStart(2, '0')
 
       if (currentMinutes + splitPerMinutes >= 60) {
         currentMinutes = currentMinutes + splitPerMinutes - 60

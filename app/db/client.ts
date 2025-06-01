@@ -21,8 +21,8 @@ export async function getAllEvents (token: string): Promise<Day> {
       {
         id,
         name,
-        startTime: new Date(startTime),
-        endTime: new Date(endTime),
+        startTime: convertToLocalTime(startTime),
+        endTime: convertToLocalTime(endTime),
         userId: user_id
       }
     ))
@@ -49,8 +49,8 @@ export async function fetchEvents (token: string, week: Date = new Date()): Prom
       {
         id,
         name,
-        startTime: new Date(startTime),
-        endTime: new Date(endTime),
+        startTime: convertToLocalTime(startTime),
+        endTime: convertToLocalTime(endTime),
         userId: user_id
       }
     ))
@@ -70,6 +70,8 @@ export async function insertEvent ({ startTime, endTime, name } : Omit<Event, 'i
       }
     ])
     .select()
+
+  console.log(startTime.toISOString(), endTime.toISOString(), endTime.toString())
 
   if (error) {
     console.error('Error inserting event:', error)
@@ -95,4 +97,10 @@ export async function deleteEvent (eventID: string) {
   console.log('Deleted event:', data)
 
   revalidatePath('/')
+}
+
+function convertToLocalTime (dateString: string): Date {
+  const utcDate = new Date(dateString)
+  const localOffset = utcDate.getTimezoneOffset() * 60000
+  return new Date(utcDate.getTime() - localOffset)
 }

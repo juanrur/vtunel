@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { deleteEvent, fetchEvents, getAllEvents, insertEvent as insertEventDB } from './db/client'
+import { deleteEvent, getAllEvents, insertEvent as insertEventDB } from './db/client'
 import { Event } from './types'
 
 interface EventsStore {
@@ -56,10 +56,9 @@ export const useEventsStore = create<EventsStore>((set) => ({
   },
 
   insertEvent: async (event, token) => {
-    const updatedEvents = await fetchEvents(token, new Date())
-    set(() => ({ events: updatedEvents }))
-
     await insertEventDB(event, token)
+    const updatedEvents = await getAllEvents(token)
+    set(() => ({ events: updatedEvents }))
   },
 
   deleteEvent: async (eventID) => {
