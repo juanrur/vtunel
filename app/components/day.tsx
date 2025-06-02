@@ -54,31 +54,37 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
   }
 
   return <ul className='border-r first:border-l border-black dark:border-white'>
-      {
-        // make a list of 24 hours with 4 divisions each
-        Array.from({ length: 24 * 4 }).map((_, idx) => {
-          // find the event that starts at this hour
-          const event = events.find(({ startTime }) => idx === (startTime.getHours() * 4) + Math.floor(startTime.getMinutes() / 60 * 4))
-          let height, margin
-          if (event) {
-            height = (event?.endTime.getTime() - event?.startTime.getTime()) / 1000 / 60
-            margin = event?.startTime.getMinutes() % MinutesPerDivided
-          }
-
-          return <li
-            data-index={idx}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            className='border-b first:border-t border-black dark:border-white'
-            style={{ height: PXMinute * MinutesPerDivided }}
-            key={idx}>
-
-            {event && <Event name={event.name} id={event.id} height={PXMinute * height!} margin={PXMinute * margin!}/>}
-          </li>
-        }
-
+    {
+      // make a list of 24 hours with 4 divisions each
+      Array.from({ length: 24 * 4 }).map((_, idx) => {
+        // find all events that start at this hour
+        const matchingEvents = events.filter(({ startTime }) =>
+          idx === (startTime.getHours() * 4) + Math.floor(startTime.getMinutes() / 60 * 4)
         )
-      }
-    </ul>
+
+        const sortedMatchingEvents = matchingEvents.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+
+        return <li
+          data-index={idx}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          className='border-b first:border-t border-black dark:border-white'
+          style={{ height: PXMinute * MinutesPerDivided }}
+          key={idx}>
+
+          {sortedMatchingEvents.map((event, idx) => (
+            <div key={event.id} style={{ marginLeft: idx * 30 + 'px', zIndex: idx, width: idx > 0 ? '60%' : '' }} className='relative'>
+              <Event
+                name={event.name}
+                id={event.id}
+                height={PXMinute * ((event.endTime.getTime() - event.startTime.getTime()) / 1000 / 60)}
+                margin={PXMinute * (event.startTime.getMinutes() % MinutesPerDivided)}
+              />
+            </div>
+          ))}
+        </li>
+      })
+    }
+  </ul>
 }
