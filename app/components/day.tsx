@@ -10,7 +10,6 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
 
   const handleDrop = (event: any) => {
     event.target = event.target.closest('li')
-    console.log(event.target)
     event.preventDefault()
     const eventID = event.dataTransfer.getData('text/plain')
 
@@ -36,8 +35,6 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
     // should have some function to change between Monday and Sunday
     const deference = dayIndex - (week.getDay() === 0 ? 7 : week.getDay())
     const day = week.getDate() + deference + 1
-
-    console.log(deference, week.getDate())
 
     const newDate = new Date(Date.UTC(week.getFullYear(), week.getMonth(), day, Number(hour), Number(minutes)))
     newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
