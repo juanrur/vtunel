@@ -24,7 +24,6 @@ export default function AuthButton () {
         setSession(session)
         setToken(session.access_token)
       }
-      console.log('session', session)
     }
 
     getSession()
