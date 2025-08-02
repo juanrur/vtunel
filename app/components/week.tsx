@@ -4,15 +4,12 @@ import { useEventsStore } from '@/store'
 import { type Week as WeekType } from '@/types'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import HoursCol from './hours-col'
-import ChangeWeekButton from './change-week-button'
 import { getWeekStartEndDates } from '@/utils'
 
 export default function Week () {
   const {
     events,
-    week,
-    decreaseWeek,
-    increaseWeek
+    week
   } = useEventsStore()
 
   const { startOfWeek, endOfWeek } = getWeekStartEndDates(week)
@@ -60,29 +57,22 @@ export default function Week () {
   const weekDayNumbers = getWeekDays(week)
 
   return (
-    <section className='flex h-full overflow-auto'>
-      <ChangeWeekButton action={decreaseWeek} />
+    <article className='h-full flex flex-col'>
+      <div className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3 flex-shrink-0'>
+        <h2 className='text-end px-4'>Hours</h2>
+        {weekdays.map((day, idx) => <div key={idx}>
+            <h2>{weekDayNumbers[idx]}</h2>
+            <p>{day}</p>
+          </div>
+        )}
+      </div>
 
-      <article className='grid flex-1 pt-5'>
-        <div className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3'>
-          <h2 className='text-end px-4'>Hours</h2>
-          {weekdays.map((day, idx) => <div key={idx}>
-              <h2>{weekDayNumbers[idx]}</h2>
-              <p>{day}</p>
-            </div>
-          )}
-        </div>
-
-        <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto`}>
-          <HoursCol />
-          {weekEvents.map((day, idx) =>
-            <Day key={idx} dayIndex={idx} events={day} />
-          )}
-        </div>
-
-      </article>
-
-      <ChangeWeekButton action={increaseWeek} rotate />
-    </section>
+      <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto flex-1 min-h-0 pb-4`}>
+        <HoursCol />
+        {weekEvents.map((day, idx) =>
+          <Day key={idx} dayIndex={idx} events={day} />
+        )}
+      </div>
+    </article>
   )
 }

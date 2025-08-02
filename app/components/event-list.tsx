@@ -4,7 +4,7 @@ import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import EventInfo from './event-info'
 
 export default function EventList ({ events } : { events: Event[] }) {
-  return <ul className={`${RemoveScrollbar.remove} flex flex-col gap-2 overflow-auto`}>
+  return <ul className={`${RemoveScrollbar.remove} flex flex-col gap-3 overflow-auto scroll-smooth`}>
     {events.length === 0 && <li>No events</li>}
 
     {events.map((event) => (

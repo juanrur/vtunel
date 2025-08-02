@@ -10,4 +10,7 @@
 - [X] meterle gap al los eventos en el aside
 - [ ] gestionar varios eventos en un li (espacio de 15m o cuadrante de tiempo)
 - [ ] meter un polyfill de closed by (dialog)
-- [ ] hacer un componente con el botón para cambiar de semana
+- [X] hacer un componente con el botón para cambiar de semana
+- [ ] get trash icon to icons folder (event-list)
+- [ ] put the scrollbar-hidden like a utility in tailwind
+- [ ] put z-index of 00:00 from hours column well

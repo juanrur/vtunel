@@ -7,6 +7,8 @@ interface EventsStore {
   week: Date
   divisionsPerDay: number
   token: string | null
+  pixelsPerMinute: number
+  minutesPerDivided: number
   changeDivisionsPerDay: (number: number) => void
   changeEventStartTime: (newStartTime: Date, eventID: string) => void
   increaseWeek: () => void
@@ -23,6 +25,8 @@ export const useEventsStore = create<EventsStore>((set) => ({
   week: new Date(),
   divisionsPerDay: 0,
   token: null,
+  pixelsPerMinute: 4,
+  minutesPerDivided: 15,
 
   changeDivisionsPerDay: (number: number) => set(() => ({ divisionsPerDay: number })),
 
