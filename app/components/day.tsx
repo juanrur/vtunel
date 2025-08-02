@@ -4,9 +4,7 @@ import { useEventsStore } from '@/store'
 import { type Day as DayType } from '@/types'
 
 export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: number }) {
-  const { week, changeEventStartTime } = useEventsStore()
-  const PXMinute = 4
-  const MinutesPerDivided = 15
+  const { week, changeEventStartTime, pixelsPerMinute, minutesPerDivided } = useEventsStore()
 
   const handleDrop = (event: any) => {
     event.target = event.target.closest('li')
@@ -53,7 +51,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
     event.preventDefault()
   }
 
-  return <ul className='border-r first:border-l border-black dark:border-white'>
+  return <ul className='border-r first:border-l border-primary'>
     {
       // make a list of 24 hours with 4 divisions each
       Array.from({ length: 24 * 4 }).map((_, idx) => {
@@ -69,8 +67,8 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className='border-b first:border-t border-black dark:border-white'
-          style={{ height: PXMinute * MinutesPerDivided }}
+          className='border-b first:border-t border-primary'
+          style={{ height: pixelsPerMinute * minutesPerDivided }}
           key={idx}>
 
           {sortedMatchingEvents.map((event, idx) => (
@@ -78,8 +76,8 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
               <Event
                 name={event.name}
                 id={event.id}
-                height={PXMinute * ((event.endTime.getTime() - event.startTime.getTime()) / 1000 / 60)}
-                margin={PXMinute * (event.startTime.getMinutes() % MinutesPerDivided)}
+                height={pixelsPerMinute * ((event.endTime.getTime() - event.startTime.getTime()) / 1000 / 60)}
+                margin={pixelsPerMinute * (event.startTime.getMinutes() % minutesPerDivided)}
               />
             </div>
           ))}

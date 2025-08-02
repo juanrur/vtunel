@@ -17,7 +17,9 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-color: #000000;
+    --background-color: #18171c;
+    --background-secondary: #242328;
+    --border-color: #494949;
   }
 }
 
@@ -36,4 +38,25 @@ input {
   border: 1px solid #000000;
   border-radius: 0.5rem;
   padding: 0.2rem;
+}
+
+@layer utilities {
+  .bg-primary {
+    background-color: var(--background-color);
+  }
+  .bg-secondary {
+    background-color: var(--background-secondary);
+  }
+  .border-primary {
+    border-color: var(--border-color);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border-color);
+  }
+  button {
+    transition: background-color 100ms ease;
+  }
 }

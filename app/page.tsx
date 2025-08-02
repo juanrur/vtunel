@@ -3,6 +3,7 @@ import Aside from '@/components/aside'
 import { redirect } from 'next/navigation'
 import { createServerClient } from '@/utils'
 import { cookies } from 'next/headers'
+import Header from './components/header'
 
 export default async function Home () {
   const supabase = createServerClient(cookies)
@@ -11,9 +12,12 @@ export default async function Home () {
   if (session === null) redirect('/login')
 
   return (
-    <main className='grid grid-cols-[20%,1fr] h-full overflow-hidden'>
+    <main className='grid grid-cols-[20%,1fr] h-screen overflow-hidden'>
       <Aside />
-      <Week />
+      <div className='h-full flex flex-col min-h-0'>
+        <Header />
+        <Week />
+      </div>
     </main>
   )
 }

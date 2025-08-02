@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import EventList from './event-list'
 import '@/remove-scrollbar.module.css'
 import { getWeekStartEndDates } from '@/utils'
+import FilterButton from './filter-button'
 
 const FILTER = {
   ALL: 'all',
@@ -14,7 +15,7 @@ const FILTER = {
   MONTH: 'month'
 } as const
 
-type Filter = typeof FILTER[keyof typeof FILTER]
+export type Filter = typeof FILTER[keyof typeof FILTER]
 
 export default function Aside () {
   const [filter, setFilter] = useState<Filter>(FILTER.ALL)
@@ -35,33 +36,16 @@ export default function Aside () {
     return false
   })
 
-  return <aside className='flex flex-col gap-10 p-6 pr-0 h-full overflow-auto'>
-    <div className='flex justify-around items-center'>
-      <AddEventButton />
-      <AuthButton />
-    </div>
+  return <aside className='h-full flex flex-col gap-6 p-6 pr-0 overflow-hidden'>
+    <div className='flex-1 min-h-0 overflow-auto space-y-6'>
+      <div className='flex justify-around gap-2'>
+        <FilterButton onClick={setFilter} filterState={filter} value={FILTER.ALL} />
+        <FilterButton onClick={setFilter} filterState={filter} value={FILTER.TODAY} />
+        <FilterButton onClick={setFilter} filterState={filter} value={FILTER.WEEK} />
+      </div>
 
-    <div className='flex justify-around gap-2'>
-      <FilterButton onClick={setFilter} filterState={filter} value={FILTER.ALL} />
-      <FilterButton onClick={setFilter} filterState={filter} value={FILTER.TODAY} />
-      <FilterButton onClick={setFilter} filterState={filter} value={FILTER.WEEK} />
+      <EventList events={eventsFiltered}/>
     </div>
-
-    <EventList events={eventsFiltered}/>
 
   </aside>
-}
-
-function FilterButton ({ value, filterState, onClick }: { value: Filter, filterState: Filter, onClick: (value: Filter) => void }) {
-  const isActive = value === filterState
-
-  return (
-    <button
-      className='text-center items-center rounded px-2'
-      style={isActive ? { backgroundColor: 'white', color: 'black' } : {}}
-      onClick={() => onClick(value)}
-    >
-      {value}
-    </button>
-  )
 }
