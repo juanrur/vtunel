@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { deleteEvent, getAllEvents, insertEvent as insertEventDB } from './db/client'
+import { deleteEvent, getAllEvents, insertEvent as insertEventDB, updateEvent } from './db/client'
 import { Event } from './types'
 
 interface EventsStore {
@@ -15,6 +15,7 @@ interface EventsStore {
   insertEvent: (event: Omit<Event, 'id' | 'userId'>, token: string) => void
   deleteEvent: (eventID: string) => void,
   setToken: (token: string) => void
+  updateEvent: (eventID: string, updatedData: Partial<Event>) => void
 }
 
 export const useEventsStore = create<EventsStore>((set) => ({
@@ -25,18 +26,24 @@ export const useEventsStore = create<EventsStore>((set) => ({
 
   changeDivisionsPerDay: (number: number) => set(() => ({ divisionsPerDay: number })),
 
-  changeEventStartTime: (newStartTime: Date, eventID: string) => set(({ events }) => {
-    return {
-      events: events.map((event) => {
-        if (event.id === eventID) {
-          const newEndTime = new Date(event.endTime.getTime() + (newStartTime.getTime() - event.startTime.getTime()))
-          return { ...event, startTime: newStartTime, endTime: newEndTime }
+  changeEventStartTime: async (newStartTime: Date, eventID: string) => {
+    let newEndTime
+
+    set(({ events }) => {
+      return {
+        events: events.map((event) => {
+          if (event.id === eventID) {
+            newEndTime = new Date(event.endTime.getTime() + (newStartTime.getTime() - event.startTime.getTime()))
+            return { ...event, startTime: newStartTime, endTime: newEndTime }
+          }
+          return event
         }
-        return event
+        )
       }
-      )
-    }
-  }),
+    })
+
+    await updateEvent(eventID, { startTime: newStartTime, endTime: newEndTime })
+  },
 
   increaseWeek: () => set((state) => {
     const newDate = new Date(state.week)
@@ -59,6 +66,20 @@ export const useEventsStore = create<EventsStore>((set) => ({
     await insertEventDB(event, token)
     const updatedEvents = await getAllEvents(token)
     set(() => ({ events: updatedEvents }))
+  },
+
+  updateEvent: async (eventID: string, updatedData: Partial<Event>) => {
+    await updateEvent(eventID, updatedData)
+    set(({ events }) => {
+      return {
+        events: events.map((event) => {
+          if (event.id === eventID) {
+            return { ...event, ...updatedData }
+          }
+          return event
+        })
+      }
+    })
   },
 
   deleteEvent: async (eventID) => {

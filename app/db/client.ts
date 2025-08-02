@@ -99,6 +99,27 @@ export async function deleteEvent (eventID: string) {
   revalidatePath('/')
 }
 
+export async function updateEvent (eventID: string, updatedData: Partial<Omit<Event, 'id' | 'userId'>>) {
+  const { data, error } = await supabase
+    .from('events')
+    .update({
+      ...updatedData,
+      startTime: updatedData.startTime?.toISOString(),
+      endTime: updatedData.endTime?.toISOString()
+    })
+    .eq('id', eventID)
+    .select()
+  console.log('Updated data:', updatedData)
+  console.log('Event ID:', eventID)
+  if (error) {
+    console.error('Error updating event:', error)
+  } else {
+    console.log('Updated event:', data)
+  }
+
+  revalidatePath('/')
+}
+
 function convertToLocalTime (dateString: string): Date {
   const utcDate = new Date(dateString)
   const localOffset = utcDate.getTimezoneOffset() * 60000

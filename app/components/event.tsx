@@ -8,6 +8,8 @@ export default function Event ({ name, height, margin, id }: { name: string, hei
   const handleDragEnd = (event: any) => {
   }
 
+  console.log('Event rendered', name, height, margin)
+
   return (
     <button draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd}
     className='bg-blue-500 w-3/4 inline-flex overflow-hidden py-1 px-1.5 rounded-r absolute'
