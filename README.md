@@ -14,3 +14,4 @@
 - [ ] get trash icon to icons folder (event-list)
 - [ ] put the scrollbar-hidden like a utility in tailwind
 - [ ] put z-index of 00:00 from hours column well
+- [ ] put month in header
