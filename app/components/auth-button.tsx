@@ -18,21 +18,31 @@ export default function AuthButton () {
   )
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         setSession(session)
         setToken(session.access_token)
       }
-    }
-
-    getSession()
+    })
   }, [supabase.auth, setToken])
 
-  const handleSignIn = async () => {
+  const handleGitHubSignIn = async () => {
     try {
       await supabase.auth.signInWithOAuth({
         provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      })
+    } catch (error) {
+      console.error('Error signing in:', error)
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`
         }
@@ -55,7 +65,10 @@ export default function AuthButton () {
           <button className='p-2 rounded-lg w-32' onClick={handleSignOut}>Sing Out</button>
           )
         : (
-          <button className='p-2 rounded-lg w-32' onClick={handleSignIn}>Sing In</button>
+          <>
+            <button className='p-2 rounded-lg w-32' onClick={handleGitHubSignIn}>Sing In with GitHub</button>
+            <button className='p-2 rounded-lg w-32' onClick={handleGoogleSignIn}>Sign In with Google</button>
+          </>
           )}
     </>
   )
