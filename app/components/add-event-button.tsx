@@ -33,7 +33,7 @@ export default function AddEventButton () {
       >
         {isOpen ? '-' : <PlusIcon />}
       </button>
-      <dialog className='rounded top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-10' ref={dialogRef} closedby="any">
+      <dialog className='rounded top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-10' ref={dialogRef}>
         <EventAdderForm />
       </dialog>
     </>

@@ -17,7 +17,7 @@ export default function EventInfo ({ event }: { event: Event }) {
 
   return (
     <li className='border rounded-lg p-3 flex justify-between items-center bg-secondary border-primary' key={event.id} onClick={showEditDialog}>
-        <dialog ref={EventEditDialog} className='bg-white rounded-lg p-4 shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' closedby="any">
+        <dialog ref={EventEditDialog} className='bg-white rounded-lg p-4 shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
           <EditEventDialog event={event} />
         </dialog>
         <div>
