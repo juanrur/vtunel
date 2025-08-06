@@ -4,6 +4,7 @@ import { Event } from './types'
 
 interface EventsStore {
   events: Event[]
+  eventsAreLoading: boolean
   week: Date
   divisionsPerDay: number
   token: string | null
@@ -22,6 +23,7 @@ interface EventsStore {
 
 export const useEventsStore = create<EventsStore>((set) => ({
   events: [],
+  eventsAreLoading: true,
   week: new Date(),
   divisionsPerDay: 0,
   token: null,
@@ -62,8 +64,10 @@ export const useEventsStore = create<EventsStore>((set) => ({
   }),
 
   getAllEvents: async (token) => {
+    set(() => ({ eventsAreLoading: true }))
     const eventsResponse = await getAllEvents(token)
     set(() => ({ events: eventsResponse }))
+    set(() => ({ eventsAreLoading: false }))
   },
 
   insertEvent: async (event, token) => {

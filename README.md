@@ -15,3 +15,4 @@
 - [ ] put the scrollbar-hidden like a utility in tailwind
 - [ ] put z-index of 00:00 from hours column well
 - [ ] put month in header
+- [ ] split header in component to make header a server component

@@ -1,12 +1,11 @@
 'use client'
 import { useEventsStore } from '@/store'
-import AddEventButton from './add-event-button'
-import AuthButton from './auth-button'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import EventList from './event-list'
 import '@/remove-scrollbar.module.css'
 import { getWeekStartEndDates } from '@/utils'
 import FilterButton from './filter-button'
+import EventListSkeleton from './event-list-skeleton'
 
 const FILTER = {
   ALL: 'all',
@@ -20,10 +19,9 @@ export type Filter = typeof FILTER[keyof typeof FILTER]
 export default function Aside () {
   const [filter, setFilter] = useState<Filter>(FILTER.ALL)
 
-  const { events, getAllEvents, token, week } = useEventsStore()
+  const { events, getAllEvents, token, week, eventsAreLoading } = useEventsStore()
 
   useEffect(() => { if (token) getAllEvents(token) }, [getAllEvents, token])
-  useEffect(() => {}, [filter])
 
   const eventsFiltered = events.filter((event) => {
     const eventDate = new Date(event.startTime)
@@ -44,7 +42,10 @@ export default function Aside () {
         <FilterButton onClick={setFilter} filterState={filter} value={FILTER.WEEK} />
       </div>
 
-      <EventList events={eventsFiltered}/>
+      { !eventsAreLoading
+        ? <EventList events={eventsFiltered}/>
+        : <EventListSkeleton />
+      }
     </div>
 
   </aside>

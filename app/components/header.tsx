@@ -5,7 +5,10 @@ import ChangeWeekButton from './change-week-button'
 import { useEventsStore } from '@/store'
 
 export default function Header () {
-  const { decreaseWeek, increaseWeek } = useEventsStore()
+  const { decreaseWeek, increaseWeek, week } = useEventsStore()
+
+  const month = week.toLocaleString('default', { month: 'long' }).toUpperCase()
+  const year = week.getFullYear()
 
   return (
     <header className='flex items-center justify-between gap-2 p-2'>
@@ -13,6 +16,7 @@ export default function Header () {
         <ChangeWeekButton action={decreaseWeek} />
         <ChangeWeekButton action={increaseWeek} rotate />
       </div>
+      <h1>{month + ' ' + year}</h1>
       <div className='flex gap-3'>
         <AddEventButton />
         <AuthButton />

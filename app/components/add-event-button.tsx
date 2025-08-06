@@ -29,7 +29,7 @@ export default function AddEventButton () {
     <>
       <button
         onClick={handleClick}
-        className="text-3xl rounded-full bg-white text-black flex justify-center items-center size-10"
+        className="text-3xl rounded-full text-white p-1 flex justify-center items-center size-10"
       >
         {isOpen ? '-' : <PlusIcon />}
       </button>

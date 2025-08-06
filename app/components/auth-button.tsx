@@ -52,10 +52,10 @@ export default function AuthButton () {
     <>
       {session
         ? (
-          <button className='border p-2 rounded-lg' onClick={handleSignOut}>Sing Out</button>
+          <button className='p-2 rounded-lg w-32' onClick={handleSignOut}>Sing Out</button>
           )
         : (
-          <button className='border p-2 rounded-lg' onClick={handleSignIn}>Sing In</button>
+          <button className='p-2 rounded-lg w-32' onClick={handleSignIn}>Sing In</button>
           )}
     </>
   )

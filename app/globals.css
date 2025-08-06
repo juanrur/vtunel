@@ -58,5 +58,10 @@ input {
   }
   button {
     transition: background-color 100ms ease;
+    border: 2px solid var(--border-color);
+  }
+
+  button:hover {
+    background-color: var(--background-secondary);
   }
 }
