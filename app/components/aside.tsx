@@ -1,6 +1,6 @@
 'use client'
 import { useEventsStore } from '@/store'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import EventList from './event-list'
 import '@/remove-scrollbar.module.css'
 import { getWeekStartEndDates } from '@/utils'
