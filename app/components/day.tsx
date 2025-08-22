@@ -51,13 +51,15 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
   return <ul className='border-r first:border-l border-primary'>
     {
       // make a list of 24 hours with 4 divisions each
-      Array.from({ length: 24 * 4 }).map((_, idx) => {
+      Array.from({ length: 24 * (60 / minutesPerDivided) }).map((_, idx) => {
         // find all events that start at this hour
         const matchingEvents = events.filter(({ startTime }) =>
-          idx === (startTime.getHours() * 4) + Math.floor(startTime.getMinutes() / 60 * 4)
+          idx === (startTime.getHours() * (60 / minutesPerDivided)) + Math.floor(startTime.getMinutes() / 60 * (60 / minutesPerDivided))
         )
 
         const sortedMatchingEvents = matchingEvents.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+        if (matchingEvents.length > 0) console.log({ matchingEvents })
+          console.log({ matchingEvents })
 
         return <li
           data-index={idx}
@@ -81,5 +83,9 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
         </li>
       })
     }
+    <li
+  className='border-b border-primary'
+  style={{ height: pixelsPerMinute * minutesPerDivided + 4 }}
+/>
   </ul>
 }

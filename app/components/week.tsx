@@ -5,12 +5,17 @@ import { type Week as WeekType } from '@/types'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import HoursCol from './hours-col'
 import { getWeekStartEndDates } from '@/utils'
+import { useEffect } from 'react'
 
 export default function Week () {
   const {
     events,
-    week
+    week,
+    token,
+    getAllEvents
   } = useEventsStore()
+
+  useEffect(() => { if (token) getAllEvents(token) }, [getAllEvents, token])
 
   const { startOfWeek, endOfWeek } = getWeekStartEndDates(week)
 
@@ -67,7 +72,7 @@ export default function Week () {
         )}
       </div>
 
-      <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto flex-1 min-h-0 pb-4`}>
+      <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto flex-1 min-h-0`}>
         <HoursCol />
         {weekEvents.map((day, idx) =>
           <Day key={idx} dayIndex={idx} events={day} />
