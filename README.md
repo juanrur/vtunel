@@ -16,4 +16,5 @@
 - [ ] put z-index of 00:00 from hours column well
 - [ ] put month in header
 - [ ] split header in component to make header a server component
-- [ ] split every dialog to the same component
+- [X] split every dialog to the same component
+- [ ] define a default sort for the events

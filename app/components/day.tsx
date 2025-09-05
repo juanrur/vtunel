@@ -58,10 +58,8 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
         )
 
         const sortedMatchingEvents = matchingEvents.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
-        if (matchingEvents.length > 0) console.log({ matchingEvents })
-          console.log({ matchingEvents })
-
-        return <li
+        if (matchingEvents.length > 0) {
+          return <li
           data-index={idx}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
@@ -81,6 +79,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
             </div>
           ))}
         </li>
+        }
       })
     }
     <li
