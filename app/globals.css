@@ -10,8 +10,10 @@
 }
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-color: #f7f7ff;
+  --foreground-rgb: #393E46;
+  --background-color: #F7F7F7;
+  --background-secondary: #EEEEEE;
+  --border-color: #929AAB;
 }
 
 @media (prefers-color-scheme: dark) {

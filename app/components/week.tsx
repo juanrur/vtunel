@@ -65,11 +65,24 @@ export default function Week () {
     <article className='h-full flex flex-col'>
       <div className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3 flex-shrink-0'>
         <h2 className='text-end px-4'>Hours</h2>
-        {weekdays.map((day, idx) => <div key={idx}>
-            <h2>{weekDayNumbers[idx]}</h2>
-            <p>{day}</p>
-          </div>
-        )}
+        {
+          weekdays.map((day, idx) => {
+            if (weekDayNumbers[idx] === week.getDate()) {
+              return (
+              <div className='rounded-full bg-secondary flex flex-col mx-auto px-4' key={idx}>
+                <h2>{weekDayNumbers[idx]}</h2>
+                <p>{day}</p>
+              </div>
+              )
+            }
+            return (
+              <div key={idx}>
+                <h2>{weekDayNumbers[idx]}</h2>
+                <p>{day}</p>
+              </div>
+            )
+          })
+        }
       </div>
 
       <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto flex-1 min-h-0`}>

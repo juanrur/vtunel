@@ -6,7 +6,7 @@ export default function ChangeWeekButton ({
   action: () => void, rotate?: boolean
 }) {
   return <button
-        className='border-2 rounded-full size-fit p-2 self-center justify-self-center'
+        className='border-2 rounded-full size-fit p-1 self-center justify-self-center'
         onClick={action}
       >
         <Arrow className={rotate ? 'rotate-180' : ''}/>
