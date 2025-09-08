@@ -34,6 +34,8 @@ export default function Aside () {
     return false
   })
 
+  const eventsFilteredSorted = eventsFiltered.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
+
   return <aside className='h-full flex flex-col gap-6 p-6 pr-0 overflow-hidden'>
     <div className='flex-1 min-h-0 overflow-auto space-y-6'>
       <div className='flex justify-around gap-2'>
@@ -43,7 +45,7 @@ export default function Aside () {
       </div>
 
       { !eventsAreLoading
-        ? <EventList events={eventsFiltered}/>
+        ? <EventList events={eventsFilteredSorted}/>
         : <EventListSkeleton />
       }
     </div>

@@ -80,6 +80,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
           ))}
         </li>
         }
+        return <></>
       })
     }
     <li
