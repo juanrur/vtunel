@@ -1,8 +1,8 @@
 'use client'
 import AddEventButton from './add-event-button'
-import AuthButton from './auth-button'
 import ChangeWeekButton from './change-week-button'
 import { useEventsStore } from '@/store'
+import SingOutButton from './sing-out-button'
 
 export default function Header () {
   const { decreaseWeek, increaseWeek, week } = useEventsStore()
@@ -19,7 +19,7 @@ export default function Header () {
       <h1>{month + ' ' + year}</h1>
       <div className='flex gap-3'>
         <AddEventButton />
-        <AuthButton />
+        <SingOutButton />
       </div>
     </header>
   )
