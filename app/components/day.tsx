@@ -17,7 +17,8 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
       let currentMinutes = 0
 
       while (currentHour < 24) {
-        hours[hours.length] = currentHour.toString().padStart(2, '0') + ':' + currentMinutes.toString().padStart(2, '0')
+        hours[hours.length] = currentHour + ':' + currentMinutes.toString().padStart(2, '0')
+
         if (currentMinutes + splitPerMinutes >= 60) {
           currentMinutes = currentMinutes + splitPerMinutes - 60
           currentHour++
@@ -28,7 +29,8 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
 
       return hours
     }
-    const [hour, minutes] = getHours(15)[event.target.dataset.index].split(':')
+
+    const [hour, minutes] = getHours(minutesPerDivided)[event.target.dataset.index].split(':')
     // Here you have to take into account that the first day of the week is Monday,
     // should have some function to change between Monday and Sunday
     const deference = dayIndex - (week.getDay() === 0 ? 7 : week.getDay())
@@ -58,8 +60,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
         )
 
         const sortedMatchingEvents = matchingEvents.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
-        if (matchingEvents.length > 0) {
-          return <li
+        return <li
           data-index={idx}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
@@ -68,7 +69,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
           style={{ height: pixelsPerMinute * minutesPerDivided }}
           key={idx}>
 
-          {sortedMatchingEvents.map((event, idx) => (
+          {sortedMatchingEvents?.map((event, idx) => (
             <div key={event.id} style={{ marginLeft: idx * 30 + 'px', zIndex: idx, width: idx > 0 ? '60%' : '' }} className='relative'>
               <Event
                 name={event.name}
@@ -79,8 +80,6 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
             </div>
           ))}
         </li>
-        }
-        return <></>
       })
     }
     <li

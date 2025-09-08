@@ -25,7 +25,7 @@ export const useEventsStore = create<EventsStore>((set) => ({
   events: [],
   eventsAreLoading: true,
   week: new Date(),
-  divisionsPerDay: 24,
+  divisionsPerDay: 0,
   token: null,
   pixelsPerMinute: 1,
   minutesPerDivided: 60,
