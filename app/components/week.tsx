@@ -67,7 +67,8 @@ export default function Week () {
         <h2 className='text-end px-4'>Hours</h2>
         {
           weekdays.map((day, idx) => {
-            if (weekDayNumbers[idx] === week.getDate()) {
+            const today = new Date()
+            if (weekDayNumbers[idx] === today.getDate() && week.getMonth() === today.getMonth() && week.getFullYear() === today.getFullYear()) {
               return (
               <div className='rounded-full bg-secondary flex flex-col mx-auto px-4' key={idx}>
                 <h2>{weekDayNumbers[idx]}</h2>
