@@ -5,7 +5,7 @@ import { Event } from '@/types'
 interface EventDialogProps {
   children: React.ReactNode
   onSubmit: (newEvent: Omit<Event, 'userId' | 'id'>) => void
-  event?: Event
+  event?: Omit<Event, 'userId' | 'id'> | Event
 }
 
 const EventDialog = forwardRef<HTMLDialogElement, EventDialogProps>(

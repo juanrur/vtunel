@@ -76,6 +76,8 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
                 id={event.id}
                 height={pixelsPerMinute * ((event.endTime.getTime() - event.startTime.getTime()) / 1000 / 60)}
                 margin={pixelsPerMinute * (event.startTime.getMinutes() % minutesPerDivided)}
+                startTime={event.startTime}
+                endTime={event.endTime}
               />
             </div>
           ))}

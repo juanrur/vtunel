@@ -1,7 +1,7 @@
 import { Event } from '@/types'
 import { FormEvent } from 'react'
 
-export default function EventForm ({ event, close, onSubmit }: { event?: Event, close: () => void, onSubmit: (event: Omit<Event, 'userId' | 'id'>) => void }) {
+export default function EventForm ({ event, close, onSubmit }: { event?: Omit<Event, 'userId' | 'id'> | Event, close: () => void, onSubmit: (event: Omit<Event, 'userId' | 'id'>) => void }) {
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
