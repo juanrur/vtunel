@@ -17,4 +17,4 @@
 - [X] put month in header
 - [ ] split header in component to make header a server component
 - [X] split every dialog to the same component
-- [ ] define a default sort for the events
+- [X] define a default sort for the events
