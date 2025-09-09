@@ -6,7 +6,7 @@ export default function FilterButton ({ value, filterState, onClick }: { value: 
   return (
     <button
       className='text-center items-center rounded p-1 px-2 uppercase font-semibold text-sm'
-      style={isActive ? { border: '1px solid var(--border-color)' } : { }}
+      style={isActive ? { border: '1px solid var(--border-color)', background: 'var(--background-secondary)' } : { }}
       onClick={() => onClick(value)}
     >
       {value}
