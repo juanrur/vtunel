@@ -11,9 +11,7 @@ export default function EventInfo ({ event }: { event: Event }) {
   const EventEditDialog = useRef<HTMLDialogElement>(null)
 
   const showEditDialog = () => {
-    console.log(EventEditDialog.current)
     if (EventEditDialog.current) {
-      console.log('Showing edit dialog for event:', event.id)
       EventEditDialog.current.showModal()
     }
   }
@@ -27,7 +25,11 @@ export default function EventInfo ({ event }: { event: Event }) {
 
   return (
     <li draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} className='border rounded-lg p-3 flex justify-between items-center bg-secondary border-primary' key={event.id} onClick={showEditDialog}>
-      <EventDialog ref={EventEditDialog} onSubmit={(newEvent) => updateEvent(event.id, newEvent)} event={event}>
+      <EventDialog
+        key={event.id + event.startTime.getTime() + event.endTime.getTime()} // fuerza remount si cambian los datos
+        ref={EventEditDialog}
+        onSubmit={(newEvent) => updateEvent(event.id, newEvent)}
+        event={event}>
         Edit Event
       </EventDialog>
 
