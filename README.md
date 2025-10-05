@@ -15,7 +15,7 @@
 - [ ] put the scrollbar-hidden like a utility in tailwind
 - [ ] put z-index of 00:00 from hours column well
 - [X] put month in header
-- [ ] split header in component to make header a server component
+- [ ] split week arrow and header to make header a server component
 - [X] split every dialog to the same component
 - [X] define a default sort for the events
 - [ ] add drag style
