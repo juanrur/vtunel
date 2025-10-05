@@ -1,7 +1,11 @@
 import { Event } from '@/types'
 import { FormEvent } from 'react'
 
-export default function EventForm ({ event, close, onSubmit }: { event?: Omit<Event, 'userId' | 'id'> | Event, close: () => void, onSubmit: (event: Omit<Event, 'userId' | 'id'>) => void }) {
+const defaultStart = new Date()
+const defaultEnd = new Date(defaultStart)
+defaultEnd.setHours(defaultEnd.getHours() + 1)
+
+export default function EventForm ({ event = { name: '', startTime: defaultStart, endTime: defaultEnd }, close, onSubmit }: { event?: Omit<Event, 'userId' | 'id'> | Event, close: () => void, onSubmit: (event: Omit<Event, 'userId' | 'id'>) => void }) {
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
