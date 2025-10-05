@@ -12,8 +12,10 @@ export default async function Home () {
   if (session === null) redirect('/login')
 
   return (
-    <main className='grid grid-cols-[20%,1fr] h-screen overflow-hidden'>
-      <Aside />
+    <main className='grid grid-cols-[20%,1fr] h-screen overflow-hidden max-md:grid-cols-1'>
+      <div className='max-md:hidden'>
+        <Aside />
+      </div>
       <div className='h-full flex flex-col min-h-0'>
         <Header />
         <Week />

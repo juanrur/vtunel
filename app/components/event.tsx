@@ -17,7 +17,7 @@ export default function Event ({ name, height, margin, id, startTime, endTime }:
 
   return (
     <article draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} onClick={() => dialogRef.current?.showModal()}
-    className='bg-blue-500 w-3/4 inline-flex overflow-hidden py-1 px-1.5 rounded-r absolute'
+    className='bg-zinc-600 w-3/4 inline-flex overflow-hidden py-1 px-1.5 rounded-r absolute'
     style={{ height: height + 'px', marginTop: margin + 'px' }}
     >
       {name}

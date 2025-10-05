@@ -62,8 +62,8 @@ export default function Week () {
   const weekDayNumbers = getWeekDays(week)
 
   return (
-    <article className='h-full flex flex-col'>
-      <div className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3 flex-shrink-0'>
+    <article className='h-full flex flex-col max-md:w-[700px] max-md:overflow-x-auto'>
+      <header className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3 flex-shrink-0'>
         <h2 className='text-end px-4'>Hours</h2>
         {
           weekdays.map((day, idx) => {
@@ -84,7 +84,7 @@ export default function Week () {
             )
           })
         }
-      </div>
+      </header>
 
       <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto flex-1 min-h-0`}>
         <HoursCol />

@@ -1,7 +1,7 @@
 import SingInButtons from '@/components/sing-in-buttons'
 
 export default function Login () {
-  return <section className='grid place-content-center min-h-screen'>
+  return <section className='flex items-center justify-center h-screen gap-4'>
     <SingInButtons />
   </section>
 }
