@@ -7,6 +7,7 @@ import TrashIcon from './icons/trash'
 
 export default function EventInfo ({ event }: { event: Event }) {
   const { deleteEvent, updateEvent } = useEventsStore()
+  console.log('render event', event.id)
 
   const EventEditDialog = useRef<HTMLDialogElement>(null)
 
@@ -16,8 +17,8 @@ export default function EventInfo ({ event }: { event: Event }) {
     }
   }
 
-  const handleDragStart = (event: any) => {
-    event.dataTransfer?.setData('text/plain', event.id)
+  const handleDragStart = (functionEvent: any) => {
+    functionEvent.dataTransfer?.setData('text/plain', event.id)
   }
 
   const handleDragEnd = (event: any) => {

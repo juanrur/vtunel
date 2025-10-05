@@ -18,3 +18,4 @@
 - [ ] split header in component to make header a server component
 - [X] split every dialog to the same component
 - [X] define a default sort for the events
+- [ ] add drag style
