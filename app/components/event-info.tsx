@@ -18,8 +18,15 @@ export default function EventInfo ({ event }: { event: Event }) {
     }
   }
 
+  const handleDragStart = (event: any) => {
+    event.dataTransfer?.setData('text/plain', event.id)
+  }
+
+  const handleDragEnd = (event: any) => {
+  }
+
   return (
-    <li className='border rounded-lg p-3 flex justify-between items-center bg-secondary border-primary' key={event.id} onClick={showEditDialog}>
+    <li draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} className='border rounded-lg p-3 flex justify-between items-center bg-secondary border-primary' key={event.id} onClick={showEditDialog}>
       <EventDialog ref={EventEditDialog} onSubmit={(newEvent) => updateEvent(event.id, newEvent)} event={event}>
         Edit Event
       </EventDialog>
