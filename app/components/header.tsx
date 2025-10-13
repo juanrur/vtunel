@@ -5,10 +5,10 @@ import { useEventsStore } from '@/store'
 import SingOutButton from './sing-out-button'
 
 export default function Header () {
-  const { decreaseWeek, increaseWeek, week } = useEventsStore()
+  const { decreaseWeek, increaseWeek, day } = useEventsStore()
 
-  const month = week.toLocaleString('default', { month: 'long' }).toUpperCase()
-  const year = week.getFullYear()
+  const month = day.toLocaleString('default', { month: 'long' }).toUpperCase()
+  const year = day.getFullYear()
 
   return (
     <header className='flex items-center justify-between gap-2 p-2 pb-4'>

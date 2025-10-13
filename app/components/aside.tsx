@@ -19,17 +19,17 @@ export type Filter = typeof FILTER[keyof typeof FILTER]
 export default function Aside () {
   const [filter, setFilter] = useState<Filter>(FILTER.ALL)
 
-  const { events, getAllEvents, token, week, eventsAreLoading } = useEventsStore()
+  const { events, getAllEvents, token, day, eventsAreLoading } = useEventsStore()
 
   useEffect(() => { if (token) getAllEvents(token) }, [getAllEvents, token])
 
   const eventsFiltered = events.filter((event) => {
     const eventDate = new Date(event.startTime)
-    const { startOfWeek, endOfWeek } = getWeekStartEndDates(week)
+    const { startOfWeek, endOfWeek } = getWeekStartEndDates(day)
 
     if (filter === FILTER.ALL) return true
-    if (filter === FILTER.TODAY) return eventDate.toDateString() === week.toDateString()
-    if (filter === FILTER.MONTH) return eventDate.getMonth() === week.getMonth() && eventDate.getFullYear() === week.getFullYear()
+    if (filter === FILTER.TODAY) return eventDate.toDateString() === day.toDateString()
+    if (filter === FILTER.MONTH) return eventDate.getMonth() === day.getMonth() && eventDate.getFullYear() === day.getFullYear()
     if (filter === FILTER.WEEK) return eventDate >= startOfWeek && eventDate <= endOfWeek
     return false
   })

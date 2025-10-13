@@ -3,8 +3,8 @@ import Event from '@/components/event'
 import { useEventsStore } from '@/store'
 import { type Day as DayType } from '@/types'
 
-export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: number }) {
-  const { week, changeEventStartTime, pixelsPerMinute, minutesPerDivided } = useEventsStore()
+export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?: number }) {
+  const { day, changeEventStartTime, pixelsPerMinute, minutesPerDivided } = useEventsStore()
 
   const handleDrop = (event: any) => {
     event.target = event.target.closest('li')
@@ -33,10 +33,13 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex: 
     const [hour, minutes] = getHours(minutesPerDivided)[event.target.dataset.index].split(':')
     // Here you have to take into account that the first day of the week is Monday,
     // should have some function to change between Monday and Sunday
-    const deference = dayIndex - (week.getDay() === 0 ? 7 : week.getDay())
-    const day = week.getDate() + deference + 1
+    let newDay
+    if (dayIndex) {
+      const deference = dayIndex - (day.getDay() === 0 ? 7 : day.getDay())
+      newDay = day.getDate() + deference + 1
+    } else newDay = day.getDate()
 
-    const newDate = new Date(Date.UTC(week.getFullYear(), week.getMonth(), day, Number(hour), Number(minutes)))
+    const newDate = new Date(Date.UTC(day.getFullYear(), day.getMonth(), newDay, Number(hour), Number(minutes)))
     newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
 
     changeEventStartTime(newDate, eventID)

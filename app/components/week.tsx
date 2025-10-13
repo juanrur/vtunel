@@ -1,23 +1,20 @@
-'use client'
-import Day from '@/components/day'
-import { useEventsStore } from '@/store'
-import { type Week as WeekType } from '@/types'
-import RemoveScrollbar from '@/remove-scrollbar.module.css'
-import HoursCol from './hours-col'
-import { getWeekStartEndDates } from '@/utils'
 import { useEffect } from 'react'
+import { useEventsStore } from '@/store'
+import Day from './day'
+import { getWeekStartEndDates } from '@/utils'
+import { type Week as WeekType, type Event } from '@/types'
+import RemoveScrollbar from '@/remove-scrollbar.module.css'
 
-export default function Week () {
+export default function Week ({ events }: {events: Event[]}) {
   const {
-    events,
-    week,
+    day,
     token,
     getAllEvents
   } = useEventsStore()
 
   useEffect(() => { if (token) getAllEvents(token) }, [getAllEvents, token])
 
-  const { startOfWeek, endOfWeek } = getWeekStartEndDates(week)
+  const { startOfWeek, endOfWeek } = getWeekStartEndDates(day)
 
   const weekEvents : WeekType = Array.from({ length: 7 }, () => [])
 
@@ -59,39 +56,36 @@ export default function Week () {
     return daysOfWeek
   }
 
-  const weekDayNumbers = getWeekDays(week)
+  const weekDayNumbers = getWeekDays(day)
 
   return (
-    <article className='h-full flex flex-col max-md:w-[700px] max-md:overflow-x-auto'>
-      <header className='text-center grid grid-cols-[70px,repeat(7,1fr)] pb-3 flex-shrink-0'>
-        <h2 className='text-end px-4'>Hours</h2>
+    <div>
+      <header className='text-center grid grid-cols-7 pb-3 flex-shrink-0'>
         {
-          weekdays.map((day, idx) => {
+          weekdays.map((dayNumber, idx) => {
             const today = new Date()
-            if (weekDayNumbers[idx] === today.getDate() && week.getMonth() === today.getMonth() && week.getFullYear() === today.getFullYear()) {
-              return (
-              <div className='rounded-full bg-secondary flex flex-col mx-auto px-4' key={idx}>
-                <h2>{weekDayNumbers[idx]}</h2>
-                <p>{day}</p>
-              </div>
-              )
-            }
+            const className =
+              weekDayNumbers[idx] === today.getDate() &&
+              day.getMonth() === today.getMonth() &&
+              day.getFullYear() === today.getFullYear()
+                ? 'rounded-full bg-secondary flex flex-col mx-auto px-4'
+                : ''
+
             return (
-              <div key={idx}>
+              <div className={className} key={idx}>
                 <h2>{weekDayNumbers[idx]}</h2>
-                <p>{day}</p>
+                <p>{dayNumber}</p>
               </div>
             )
           })
         }
       </header>
 
-      <div className={`${RemoveScrollbar.remove} grid grid-cols-[70px,repeat(7,1fr)] overflow-auto flex-1 min-h-0`}>
-        <HoursCol />
+      <section className={`${RemoveScrollbar.remove} grid grid-cols-7 overflow-auto flex-1`}>
         {weekEvents.map((day, idx) =>
           <Day key={idx} dayIndex={idx} events={day} />
         )}
-      </div>
-    </article>
+      </section>
+    </div>
   )
 }

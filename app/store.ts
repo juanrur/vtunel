@@ -5,7 +5,7 @@ import { Event } from './types'
 interface EventsStore {
   events: Event[]
   eventsAreLoading: boolean
-  week: Date
+  day: Date
   divisionsPerDay: number
   token: string | null
   pixelsPerMinute: number
@@ -24,7 +24,7 @@ interface EventsStore {
 export const useEventsStore = create<EventsStore>((set) => ({
   events: [],
   eventsAreLoading: true,
-  week: new Date(),
+  day: new Date(),
   divisionsPerDay: 0,
   token: null,
   pixelsPerMinute: 1,
@@ -52,15 +52,15 @@ export const useEventsStore = create<EventsStore>((set) => ({
   },
 
   increaseWeek: () => set((state) => {
-    const newDate = new Date(state.week)
-    newDate.setDate(state.week.getDate() + 7)
-    return { week: newDate }
+    const newDate = new Date(state.day)
+    newDate.setDate(state.day.getDate() + 7)
+    return { day: newDate }
   }),
 
   decreaseWeek: () => set((state) => {
-    const newDate = new Date(state.week)
-    newDate.setDate(state.week.getDate() - 7)
-    return { week: newDate }
+    const newDate = new Date(state.day)
+    newDate.setDate(state.day.getDate() - 7)
+    return { day: newDate }
   }),
 
   getAllEvents: async (token) => {

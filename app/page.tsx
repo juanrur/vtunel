@@ -1,4 +1,4 @@
-import Week from '@/components/week'
+import Calendar from '@/components/calendar'
 import Aside from '@/components/aside'
 import { redirect } from 'next/navigation'
 import { createServerClient } from '@/utils'
@@ -18,7 +18,7 @@ export default async function Home () {
       </div>
       <div className='h-full flex flex-col min-h-0'>
         <Header />
-        <Week />
+        <Calendar />
       </div>
     </main>
   )
