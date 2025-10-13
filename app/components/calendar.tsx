@@ -4,9 +4,16 @@ import Week from '@/components/week'
 import Day from './day'
 import { useEventsStore } from '@/store'
 import HoursCol from '@/components/hours-col'
+import Month from './month'
+
+const Views = {
+  day: 'day',
+  week: 'week',
+  month: 'month'
+} as const
 
 export default function Calendar () {
-  const [view, setView] = useState<'day' | 'week' | 'month'>('week')
+  const [view, setView] = useState<'day' | 'week' | 'month'>('month')
   const { day, events } = useEventsStore()
 
   const weekdays = [
@@ -19,11 +26,13 @@ export default function Calendar () {
     'Saturday'
   ] as const
 
-  return <main className='h-full max-md:w-[700px] max-md:overflow-x-auto grid grid-cols-[70px,1fr]'>
-    <div>
-      <h2 className='text-end px-4 h-[60px] grid pt-3'>Hours</h2>
-      <HoursCol />
-    </div>
+  return <main className={`h-full max-md:w-[700px] max-md:overflow-x-auto grid ${view === Views.day ? 'grid-cols-[70px,1fr]' : ''}`}>
+    {view !== 'month' &&
+      <div>
+        <h2 className='text-end px-4 h-[60px] grid pt-3'>Hours</h2>
+        <HoursCol />
+      </div>
+    }
     {view === 'week' &&
       <Week events={events} />
     }
@@ -35,6 +44,9 @@ export default function Calendar () {
         </header>
         <Day events={events}></Day>
       </div>
+    }
+    {view === 'month' &&
+      <Month />
     }
 
   </main>
