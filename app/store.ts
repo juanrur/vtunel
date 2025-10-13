@@ -6,14 +6,15 @@ interface EventsStore {
   events: Event[]
   eventsAreLoading: boolean
   day: Date
+  view: 'day' | 'week' | 'month'
   divisionsPerDay: number
   token: string | null
   pixelsPerMinute: number
   minutesPerDivided: number
   changeDivisionsPerDay: (number: number) => void
   changeEventStartTime: (newStartTime: Date, eventID: string) => void
-  increaseWeek: () => void
-  decreaseWeek: () => void
+  increaseView: () => void
+  decreaseView: () => void
   getAllEvents: (token: string) => void
   insertEvent: (event: Omit<Event, 'id' | 'userId'>, token: string) => void
   deleteEvent: (eventID: string) => void,
@@ -29,7 +30,7 @@ export const useEventsStore = create<EventsStore>((set) => ({
   token: null,
   pixelsPerMinute: 1,
   minutesPerDivided: 60,
-
+  view: 'month',
   changeDivisionsPerDay: (number: number) => set(() => ({ divisionsPerDay: number })),
 
   changeEventStartTime: async (newStartTime: Date, eventID: string) => {
@@ -51,13 +52,13 @@ export const useEventsStore = create<EventsStore>((set) => ({
     await updateEvent(eventID, { startTime: newStartTime, endTime: newEndTime })
   },
 
-  increaseWeek: () => set((state) => {
+  increaseView: () => set((state) => {
     const newDate = new Date(state.day)
     newDate.setDate(state.day.getDate() + 7)
     return { day: newDate }
   }),
 
-  decreaseWeek: () => set((state) => {
+  decreaseView: () => set((state) => {
     const newDate = new Date(state.day)
     newDate.setDate(state.day.getDate() - 7)
     return { day: newDate }

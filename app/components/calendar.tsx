@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react'
 import Week from '@/components/week'
 import Day from './day'
 import { useEventsStore } from '@/store'
@@ -13,8 +12,7 @@ const Views = {
 } as const
 
 export default function Calendar () {
-  const [view, setView] = useState<'day' | 'week' | 'month'>('month')
-  const { day, events } = useEventsStore()
+  const { day, events, view } = useEventsStore()
 
   const weekdays = [
     'Sunday',

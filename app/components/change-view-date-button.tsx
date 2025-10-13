@@ -1,6 +1,6 @@
 import Arrow from '@icons/arrow'
 
-export default function ChangeWeekButton ({
+export default function ChangeViewDateButton ({
   action, rotate = false
 }: {
   action: () => void, rotate?: boolean
