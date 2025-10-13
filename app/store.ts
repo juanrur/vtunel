@@ -54,13 +54,35 @@ export const useEventsStore = create<EventsStore>((set) => ({
 
   increaseView: () => set((state) => {
     const newDate = new Date(state.day)
-    newDate.setDate(state.day.getDate() + 7)
+    const views = {
+      month: () => {
+        newDate.setMonth(state.day.getMonth() + 1)
+      },
+      week: () => {
+        newDate.setDate(state.day.getDate() + 7)
+      },
+      day: () => {
+        newDate.setDate(state.day.getDate() + 1)
+      }
+    }
+    views[state.view]()
     return { day: newDate }
   }),
 
   decreaseView: () => set((state) => {
     const newDate = new Date(state.day)
-    newDate.setDate(state.day.getDate() - 7)
+    const views = {
+      month: () => {
+        newDate.setMonth(state.day.getMonth() - 1)
+      },
+      week: () => {
+        newDate.setDate(state.day.getDate() - 7)
+      },
+      day: () => {
+        newDate.setDate(state.day.getDate() - 1)
+      }
+    }
+    views[state.view]()
     return { day: newDate }
   }),
 
