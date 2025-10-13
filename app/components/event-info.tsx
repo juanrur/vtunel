@@ -7,7 +7,6 @@ import TrashIcon from './icons/trash'
 
 export default function EventInfo ({ event }: { event: Event }) {
   const { deleteEvent, updateEvent } = useEventsStore()
-  console.log('render event', event.id)
 
   const EventEditDialog = useRef<HTMLDialogElement>(null)
 
