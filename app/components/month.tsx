@@ -13,19 +13,19 @@ export default function Month () {
     const daysInMonth = getDaysInMonth(year, month)
     const remainingDays = Math.round((35 - daysInMonth) / 2)
     const daysArray = []
-    let daysInMonthCounter = 0
+    let daysInMonthCounter = 1
     let remainingDaysCounter = remainingDays
     let daysInNextMonthCounter = 1
 
     for (let idx = 0; idx <= 35; idx++) {
       if (idx < remainingDays) {
-        daysArray.push(daysInLastMonth - remainingDaysCounter + 1)
+        daysArray.push({ day: daysInLastMonth - remainingDaysCounter + 1, month: month - 1 })
         remainingDaysCounter--
       } else if (daysInMonthCounter >= daysInMonth) {
-        daysArray.push(daysInNextMonthCounter)
+        daysArray.push({ day: daysInNextMonthCounter, month: month + 1 })
         daysInNextMonthCounter++
       } else if (idx > remainingDays) {
-        daysArray.push(daysInMonthCounter + 1)
+        daysArray.push({ day: daysInMonthCounter, month })
         daysInMonthCounter++
       }
     }
@@ -37,11 +37,11 @@ export default function Month () {
 
   return <section className="h-full">
     <ul className="h-full grid grid-cols-7 grid-rows-5 p-1">
-      {dayNumbers.map((day, idx) => (
+      {dayNumbers.map(({ day, month }, idx) => (
         <li key={idx}
         className="border border-primary flex items-center justify-center"
         >
-          {day}
+          {day}, {month + 1}
         </li>
       ))}
     </ul>
