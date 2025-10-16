@@ -24,17 +24,17 @@ export default function Calendar () {
     'Saturday'
   ] as const
 
-  return <main className={`h-full max-md:w-[700px] max-md:overflow-x-auto grid ${view === Views.day ? 'grid-cols-[70px,1fr]' : ''}`}>
-    {view !== 'month' &&
+  return <main className={`h-full max-md:w-[700px] max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
+    {view !== Views.month &&
       <div>
         <h2 className='text-end px-4 h-[60px] grid pt-3'>Hours</h2>
         <HoursCol />
       </div>
     }
-    {view === 'week' &&
+    {view === Views.week &&
       <Week events={events} />
     }
-    {view === 'day' &&
+    {view === Views.day &&
       <div className='flex flex-col'>
         <header className='text-center h-[60px]'>
           <h2>{weekdays[day.getDay()]}</h2>
@@ -44,7 +44,7 @@ export default function Calendar () {
       </div>
     }
     {view === 'month' &&
-      <Month />
+      <Month events={events}/>
     }
 
   </main>
