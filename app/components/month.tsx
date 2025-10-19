@@ -13,10 +13,12 @@ export default function Month ({ events }: {events: EventType[]}) {
     event.preventDefault()
     const eventID = event.dataTransfer.getData('text/plain')
 
+    const draggedEvent = events.find(ev => ev.id === eventID)
+
     const newDay = Number(event.target.dataset.day)
     const newMonth = Number(event.target.dataset.month)
 
-    const newStartTime = new Date(Date.UTC(day.getFullYear(), newMonth, newDay, 0, 0))
+    const newStartTime = new Date(Date.UTC(day.getFullYear(), newMonth, newDay, draggedEvent?.startTime.getUTCHours(), draggedEvent?.startTime.getUTCMinutes()))
 
     changeEventStartTime(newStartTime, eventID)
   }
@@ -82,10 +84,7 @@ export default function Month ({ events }: {events: EventType[]}) {
         >
           <span className=''>{day}</span>
           {sortedMatchingEvents.map(event =>
-            <article className='self-start text-sm' key={event.id}>
-              <span>{event.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-              <p className='whitespace-nowrap truncate overflow-hidden w-max-4'>{event.name}</p>
-            </article>
+            <MonthEvent key={event.id} event={event} />
           )}
         </li>
       })}
@@ -93,24 +92,32 @@ export default function Month ({ events }: {events: EventType[]}) {
   </section>
 }
 
-function Event ({ name, height, margin, id, startTime, endTime }: { name: string, height: number, margin: number, id: string, startTime: Date, endTime: Date }) {
+function MonthEvent ({ event }: {event: EventType}) {
   const { updateEvent } = useEventsStore()
   const dialogRef = useRef<HTMLDialogElement>(null)
-
-  const handleDragStart = (event: any) => {
-    event.dataTransfer?.setData('text/plain', id)
+  const showModal = () => {
+    if (dialogRef.current) {
+      dialogRef.current.showModal()
+    }
   }
-
-  const handleDragEnd = (event: any) => {
-  }
-
   return (
-    <article draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} onClick={() => dialogRef.current?.showModal()}
-    className='bg-zinc-600 w-3/4 inline-flex overflow-hidden py-1 px-1.5 rounded-r absolute'
-    style={{ height: height + 'px', marginTop: margin + 'px' }}
+    <article
+      draggable
+      onDragStart={(evt) => {
+        evt.dataTransfer?.setData('text/plain', event.id)
+      }}
+      onClick={showModal}
+      className='self-start text-sm flex gap-1 max-w-full'
+      key={event.id}
     >
-      {name}
-      <EventDialog ref={dialogRef} onSubmit={(newEvent) => updateEvent(id, newEvent)} event={{ name, startTime, endTime }}>
+      <span>{event.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+      <p className='truncate'>{event.name}</p>
+      <EventDialog
+        key={event.id + event.startTime.getTime() + event.endTime.getTime()} // fuerza remount si cambian los datos
+        ref={dialogRef}
+        event={event}
+        onSubmit={(newEvent) => updateEvent(event.id, newEvent)}
+      >
         Edit Event
       </EventDialog>
     </article>
