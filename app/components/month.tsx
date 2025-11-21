@@ -4,6 +4,8 @@ import { useEventsStore } from '@/store'
 export default function Month () {
   const { day } = useEventsStore()
 
+  const actualMonth = day.getMonth()
+
   function getDaysInMonth (year: number, month: number) {
     return new Date(year, month + 1, 0).getDate()
   }
@@ -40,8 +42,9 @@ export default function Month () {
       {dayNumbers.map(({ day, month }, idx) => (
         <li key={idx}
         className="border border-primary flex items-center justify-center"
+        style={actualMonth === month ? {} : { backgroundColor: 'rgba(0,0,0,0.5)' }}
         >
-          {day}, {month + 1}
+          {day}
         </li>
       ))}
     </ul>
