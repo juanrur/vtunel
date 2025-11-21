@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 'use server'
-import { Day, Event } from '@/types'
+import { Event } from '@/types'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@supabase/supabase-js'
 import { getWeekStartEndDates } from '@/utils'
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '')
 
-export async function getAllEvents (token: string): Promise<Day> {
+export async function getAllEvents (token: string): Promise<Event[]> {
   const user = await supabase.auth.getUser(token)
   const { data, error } = await supabase
     .from('events')
@@ -17,13 +17,18 @@ export async function getAllEvents (token: string): Promise<Day> {
   if (error) console.error('Error fetching all events:', error)
 
   if (data) {
-    return data.map<Event>(({ id, startTime, endTime, name, user_id }) => (
+    return data.map<Event>(({ id, startTime, endTime, name, user_id, recurrenceType, recurrenceInterval, recurrenceDays, recurrenceEnd, exceptionDates }) => (
       {
         id,
         name,
         startTime: convertToLocalTime(startTime),
         endTime: convertToLocalTime(endTime),
-        userId: user_id
+        userId: user_id,
+        recurrenceType: recurrenceType ?? 'none',
+        recurrenceInterval: recurrenceInterval ?? 1,
+        recurrenceDays: recurrenceDays ?? null,
+        recurrenceEnd: recurrenceEnd ?? null,
+        exceptionDates: exceptionDates ?? null
       }
     ))
   } else return []
@@ -45,30 +50,40 @@ export async function fetchEvents (token: string, week: Date = new Date()): Prom
   console.log('Fetched events:', data)
 
   if (data) {
-    return data.map<Event>(({ id, startTime, endTime, name, user_id }) => (
+    return data.map<Event>(({ id, startTime, endTime, name, user_id, recurrenceType, recurrenceInterval, recurrenceDays, recurrenceEnd, exceptionDates }) => (
       {
         id,
         name,
         startTime: convertToLocalTime(startTime),
         endTime: convertToLocalTime(endTime),
-        userId: user_id
+        userId: user_id,
+        recurrenceType: recurrenceType ?? 'none',
+        recurrenceInterval: recurrenceInterval ?? 1,
+        recurrenceDays: recurrenceDays ?? null,
+        recurrenceEnd: recurrenceEnd ?? null,
+        exceptionDates: exceptionDates ?? null
       }
     ))
   } else return []
 }
 
-export async function insertEvent ({ startTime, endTime, name } : Omit<Event, 'id' | 'userId'>, token: string) {
+export async function insertEvent ({ startTime, endTime, name, recurrenceType, recurrenceInterval, recurrenceDays, recurrenceEnd, exceptionDates } : Omit<Event, 'id' | 'userId'>, token: string) {
   const user = await supabase.auth.getUser(token)
+  const payload: any = {
+    startTime: startTime.toISOString(),
+    endTime: endTime.toISOString(),
+    name,
+    user_id: user.data.user?.id,
+    recurrenceType: recurrenceType ?? 'none',
+    recurrenceInterval: recurrenceInterval ?? 1,
+    recurrenceDays: recurrenceDays ?? null,
+    recurrenceEnd: recurrenceEnd ?? null,
+    exceptionDates: exceptionDates ?? null
+  }
+
   const { data, error } = await supabase
     .from('events')
-    .insert([
-      {
-        startTime: startTime.toISOString(),
-        endTime: endTime.toISOString(),
-        name,
-        user_id: user.data.user?.id
-      }
-    ])
+    .insert([payload])
     .select()
 
   console.log(startTime.toISOString(), endTime.toISOString(), endTime.toString())
@@ -104,8 +119,8 @@ export async function updateEvent (eventID: string, updatedData: Partial<Omit<Ev
     .from('events')
     .update({
       ...updatedData,
-      startTime: updatedData.startTime?.toISOString(),
-      endTime: updatedData.endTime?.toISOString()
+      startTime: updatedData.startTime ? updatedData.startTime.toISOString() : undefined,
+      endTime: updatedData.endTime ? updatedData.endTime.toISOString() : undefined
     })
     .eq('id', eventID)
     .select()
@@ -120,7 +135,8 @@ export async function updateEvent (eventID: string, updatedData: Partial<Omit<Ev
   revalidatePath('/')
 }
 
-function convertToLocalTime (dateString: string): Date {
+function convertToLocalTime (dateString?: string | null): Date {
+  if (!dateString) return new Date()
   const utcDate = new Date(dateString)
   const localOffset = utcDate.getTimezoneOffset() * 60000
   return new Date(utcDate.getTime() - localOffset)
