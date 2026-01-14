@@ -30,7 +30,7 @@ export const useEventsStore = create<EventsStore>((set) => ({
   token: null,
   pixelsPerMinute: 1,
   minutesPerDivided: 60,
-  view: 'month',
+  view: 'week',
   changeDivisionsPerDay: (number: number) => set(() => ({ divisionsPerDay: number })),
 
   changeEventStartTime: async (newStartTime: Date, eventID: string) => {
