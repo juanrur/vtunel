@@ -20,7 +20,8 @@ export default function AddEvent () {
     if (!name) return
     if (!startDay && !startDay && !startHour && !endDay && !endHour) return
 
-    const event : Omit<Event, 'id' | 'userId'> = {
+    // TODO: convert to proper Event type
+    const event : any = {
       startTime: new Date(`${startDay}T${startHour}`),
       endTime: new Date(`${endDay}T${endHour}`),
       name
