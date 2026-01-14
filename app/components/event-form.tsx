@@ -5,7 +5,7 @@ const defaultStart = new Date()
 const defaultEnd = new Date(defaultStart)
 defaultEnd.setHours(defaultEnd.getHours() + 1)
 
-export default function EventForm ({ event = { name: '', startTime: defaultStart, endTime: defaultEnd }, close, onSubmit }: { event?: Omit<Event, 'userId' | 'id'> | Event, close: () => void, onSubmit: (event: Omit<Event, 'userId' | 'id'>) => void }) {
+export default function EventForm ({ event = { name: '', startTime: defaultStart, endTime: defaultEnd }, close, onSubmit }: { event?: any | Event, close: () => void, onSubmit: (event: Omit<Event, 'userId' | 'id'>) => void }) {
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
@@ -19,7 +19,7 @@ export default function EventForm ({ event = { name: '', startTime: defaultStart
       return
     }
 
-    const newEvent: Omit<Event, 'userId' | 'id'> = {
+    const newEvent: any = {
       name,
       startTime: new Date(new Date(`${day}T${startTime}`)),
       endTime: new Date(new Date(`${day}T${endTime}`))
