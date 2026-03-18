@@ -3,24 +3,34 @@ import { deleteEvent, getAllEvents, insertEvent as insertEventDB, updateEvent } 
 import { Event } from './types'
 
 interface EventsStore {
+  // events
   events: Event[]
   eventsAreLoading: boolean
-  day: Date
-  view: 'day' | 'week' | 'month'
-  divisionsPerDay: number
-  token: string | null
-  pixelsPerMinute: number
-  minutesPerDivided: number
-  setView: (view: 'day' | 'week' | 'month') => void
-  changeDivisionsPerDay: (number: number) => void
-  changeEventStartTime: (newStartTime: Date, eventID: string) => void
-  increaseView: () => void
-  decreaseView: () => void
   getAllEvents: (token: string) => void
   insertEvent: (event: Omit<Event, 'id' | 'userId'>, token: string) => void
   deleteEvent: (eventID: string) => void,
-  setToken: (token: string) => void
+  // maybe should be rethink, maybe should be more generic like updateEventTime or something
+  changeEventStartTime: (newStartTime: Date, eventID: string) => void
   updateEvent: (eventID: string, updatedData: Partial<Event>) => void
+
+  // bad name
+  day: Date
+  increaseView: () => void
+  decreaseView: () => void
+
+  // view
+  view: 'day' | 'week' | 'month'
+  setView: (view: 'day' | 'week' | 'month') => void
+
+  // settings
+  divisionsPerDay: number
+  pixelsPerMinute: number
+  minutesPerDivided: number
+  changeDivisionsPerDay: (number: number) => void
+
+  // auth
+  token: string | null
+  setToken: (token: string) => void
 }
 
 export const useEventsStore = create<EventsStore>((set) => ({

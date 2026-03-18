@@ -1,9 +1,9 @@
 'use client'
-import Week from '@/components/week'
-import Day from './day'
+import Week from '@/components/calendar/week/view'
+import Day from './day/view'
 import { useEventsStore } from '@/store'
-import HoursCol from '@/components/hours-col'
-import Month from './month'
+import HoursCol from '@/components/calendar/hours-col'
+import Month from '@/components/calendar/month/view'
 
 const Views = {
   day: 'day',
@@ -12,8 +12,9 @@ const Views = {
 } as const
 
 export default function Calendar () {
-  const { day, events, view } = useEventsStore()
+  const { day, events } = useEventsStore()
 
+  const view : keyof typeof Views = 'month'
   const weekdays = [
     'Sunday',
     'Monday',
@@ -23,6 +24,10 @@ export default function Calendar () {
     'Friday',
     'Saturday'
   ] as const
+
+  return <main className={`h-full max-md:w-[700px] max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
+    <Month events={events}/>
+    </main>
 
   return <main className={`h-full max-md:w-[700px] max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
     {view !== Views.month &&

@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
 import { useEventsStore } from '@/store'
-import Day from './day'
+import Day from '@/components/calendar/day/view'
 import { getWeekStartEndDates } from '@/utils'
 import { type Week as WeekType, type Event } from '@/types'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'

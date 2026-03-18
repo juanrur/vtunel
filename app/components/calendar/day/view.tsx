@@ -1,5 +1,5 @@
 'use client'
-import Event from '@/components/event'
+import Event from '@/components/calendar/event'
 import { useEventsStore } from '@/store'
 import { type Day as DayType } from '@/types'
 
