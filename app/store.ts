@@ -11,6 +11,7 @@ interface EventsStore {
   token: string | null
   pixelsPerMinute: number
   minutesPerDivided: number
+  setView: (view: 'day' | 'week' | 'month') => void
   changeDivisionsPerDay: (number: number) => void
   changeEventStartTime: (newStartTime: Date, eventID: string) => void
   increaseView: () => void
@@ -31,6 +32,9 @@ export const useEventsStore = create<EventsStore>((set) => ({
   pixelsPerMinute: 1,
   minutesPerDivided: 60,
   view: 'month',
+
+  setView: (view: 'day' | 'week' | 'month') => set(() => ({ view })),
+
   changeDivisionsPerDay: (number: number) => set(() => ({ divisionsPerDay: number })),
 
   changeEventStartTime: async (newStartTime: Date, eventID: string) => {

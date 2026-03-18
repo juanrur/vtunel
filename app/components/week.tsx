@@ -7,12 +7,8 @@ import RemoveScrollbar from '@/remove-scrollbar.module.css'
 
 export default function Week ({ events }: {events: Event[]}) {
   const {
-    day,
-    token,
-    getAllEvents
+    day
   } = useEventsStore()
-
-  useEffect(() => { if (token) getAllEvents(token) }, [getAllEvents, token])
 
   const { startOfWeek, endOfWeek } = getWeekStartEndDates(day)
 
