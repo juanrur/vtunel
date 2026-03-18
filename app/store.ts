@@ -31,7 +31,7 @@ export const useEventsStore = create<EventsStore>((set) => ({
   token: null,
   pixelsPerMinute: 1,
   minutesPerDivided: 60,
-  view: 'month',
+  view: 'week',
 
   setView: (view: 'day' | 'week' | 'month') => set(() => ({ view })),
 

@@ -31,6 +31,8 @@ export default function Month ({ events }: {events: EventType[]}) {
     event.preventDefault()
   }
 
+  const actualMonth = day.getMonth()
+
   function getDaysInMonth (year: number, month: number) {
     return new Date(year, month + 1, 0).getDate()
   }
@@ -65,27 +67,11 @@ export default function Month ({ events }: {events: EventType[]}) {
 
   return <section className="h-full">
     <ul className="h-full grid grid-cols-7 grid-rows-5 p-1">
-      {dayNumbers.map(({ day, month }, idx) => {
-        const matchingEvents = events.filter(event => {
-          const eventDate = new Date(event.startTime)
-          return eventDate.getMonth() === month &&
-                 eventDate.getDate() === day
-        })
-
-        const sortedMatchingEvents = matchingEvents.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
-        return <li
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        data-month={month}
-        data-day={day}
-        key={idx}
-        className="border border-primary flex flex-col items-center justify-start relative p-2 gap-2"
+      {dayNumbers.map(({ day, month }, idx) => (
+        <li key={idx}
+        className="border border-primary flex items-center justify-center"
         >
-          <span className=''>{day}</span>
-          {sortedMatchingEvents.map(event =>
-            <MonthEvent key={event.id} event={event} />
-          )}
+          {day}, {month + 1}
         </li>
       })}
     </ul>

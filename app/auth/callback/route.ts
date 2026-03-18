@@ -12,12 +12,31 @@ export async function GET (request: NextRequest) {
     if (code) {
       const supabase = createServerClient(cookies)
 
-      await supabase.auth.exchangeCodeForSession(code)
+      const { data: exchangeData, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+      if (exchangeError) {
+        console.error('Exchange error:', exchangeError)
+      } else {
+        console.log('Exchange result:', exchangeData)
+      }
+
+      const { data: { session } } = await supabase.auth.getSession()
+      console.log('Session after exchange:', session)
     }
   } catch (error) {
     console.error('Error exchanging code for session:', error)
     return NextResponse.json({ error: 'Failed to sign in' }, { status: 500 })
   }
 
-  return NextResponse.redirect(requestUrl.origin)
+  // If a session was created, return to origin; otherwise send user to login to avoid redirect loops
+  try {
+    const supabase = createServerClient(cookies)
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session) {
+      return NextResponse.redirect(requestUrl.origin)
+    }
+  } catch (err) {
+    console.error('Error checking session after exchange:', err)
+  }
+
+  return NextResponse.redirect(`${requestUrl.origin}/login`)
 }

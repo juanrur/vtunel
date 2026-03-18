@@ -34,7 +34,7 @@ export default function SingInButtons () {
   }
 
   return <>
-    <button className='p-2 rounded-lg w-32' onClick={handleGitHubSignIn}>Sing In with GitHub</button>
+    <button className='p-2 rounded-lg w-32' onClick={handleGitHubSignIn}>Sign In with GitHub</button>
     <button className='p-2 rounded-lg w-32' onClick={handleGoogleSignIn}>Sign In with Google</button>
   </>
 }

@@ -4,6 +4,11 @@ export interface Event {
   name: string
   id: string
   userId: string
+  recurrenceType: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly'
+  recurrenceInterval: number
+  recurrenceDays: string | null
+  recurrenceEnd: string | null
+  exceptionDates: string | null
 }
 
 export type Day = Event[]

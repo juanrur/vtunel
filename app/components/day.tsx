@@ -55,7 +55,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
 
   return <ul className='border-r first:border-l border-primary'>
     {
-      // make a list of 24 hours with 4 divisions each
+      // make a list of 24 hours with x divisions each
       Array.from({ length: 24 * (60 / minutesPerDivided) }).map((_, idx) => {
         // find all events that start at this hour
         const matchingEvents = events.filter(({ startTime }) =>
