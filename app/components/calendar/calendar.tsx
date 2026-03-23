@@ -3,7 +3,7 @@ import Week from '@/components/calendar/week/view'
 import Day from './day/view'
 import { useEventsStore } from '@/store'
 import HoursCol from '@/components/calendar/hours-col'
-import Month from '@/components/calendar/month/view'
+// import Month from '@/components/calendar/month/view'
 
 const Views = {
   day: 'day',
@@ -43,9 +43,8 @@ export default function Calendar () {
         <Day events={events}></Day>
       </div>
     }
-    {view === 'month' &&
+    {/* {view === 'month' &&
       <Month events={events}/>
-    }
-
+    } */}
   </main>
 }

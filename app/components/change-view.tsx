@@ -10,7 +10,7 @@ export default function ChangeView () {
   }
 
   return <select className="bg-secondary rounded border p-1" onChange={handleChangeView} name="" id="">
-    <option value="month">month</option>
+    {/* <option value="month">month</option> */}
     <option value="week">week</option>
     <option value="day">day</option>
   </select>
