@@ -2,7 +2,6 @@
 import Event from '@/components/calendar/event'
 import { useEventsStore } from '@/store'
 import { type Day as DayType } from '@/types'
-import { useMemo } from 'react'
 
 export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?: number }) {
   const { day, changeEventStartTime, pixelsPerMinute, minutesPerDivided } = useEventsStore()
@@ -11,6 +10,8 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
     event.target = event.target.closest('li')
     event.preventDefault()
     const eventID = event.dataTransfer.getData('text/plain')
+
+    console.log(event.target)
 
     function getHours (splitPerMinutes: number) {
       const hours = []
@@ -54,17 +55,12 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
     event.preventDefault()
   }
 
-  const thisDayEvents = useMemo(
-    () => events.filter(({ startTime }) => startTime.getDate() === day.getDate() && startTime.getMonth() === day.getMonth() && startTime.getFullYear() === day.getFullYear()),
-    [events, day]
-  )
-
   return <ul className='border-r first:border-l border-primary'>
     {
       // make a list of 24 hours with x divisions each
       Array.from({ length: 24 * (60 / minutesPerDivided) }).map((_, idx) => {
         // find all events that start at this hour
-        const matchingEvents = thisDayEvents.filter(({ startTime }) =>
+        const matchingEvents = events.filter(({ startTime }) =>
           idx === (startTime.getHours() * (60 / minutesPerDivided)) + Math.floor(startTime.getMinutes() / 60 * (60 / minutesPerDivided))
         )
 

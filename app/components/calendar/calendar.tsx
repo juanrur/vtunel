@@ -4,6 +4,7 @@ import Day from './day/view'
 import { useEventsStore } from '@/store'
 import HoursCol from '@/components/calendar/hours-col'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
+import { useMemo } from 'react'
 // import Month from '@/components/calendar/month/view'
 
 const Views = {
@@ -25,6 +26,11 @@ export default function Calendar () {
     'Saturday'
   ] as const
 
+  const thisDayEvents = useMemo(
+    () => events.filter(({ startTime }) => startTime.getDate() === day.getDate() && startTime.getMonth() === day.getMonth() && startTime.getFullYear() === day.getFullYear()),
+    [events, day]
+  )
+
   return <main className={`${RemoveScrollbar.remove} max-md:w-[700px] flex-1 min-h-0 overflow-auto max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
     {view !== Views.month &&
       <div>
@@ -41,7 +47,7 @@ export default function Calendar () {
           <h2>{weekdays[day.getDay()]}</h2>
           <p>{day.getDate()}</p>
         </header>
-        <Day events={events}></Day>
+        <Day events={thisDayEvents}></Day>
       </div>
     }
     {/* {view === 'month' &&
