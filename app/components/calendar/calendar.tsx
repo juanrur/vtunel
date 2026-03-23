@@ -12,9 +12,8 @@ const Views = {
 } as const
 
 export default function Calendar () {
-  const { day, events } = useEventsStore()
+  const { day, events, view } = useEventsStore()
 
-  const view : keyof typeof Views = 'month'
   const weekdays = [
     'Sunday',
     'Monday',
@@ -24,10 +23,6 @@ export default function Calendar () {
     'Friday',
     'Saturday'
   ] as const
-
-  return <main className={`h-full max-md:w-[700px] max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
-    <Month events={events}/>
-    </main>
 
   return <main className={`h-full max-md:w-[700px] max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
     {view !== Views.month &&
