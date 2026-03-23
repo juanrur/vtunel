@@ -74,11 +74,11 @@ export async function insertEvent ({ startTime, endTime, name, recurrenceType, r
     endTime: endTime.toISOString(),
     name,
     user_id: user.data.user?.id,
-    recurrenceType: recurrenceType ?? 'none',
-    recurrenceInterval: recurrenceInterval ?? 1,
-    recurrenceDays: recurrenceDays ?? null,
-    recurrenceEnd: recurrenceEnd ?? null,
-    exceptionDates: exceptionDates ?? null
+    recurrence_type: recurrenceType ?? 'none',
+    recurrence_interval: recurrenceInterval ?? 1,
+    recurrence_days: recurrenceDays ?? null,
+    recurrence_end: recurrenceEnd ?? null,
+    exception_dates: exceptionDates ?? null
   }
 
   const { data, error } = await supabase
