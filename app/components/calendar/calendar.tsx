@@ -3,6 +3,7 @@ import Week from '@/components/calendar/week/view'
 import Day from './day/view'
 import { useEventsStore } from '@/store'
 import HoursCol from '@/components/calendar/hours-col'
+import RemoveScrollbar from '@/remove-scrollbar.module.css'
 // import Month from '@/components/calendar/month/view'
 
 const Views = {
@@ -24,7 +25,7 @@ export default function Calendar () {
     'Saturday'
   ] as const
 
-  return <main className={`h-full max-md:w-[700px] max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
+  return <main className={`${RemoveScrollbar.remove} max-md:w-[700px] flex-1 min-h-0 overflow-auto max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
     {view !== Views.month &&
       <div>
         <h2 className='text-end px-4 h-[60px] grid pt-3'>Hours</h2>

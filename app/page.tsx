@@ -4,7 +4,7 @@ import Header from './components/header'
 
 export default async function Home () {
   return (
-    <main className='grid grid-cols-[20%,1fr] h-screen overflow-hidden max-md:grid-cols-1'>
+    <main className='grid grid-cols-[20%,1fr] h-screen max-md:grid-cols-1'>
       <div className='max-md:hidden'>
         <Aside />
       </div>

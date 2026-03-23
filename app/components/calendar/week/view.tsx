@@ -2,7 +2,6 @@ import { useEventsStore } from '@/store'
 import Day from '@/components/calendar/day/view'
 import { getWeekStartEndDates } from '@/utils'
 import { type Week as WeekType, type Event } from '@/types'
-import RemoveScrollbar from '@/remove-scrollbar.module.css'
 
 export default function Week ({ events }: {events: Event[]}) {
   const {
@@ -54,7 +53,7 @@ export default function Week ({ events }: {events: Event[]}) {
   const weekDayNumbers = getWeekDays(day)
 
   return (
-    <div>
+    <div className='flex flex-col'>
       <header className='text-center grid grid-cols-7 pb-3 flex-shrink-0'>
         {
           weekdays.map((dayNumber, idx) => {
@@ -76,7 +75,7 @@ export default function Week ({ events }: {events: Event[]}) {
         }
       </header>
 
-      <section className={`${RemoveScrollbar.remove} grid grid-cols-7 overflow-auto flex-1`}>
+      <section className={'min-h-0 grid grid-cols-7 overflow-auto flex-1'}>
         {weekEvents.map((day, idx) =>
           <Day key={idx} dayIndex={idx} events={day} />
         )}
