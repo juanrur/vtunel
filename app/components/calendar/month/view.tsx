@@ -3,33 +3,33 @@ import { useEventsStore } from '@/store'
 import { type Event as EventType } from '@/types'
 
 export default function Month ({ events }: {events: EventType[]}) {
-  const { day, changeEventStartTime } = useEventsStore()
+  const { day } = useEventsStore()
 
-  const handleDrop = (event: any) => {
-    console.log('drop')
-    event.target = event.target.closest('li')
-    event.preventDefault()
-    const eventID = event.dataTransfer.getData('text/plain')
+  // const handleDrop = (event: any) => {
+  //   console.log('drop')
+  //   event.target = event.target.closest('li')
+  //   event.preventDefault()
+  //   const eventID = event.dataTransfer.getData('text/plain')
 
-    const draggedEvent = events.find(ev => ev.id === eventID)
+  //   const draggedEvent = events.find(ev => ev.id === eventID)
 
-    const newDay = Number(event.target.dataset.day)
-    const newMonth = Number(event.target.dataset.month)
+  //   const newDay = Number(event.target.dataset.day)
+  //   const newMonth = Number(event.target.dataset.month)
 
-    const newStartTime = new Date(Date.UTC(day.getFullYear(), newMonth, newDay, draggedEvent?.startTime.getUTCHours(), draggedEvent?.startTime.getUTCMinutes()))
+  //   const newStartTime = new Date(Date.UTC(day.getFullYear(), newMonth, newDay, draggedEvent?.startTime.getUTCHours(), draggedEvent?.startTime.getUTCMinutes()))
 
-    changeEventStartTime(newStartTime, eventID)
-  }
+  //   changeEventStartTime(newStartTime, eventID)
+  // }
 
-  const handleDragOver = (event: any) => {
-    event.preventDefault()
-  }
+  // const handleDragOver = (event: any) => {
+  //   event.preventDefault()
+  // }
 
-  const handleDragLeave = (event: any) => {
-    event.preventDefault()
-  }
+  // const handleDragLeave = (event: any) => {
+  //   event.preventDefault()
+  // }
 
-  const actualMonth = day.getMonth()
+  // const actualMonth = day.getMonth()
 
   function getDaysInMonth (year: number, month: number) {
     return new Date(year, month + 1, 0).getDate()
