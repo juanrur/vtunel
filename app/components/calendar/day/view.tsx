@@ -36,7 +36,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
     // Here you have to take into account that the first day of the week is Monday,
     // should have some function to change between Monday and Sunday
     let newDay
-    if (dayIndex) {
+    if (dayIndex !== undefined) {
       const deference = dayIndex - (day.getDay() === 0 ? 7 : day.getDay())
       newDay = day.getDate() + deference + 1
     } else newDay = day.getDate()
