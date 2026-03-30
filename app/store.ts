@@ -6,8 +6,8 @@ interface EventsStore {
   // events
   events: Event[]
   eventsAreLoading: boolean
-  getAllEvents: (token: string) => void
-  insertEvent: (event: Omit<Event, 'id' | 'userId'>, token: string) => void
+  getAllEvents: () => void
+  insertEvent: (event: Omit<Event, 'id' | 'userId'>) => void
   deleteEvent: (eventID: string) => void,
 
   // maybe should be rethink, maybe should be more generic like updateEventTime or something
@@ -30,10 +30,6 @@ interface EventsStore {
   setPixelsPerMinute: (number: number) => void
   minutesPerDivided: number // change to minutesPerDivision
   setMinutesPerDivision: (number: number) => void
-
-  // auth
-  token: string | null
-  setToken: (token: string) => void
 }
 
 export const useEventsStore = create<EventsStore>((set) => ({
@@ -41,7 +37,6 @@ export const useEventsStore = create<EventsStore>((set) => ({
   eventsAreLoading: true,
   day: new Date(),
   divisionsPerDay: 0,
-  token: null,
   pixelsPerMinute: 2,
   setPixelsPerMinute: (number: number) => set(() => ({ pixelsPerMinute: number })),
   minutesPerDivided: 60,
@@ -105,16 +100,16 @@ export const useEventsStore = create<EventsStore>((set) => ({
     return { day: newDate }
   }),
 
-  getAllEvents: async (token) => {
+  getAllEvents: async () => {
     set(() => ({ eventsAreLoading: true }))
-    const eventsResponse = await getAllEvents(token)
+    const eventsResponse = await getAllEvents()
     set(() => ({ events: eventsResponse }))
     set(() => ({ eventsAreLoading: false }))
   },
 
-  insertEvent: async (event, token) => {
-    await insertEventDB(event, token)
-    const updatedEvents = await getAllEvents(token)
+  insertEvent: async (event) => {
+    await insertEventDB(event)
+    const updatedEvents = await getAllEvents()
     set(() => ({ events: updatedEvents }))
   },
 
@@ -139,7 +134,5 @@ export const useEventsStore = create<EventsStore>((set) => ({
     })
 
     await deleteEvent(eventID)
-  },
-
-  setToken: (token: any) => set(() => ({ token }))
+  }
 }))

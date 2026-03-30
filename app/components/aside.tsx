@@ -6,6 +6,7 @@ import '@/remove-scrollbar.module.css'
 import { getWeekStartEndDates } from '@/utils'
 import FilterButton from './filter-button'
 import EventListSkeleton from './event-list-skeleton'
+import { supabase } from '@/db/supabase-client'
 
 const FILTER = {
   ALL: 'all',
@@ -19,9 +20,11 @@ export type Filter = typeof FILTER[keyof typeof FILTER]
 export default function Aside () {
   const [filter, setFilter] = useState<Filter>(FILTER.ALL)
 
-  const { events, getAllEvents, token, day, eventsAreLoading } = useEventsStore()
+  const { events, getAllEvents, day, eventsAreLoading } = useEventsStore()
 
-  useEffect(() => { if (token) getAllEvents(token) }, [getAllEvents, token])
+  useEffect(() => {
+    getAllEvents()
+  }, [getAllEvents])
 
   const eventsFiltered = events.filter((event) => {
     const eventDate = new Date(event.startTime)

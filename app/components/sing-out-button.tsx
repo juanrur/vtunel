@@ -1,26 +1,9 @@
 'use client'
-import { useEventsStore } from '@/store'
-import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { supabase } from '@/db/supabase-client'
 
 export default function SingOutButton () {
-  const { setToken } = useEventsStore()
-
   const router = useRouter()
-
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
-  )
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        setToken(session.access_token)
-      }
-    })
-  }, [supabase.auth, setToken])
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()

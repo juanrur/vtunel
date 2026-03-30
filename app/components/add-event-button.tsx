@@ -5,7 +5,7 @@ import { useEventsStore } from '@/store'
 import EventDialog from './event-dialog'
 
 export default function AddEventButton () {
-  const { insertEvent, token } = useEventsStore()
+  const { insertEvent } = useEventsStore()
   const [isOpen, setIsOpen] = useState(false)
   const dialogRef = useRef<HTMLDialogElement>(null)
 
@@ -34,7 +34,7 @@ export default function AddEventButton () {
       >
         {isOpen ? '-' : <PlusIcon />}
       </button>
-      <EventDialog ref={dialogRef} onSubmit={(newEvent) => token && insertEvent(newEvent, token)}>
+      <EventDialog ref={dialogRef} onSubmit={(newEvent) => insertEvent(newEvent)}>
         Add Event
       </EventDialog>
     </>

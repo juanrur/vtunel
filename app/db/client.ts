@@ -1,18 +1,16 @@
 /* eslint-disable camelcase */
-'use server'
 import { Event } from '@/types'
-import { revalidatePath } from 'next/cache'
-import { createClient } from '@supabase/supabase-js'
 import { getWeekStartEndDates } from '@/utils'
+import { supabase } from './supabase-client'
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '')
+export async function getAllEvents (): Promise<Event[]> {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
 
-export async function getAllEvents (token: string): Promise<Event[]> {
-  const user = await supabase.auth.getUser(token)
   const { data, error } = await supabase
     .from('events')
     .select('*')
-    .eq('user_id', user.data.user?.id)
+    .eq('user_id', user?.id)
 
   if (error) console.error('Error fetching all events:', error)
 
@@ -34,14 +32,15 @@ export async function getAllEvents (token: string): Promise<Event[]> {
   } else return []
 }
 
-export async function fetchEvents (token: string, week: Date = new Date()): Promise<Event[]> {
-  const user = await supabase.auth.getUser(token)
+export async function fetchEvents (week: Date = new Date()): Promise<Event[]> {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
   const { startOfWeek, endOfWeek } = getWeekStartEndDates(week)
 
   const { data, error } = await supabase
     .from('events')
     .select('*')
-    .eq('user_id', user.data.user?.id)
+    .eq('user_id', user?.id)
     .gte('startTime', startOfWeek.toISOString())
     .lte('startTime', endOfWeek.toISOString())
 
@@ -67,13 +66,14 @@ export async function fetchEvents (token: string, week: Date = new Date()): Prom
   } else return []
 }
 
-export async function insertEvent ({ startTime, endTime, name, recurrenceType, recurrenceInterval, recurrenceDays, recurrenceEnd, exceptionDates } : Omit<Event, 'id' | 'userId'>, token: string) {
-  const user = await supabase.auth.getUser(token)
+export async function insertEvent ({ startTime, endTime, name, recurrenceType, recurrenceInterval, recurrenceDays, recurrenceEnd, exceptionDates } : Omit<Event, 'id' | 'userId'>) {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
   const payload: any = {
     startTime: startTime.toISOString(),
     endTime: endTime.toISOString(),
     name,
-    user_id: user.data.user?.id,
+    user_id: user?.id,
     recurrence_type: recurrenceType ?? 'none',
     recurrence_interval: recurrenceInterval ?? 1,
     recurrence_days: recurrenceDays ?? null,
@@ -93,8 +93,6 @@ export async function insertEvent ({ startTime, endTime, name, recurrenceType, r
   } else {
     console.log('Inserted event:', data)
   }
-
-  revalidatePath('/')
 }
 
 export async function deleteEvent (eventID: string) {
@@ -110,8 +108,6 @@ export async function deleteEvent (eventID: string) {
   }
 
   console.log('Deleted event:', data)
-
-  revalidatePath('/')
 }
 
 export async function updateEvent (eventID: string, updatedData: Partial<Omit<Event, 'id' | 'userId'>>) {
@@ -131,8 +127,6 @@ export async function updateEvent (eventID: string, updatedData: Partial<Omit<Ev
   } else {
     console.log('Updated event:', data)
   }
-
-  revalidatePath('/')
 }
 
 function convertToLocalTime (dateString?: string | null): Date {
