@@ -9,6 +9,7 @@ interface EventsStore {
   getAllEvents: (token: string) => void
   insertEvent: (event: Omit<Event, 'id' | 'userId'>, token: string) => void
   deleteEvent: (eventID: string) => void,
+
   // maybe should be rethink, maybe should be more generic like updateEventTime or something
   changeEventStartTime: (newStartTime: Date, eventID: string) => void
   updateEvent: (eventID: string, updatedData: Partial<Event>) => void
@@ -24,9 +25,11 @@ interface EventsStore {
 
   // settings
   divisionsPerDay: number
-  pixelsPerMinute: number
-  minutesPerDivided: number // change to minutesPerDivision
   changeDivisionsPerDay: (number: number) => void
+  pixelsPerMinute: number
+  setPixelsPerMinute: (number: number) => void
+  minutesPerDivided: number // change to minutesPerDivision
+  setMinutesPerDivision: (number: number) => void
 
   // auth
   token: string | null
@@ -40,7 +43,9 @@ export const useEventsStore = create<EventsStore>((set) => ({
   divisionsPerDay: 0,
   token: null,
   pixelsPerMinute: 2,
-  minutesPerDivided: 30,
+  setPixelsPerMinute: (number: number) => set(() => ({ pixelsPerMinute: number })),
+  minutesPerDivided: 60,
+  setMinutesPerDivision: (number: number) => set(() => ({ minutesPerDivided: number })),
   view: 'week',
 
   setView: (view: 'day' | 'week' | 'month') => set(() => ({ view })),
