@@ -89,9 +89,5 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
         </li>
       })
     }
-    <li
-  className='border-b border-primary'
-  style={{ height: pixelsPerMinute * minutesPerDivided + 4 }}
-/>
   </ul>
 }

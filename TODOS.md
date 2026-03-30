@@ -17,4 +17,4 @@
 
 ### Calendar component
 
-- [ ] solve the error of the calendar that goes over the hours
+- [X] solve the error of the calendar that goes over the hours
