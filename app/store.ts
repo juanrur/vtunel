@@ -24,8 +24,6 @@ interface EventsStore {
   setView: (view: 'day' | 'week' | 'month') => void
 
   // settings
-  divisionsPerDay: number
-  changeDivisionsPerDay: (number: number) => void
   pixelsPerMinute: number
   setPixelsPerMinute: (number: number) => void
   minutesPerDivided: number // change to minutesPerDivision
@@ -36,7 +34,6 @@ export const useEventsStore = create<EventsStore>((set) => ({
   events: [],
   eventsAreLoading: true,
   day: new Date(),
-  divisionsPerDay: 0,
   pixelsPerMinute: 2,
   setPixelsPerMinute: (number: number) => set(() => ({ pixelsPerMinute: number })),
   minutesPerDivided: 60,
@@ -44,8 +41,6 @@ export const useEventsStore = create<EventsStore>((set) => ({
   view: 'week',
 
   setView: (view: 'day' | 'week' | 'month') => set(() => ({ view })),
-
-  changeDivisionsPerDay: (number: number) => set(() => ({ divisionsPerDay: number })),
 
   changeEventStartTime: async (newStartTime: Date, eventID: string) => {
     let newEndTime
