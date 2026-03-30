@@ -4,6 +4,7 @@ import ChangeWeekButton from './change-view-date-button'
 import { useEventsStore } from '@/store'
 import SingOutButton from './sing-out-button'
 import ChangeView from './change-view'
+import ViewSettings from './view-settings'
 
 export default function Header () {
   const { decreaseView, increaseView, day } = useEventsStore()
@@ -18,6 +19,7 @@ export default function Header () {
         <ChangeWeekButton action={increaseView} rotate />
       </div>
       <h1 className='font-semibold text-2xl'>{month + ' ' + year}</h1>
+      <ViewSettings />
       <ChangeView />
       <div className='flex gap-3'>
         <AddEventButton />

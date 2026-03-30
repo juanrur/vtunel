@@ -25,7 +25,7 @@ interface EventsStore {
   // settings
   divisionsPerDay: number
   pixelsPerMinute: number
-  minutesPerDivided: number
+  minutesPerDivided: number // change to minutesPerDivision
   changeDivisionsPerDay: (number: number) => void
 
   // auth
@@ -39,8 +39,8 @@ export const useEventsStore = create<EventsStore>((set) => ({
   day: new Date(),
   divisionsPerDay: 0,
   token: null,
-  pixelsPerMinute: 1,
-  minutesPerDivided: 60,
+  pixelsPerMinute: 2,
+  minutesPerDivided: 30,
   view: 'week',
 
   setView: (view: 'day' | 'week' | 'month') => set(() => ({ view })),
