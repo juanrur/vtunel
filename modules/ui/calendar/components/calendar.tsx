@@ -1,10 +1,11 @@
 'use client'
-import Week from '@/components/calendar/week/view'
-import Day from './day/view'
-import { useEventsStore } from '@/store'
-import HoursCol from '@/components/calendar/hours-col'
+import Week from '@ui/calendar/components/views/week'
+import Day from '@ui/calendar/components/views/day'
+import { useEventsStore } from '@events/store'
+import HoursCol from '@ui/calendar/components/hours-col'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import { useMemo } from 'react'
+import { useViewStore } from './views/store'
 // import Month from '@/components/calendar/month/view'
 
 const Views = {
@@ -14,7 +15,8 @@ const Views = {
 } as const
 
 export default function Calendar () {
-  const { day, events, view } = useEventsStore()
+  const { viewDate, view } = useViewStore()
+  const { events } = useEventsStore()
 
   const weekdays = [
     'Sunday',
@@ -27,8 +29,8 @@ export default function Calendar () {
   ] as const
 
   const thisDayEvents = useMemo(
-    () => events.filter(({ startTime }) => startTime.getDate() === day.getDate() && startTime.getMonth() === day.getMonth() && startTime.getFullYear() === day.getFullYear()),
-    [events, day]
+    () => events.filter(({ startTime }) => startTime.getDate() === viewDate.getDate() && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear()),
+    [events, viewDate]
   )
 
   return <main className={`${RemoveScrollbar.remove} max-md:w-[700px] flex-1 min-h-0 overflow-auto max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
@@ -44,8 +46,8 @@ export default function Calendar () {
     {view === Views.day &&
       <div className='flex flex-col'>
         <header className='text-center h-[60px]'>
-          <h2>{weekdays[day.getDay()]}</h2>
-          <p>{day.getDate()}</p>
+          <h2>{weekdays[viewDate.getDay()]}</h2>
+          <p>{viewDate.getDate()}</p>
         </header>
         <Day events={thisDayEvents}></Day>
       </div>

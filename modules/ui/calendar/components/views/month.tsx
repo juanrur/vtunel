@@ -1,9 +1,9 @@
 'use client'
-import { useEventsStore } from '@/store'
-import { type Event as EventType } from '@/types'
+import { useViewStore } from './store'
+import { type Event as EventType } from '@events/domain/types'
 
 export default function Month ({ events }: {events: EventType[]}) {
-  const { day } = useEventsStore()
+  const { viewDate } = useViewStore()
 
   // const handleDrop = (event: any) => {
   //   console.log('drop')
@@ -60,7 +60,7 @@ export default function Month ({ events }: {events: EventType[]}) {
     return daysArray
   }
 
-  const dayNumbers = getDaysInMonthView(day.getFullYear(), day.getMonth())
+  const dayNumbers = getDaysInMonthView(viewDate.getFullYear(), viewDate.getMonth())
   console.log({ events })
 
   return <section className="h-full">

@@ -1,14 +1,15 @@
-import { useEventsStore } from '@/store'
-import Day from '@/components/calendar/day/view'
+import Day from '@ui/calendar/components/views/day'
 import { getWeekStartEndDates } from '@/utils'
-import { type Week as WeekType, type Event } from '@/types'
+import { type Event } from '@events/domain/types'
+import type { Week as WeekType } from '@ui/calendar/types'
+import { useViewStore } from './store'
 
 export default function Week ({ events }: {events: Event[]}) {
   const {
-    day
-  } = useEventsStore()
+    viewDate
+  } = useViewStore()
 
-  const { startOfWeek, endOfWeek } = getWeekStartEndDates(day)
+  const { startOfWeek, endOfWeek } = getWeekStartEndDates(viewDate)
 
   const weekEvents : WeekType = Array.from({ length: 7 }, () => [])
 
@@ -50,7 +51,7 @@ export default function Week ({ events }: {events: Event[]}) {
     return daysOfWeek
   }
 
-  const weekDayNumbers = getWeekDays(day)
+  const weekDayNumbers = getWeekDays(viewDate)
 
   return (
     <div className='flex flex-col'>
@@ -60,8 +61,8 @@ export default function Week ({ events }: {events: Event[]}) {
             const today = new Date()
             const className =
               weekDayNumbers[idx] === today.getDate() &&
-              day.getMonth() === today.getMonth() &&
-              day.getFullYear() === today.getFullYear()
+              viewDate.getMonth() === today.getMonth() &&
+              viewDate.getFullYear() === today.getFullYear()
                 ? 'rounded-full bg-secondary flex flex-col mx-auto px-4'
                 : ''
 

@@ -1,4 +1,4 @@
-import Calendar from '@/components/calendar/calendar'
+import Calendar from '@ui/calendar/components/calendar'
 import Aside from '@/components/aside'
 import Header from './components/header'
 

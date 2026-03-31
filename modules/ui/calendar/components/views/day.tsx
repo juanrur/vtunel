@@ -1,10 +1,14 @@
 'use client'
-import Event from '@/components/calendar/event'
-import { useEventsStore } from '@/store'
-import { type Day as DayType } from '@/types'
+import Event from '@ui/calendar/components/event'
+import { useEventsStore } from '@events/store'
+import { useSettingsStore } from '../settings/store'
+import type { Day as DayType } from '../types'
+import { useViewStore } from './store'
 
 export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?: number }) {
-  const { day, changeEventStartTime, pixelsPerMinute, minutesPerDivided } = useEventsStore()
+  const { pixelsPerMinute, minutesPerDivision } = useSettingsStore()
+  const { viewDate } = useViewStore()
+  const { changeEventStartTime } = useEventsStore()
 
   const handleDrop = (event: any) => {
     event.target = event.target.closest('li')
@@ -32,16 +36,16 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
       return hours
     }
 
-    const [hour, minutes] = getHours(minutesPerDivided)[event.target.dataset.index].split(':')
+    const [hour, minutes] = getHours(minutesPerDivision)[event.target.dataset.index].split(':')
     // Here you have to take into account that the first day of the week is Monday,
     // should have some function to change between Monday and Sunday
     let newDay
     if (dayIndex !== undefined) {
-      const deference = dayIndex - (day.getDay() === 0 ? 7 : day.getDay())
-      newDay = day.getDate() + deference + 1
-    } else newDay = day.getDate()
+      const deference = dayIndex - (viewDate.getDay() === 0 ? 7 : viewDate.getDay())
+      newDay = viewDate.getDate() + deference + 1
+    } else newDay = viewDate.getDate()
 
-    const newDate = new Date(Date.UTC(day.getFullYear(), day.getMonth(), newDay, Number(hour), Number(minutes)))
+    const newDate = new Date(Date.UTC(viewDate.getFullYear(), viewDate.getMonth(), newDay, Number(hour), Number(minutes)))
     newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
 
     changeEventStartTime(newDate, eventID)
@@ -58,10 +62,10 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
   return <ul className='border-r first:border-l border-primary'>
     {
       // make a list of 24 hours with x divisions each
-      Array.from({ length: 24 * (60 / minutesPerDivided) }).map((_, idx) => {
+      Array.from({ length: 24 * (60 / minutesPerDivision) }).map((_, idx) => {
         // find all events that start at this hour
         const matchingEvents = events.filter(({ startTime }) =>
-          idx === (startTime.getHours() * (60 / minutesPerDivided)) + Math.floor(startTime.getMinutes() / 60 * (60 / minutesPerDivided))
+          idx === (startTime.getHours() * (60 / minutesPerDivision)) + Math.floor(startTime.getMinutes() / 60 * (60 / minutesPerDivision))
         )
 
         const sortedMatchingEvents = matchingEvents.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
@@ -71,7 +75,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           className='border-b first:border-t border-primary'
-          style={{ height: pixelsPerMinute * minutesPerDivided }}
+          style={{ height: pixelsPerMinute * minutesPerDivision }}
           key={idx}>
 
           {sortedMatchingEvents?.map((event, idx) => (
@@ -80,7 +84,7 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
                 name={event.name}
                 id={event.id}
                 height={pixelsPerMinute * ((event.endTime.getTime() - event.startTime.getTime()) / 1000 / 60)}
-                margin={pixelsPerMinute * (event.startTime.getMinutes() % minutesPerDivided)}
+                margin={pixelsPerMinute * (event.startTime.getMinutes() % minutesPerDivision)}
                 startTime={event.startTime}
                 endTime={event.endTime}
               />

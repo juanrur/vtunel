@@ -21,8 +21,10 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./app/*"],
-      "@icons/*": ["app/components/icons/*"]
-
+      "@icons/*": ["app/components/icons/*"],
+      "@events/*": ["modules/events/*"],
+      "@ui/*": ["modules/ui/*"],
+      "@shared/*": ["modules/shared/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

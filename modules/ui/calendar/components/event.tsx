@@ -1,6 +1,6 @@
 'use client'
 
-import { useEventsStore } from '@/store'
+import { useEventsStore } from '@events/store'
 import { useRef } from 'react'
 import EventDialog from '@/components/event-dialog'
 
