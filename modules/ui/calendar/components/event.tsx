@@ -2,7 +2,7 @@
 
 import { useEventsStore } from '@events/store'
 import { useRef } from 'react'
-import EventDialog from '@/components/event-dialog'
+import EventDialog from '@ui/shared/events/components/event-dialog'
 
 export default function Event ({ name, height, margin, id, startTime, endTime }: { name: string, height: number, margin: number, id: string, startTime: Date, endTime: Date }) {
   const { updateEvent } = useEventsStore()

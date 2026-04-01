@@ -5,7 +5,7 @@ import { useEventsStore } from '@events/store'
 import HoursCol from '@ui/calendar/components/hours-col'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import { useMemo } from 'react'
-import { useViewStore } from './views/store'
+import { useViewStore } from '../store'
 // import Month from '@/components/calendar/month/view'
 
 const Views = {

@@ -1,9 +1,9 @@
 'use client'
-import { Event } from '@/types'
+import type { Event } from '@events/domain/types'
 import { useRef } from 'react'
-import { useEventsStore } from '@/store'
-import EventDialog from './event-dialog'
-import TrashIcon from './icons/trash'
+import { useEventsStore } from '@events/store'
+import EventDialog from '@ui/shared/events/components/event-dialog'
+import TrashIcon from '@ui/shared/icons/trash'
 
 export default function EventInfo ({ event }: { event: Event }) {
   const { deleteEvent, updateEvent } = useEventsStore()

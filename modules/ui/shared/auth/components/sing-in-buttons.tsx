@@ -1,12 +1,7 @@
 'use client'
-import { createBrowserClient } from '@supabase/ssr'
+import { supabase } from '@shared/supabase/client'
 
 export default function SingInButtons () {
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
-  )
-
   const handleGitHubSignIn = async () => {
     try {
       await supabase.auth.signInWithOAuth({

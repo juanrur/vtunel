@@ -1,8 +1,8 @@
 'use client'
-import { useEventsStore } from '@/store'
+import { useViewStore } from '../store'
 
 export default function ChangeView () {
-  const { setView } = useEventsStore()
+  const { setView } = useViewStore()
 
   function handleChangeView (event: any) {
     const selectedView = event.target.value

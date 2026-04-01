@@ -2,7 +2,7 @@ import Day from '@ui/calendar/components/views/day'
 import { getWeekStartEndDates } from '@/utils'
 import { type Event } from '@events/domain/types'
 import type { Week as WeekType } from '@ui/calendar/types'
-import { useViewStore } from './store'
+import { useViewStore } from '../../store'
 
 export default function Week ({ events }: {events: Event[]}) {
   const {

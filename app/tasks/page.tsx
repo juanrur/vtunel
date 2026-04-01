@@ -1,5 +1,5 @@
 'use client'
-import SingOutButton from '@/components/sing-out-button'
+import SingOutButton from '@ui/shared/auth/components/sing-out-button'
 import { useEventsStore } from '@/store'
 import { useEffect } from 'react'
 

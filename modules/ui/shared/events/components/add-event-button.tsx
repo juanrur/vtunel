@@ -1,8 +1,8 @@
 'use client'
 import { useRef, useState } from 'react'
-import PlusIcon from './icons/plus'
-import { useEventsStore } from '@/store'
-import EventDialog from './event-dialog'
+import PlusIcon from '@ui/shared/icons/plus'
+import { useEventsStore } from '@events/store'
+import EventDialog from '@ui/shared/events/components/event-dialog'
 
 export default function AddEventButton () {
   const { insertEvent } = useEventsStore()

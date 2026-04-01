@@ -1,9 +1,9 @@
 'use client'
 import Event from '@ui/calendar/components/event'
 import { useEventsStore } from '@events/store'
-import { useSettingsStore } from '../settings/store'
-import type { Day as DayType } from '../types'
-import { useViewStore } from './store'
+import { useSettingsStore } from '@ui/calendar/settings/store'
+import type { Day as DayType } from '@ui/calendar/types'
+import { useViewStore } from '../../store'
 
 export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?: number }) {
   const { pixelsPerMinute, minutesPerDivision } = useSettingsStore()

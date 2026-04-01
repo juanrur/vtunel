@@ -1,6 +1,6 @@
 import Calendar from '@ui/calendar/components/calendar'
-import Aside from '@/components/aside'
-import Header from './components/header'
+import Aside from '@ui/calendar/components/aside'
+import Header from '@ui/calendar/components/header'
 
 export default async function Home () {
   return (

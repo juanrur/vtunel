@@ -1,5 +1,5 @@
 'use client'
-import { useViewStore } from './store'
+import { useViewStore } from '../../store'
 import { type Event as EventType } from '@events/domain/types'
 
 export default function Month ({ events }: {events: EventType[]}) {

@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/db/supabase-client'
+import { supabase } from '@shared/supabase/client'
 
 export default function SingOutButton () {
   const router = useRouter()

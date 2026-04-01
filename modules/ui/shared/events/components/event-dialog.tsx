@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
-import EventForm from './event-form'
-import { Event } from '@/types'
+import EventForm from '@ui/shared/events/components/event-form'
+import type { Event } from '@events/domain/types'
 
 interface EventDialogProps {
   children: React.ReactNode
