@@ -7,6 +7,8 @@ import { getWeekStartEndDates } from '@/utils'
 import FilterButton from './filter-button'
 import EventListSkeleton from './event-list-skeleton'
 import { useViewStore } from '../store'
+import { useTemplatesStore } from 'modules/templates/store'
+import TemplateList from './template-list'
 
 const FILTER = {
   ALL: 'all',
@@ -19,13 +21,17 @@ export type Filter = typeof FILTER[keyof typeof FILTER]
 
 export default function Aside () {
   const [filter, setFilter] = useState<Filter>(FILTER.ALL)
+  // set if aside is showing events or templates, default to events
+  const [activeTab, setActiveTab] = useState<'events' | 'templates'>('events')
 
   const { viewDate } = useViewStore()
   const { events, getAllEvents, eventsAreLoading } = useEventsStore()
+  const { templates, getAllTemplates } = useTemplatesStore()
 
   useEffect(() => {
     getAllEvents()
-  }, [getAllEvents])
+    getAllTemplates()
+  }, [getAllEvents, getAllTemplates])
 
   const eventsFiltered = events.filter((event) => {
     const eventDate = new Date(event.startTime)
@@ -42,15 +48,30 @@ export default function Aside () {
 
   return <aside className='h-full flex flex-col gap-6 p-6 pr-0 overflow-hidden size-100'>
     <div className='flex-1 min-h-0 overflow-auto space-y-6'>
+      <nav className='flex gap-2 *:rounded *:p-2'>
+        <button
+          className={activeTab === 'events' ? 'bg-secondary' : ''}
+          onClick={() => setActiveTab('events')}
+          >Events</button>
+        <button
+          className={activeTab === 'templates' ? 'bg-secondary' : ''}
+          onClick={() => setActiveTab('templates')}
+        >Templates</button>
+      </nav>
       <div className='flex justify-around gap-2'>
         <FilterButton onClick={setFilter} filterState={filter} value={FILTER.ALL} />
         <FilterButton onClick={setFilter} filterState={filter} value={FILTER.TODAY} />
         <FilterButton onClick={setFilter} filterState={filter} value={FILTER.WEEK} />
       </div>
 
-      { !eventsAreLoading
-        ? <EventList events={eventsFilteredSorted}/>
-        : <EventListSkeleton />
+      { activeTab === 'templates' &&
+        <TemplateList templates={templates} />
+      }
+      {
+          activeTab === 'events' &&
+          (!eventsAreLoading
+            ? <EventList events={eventsFilteredSorted}/>
+            : <EventListSkeleton />)
       }
     </div>
 
