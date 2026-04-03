@@ -4,7 +4,7 @@ import { supabase } from '@shared/supabase/client'
 
 type TemplateRow = {
   id: string
-  name: string
+  title: string
   duration: number
   user_id: string
 }
@@ -25,7 +25,7 @@ export const SupabaseTemplatesRepository: TemplatesRepository = {
       {
         id: row.id,
         duration: row.duration,
-        name: row.name
+        title: row.title
       }
     )) as Template[]
   },
@@ -64,7 +64,7 @@ const TemplateMapper = {
     return {
       id: row.id,
       duration: row.duration,
-      name: row.name
+      title: row.title
     }
   },
   async toRow (template: Partial<Template>): Promise<TemplateRow> {

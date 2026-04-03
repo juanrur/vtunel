@@ -17,7 +17,7 @@ export default function EventInfo ({ event }: { event: Event }) {
   }
 
   const handleDragStart = (functionEvent: any) => {
-    functionEvent.dataTransfer?.setData('text/plain', event.id)
+    functionEvent.dataTransfer?.setData('text/plain', 'event:' + event.id)
   }
 
   const handleDragEnd = (event: any) => {

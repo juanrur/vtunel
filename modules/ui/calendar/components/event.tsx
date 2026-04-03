@@ -9,7 +9,7 @@ export default function Event ({ name, height, margin, id, startTime, endTime }:
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   const handleDragStart = (event: any) => {
-    event.dataTransfer?.setData('text/plain', id)
+    event.dataTransfer?.setData('text/plain', 'event:' + id)
   }
 
   const handleDragEnd = (event: any) => {

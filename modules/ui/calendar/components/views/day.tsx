@@ -4,18 +4,19 @@ import { useEventsStore } from '@events/store'
 import { useSettingsStore } from '@ui/calendar/settings/store'
 import type { Day as DayType } from '@ui/calendar/types'
 import { useViewStore } from '../../store'
+import { useTemplatesStore } from 'modules/templates/store'
 
 export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?: number }) {
   const { pixelsPerMinute, minutesPerDivision } = useSettingsStore()
   const { viewDate } = useViewStore()
-  const { changeEventStartTime } = useEventsStore()
+  const { changeEventStartTime, insertEvent } = useEventsStore()
+  const { templates } = useTemplatesStore()
 
   const handleDrop = (event: any) => {
     event.target = event.target.closest('li')
     event.preventDefault()
-    const eventID = event.dataTransfer.getData('text/plain')
-
-    console.log(event.target)
+    const data = event.dataTransfer.getData('text/plain')
+    const [type, id] = data.split(':')
 
     function getHours (splitPerMinutes: number) {
       const hours = []
@@ -48,7 +49,24 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
     const newDate = new Date(Date.UTC(viewDate.getFullYear(), viewDate.getMonth(), newDay, Number(hour), Number(minutes)))
     newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
 
-    changeEventStartTime(newDate, eventID)
+    if (type === 'event') {
+      changeEventStartTime(newDate, id)
+    }
+
+    if (type === 'template') {
+      const template = templates.find(template => template.id === id)
+      if (!template) return
+      insertEvent({
+        name: template.title,
+        startTime: newDate,
+        endTime: new Date(newDate.getTime() + template.duration * 60 * 1000),
+        recurrenceType: null,
+        recurrenceInterval: null,
+        recurrenceDays: null,
+        recurrenceEnd: null,
+        exceptionDates: null
+      })
+    }
   }
 
   const handleDragOver = (event: any) => {

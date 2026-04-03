@@ -1,5 +1,5 @@
 export interface Template {
   id: string;
-  name: string;
+  title: string;
   duration: number;
 }
