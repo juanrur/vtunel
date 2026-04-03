@@ -6,7 +6,7 @@ import HoursCol from '@ui/calendar/components/hours-col'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import { useMemo } from 'react'
 import { useViewStore } from '../store'
-// import Month from '@/components/calendar/month/view'
+import Month from './views/month'
 
 const Views = {
   day: 'day',
@@ -52,8 +52,8 @@ export default function Calendar () {
         <Day events={thisDayEvents}></Day>
       </div>
     }
-    {/* {view === 'month' &&
+    {view === 'month' &&
       <Month events={events}/>
-    } */}
+    }
   </main>
 }
