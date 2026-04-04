@@ -66,13 +66,24 @@ export default function Month ({ events }: {events: EventType[]}) {
   return <section className="h-full">
     <ul className="h-full grid grid-cols-7 grid-rows-5 p-1">
       {
-        dayNumbers.map(({ day }, idx) => (
-          <li key={idx}
-          className="border border-primary flex items-center justify-center"
-          >
-            {day}
-          </li>
-        ))
+        dayNumbers.map(({ day }, idx) => {
+          const matchingItems = events.filter(({ startTime }) => startTime.getDate() === day && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear())
+          return (
+            <li key={idx}
+              className="border border-primary flex items-center justify-start py-4 flex-col"
+            >
+              {day}
+              <ul className='flex-1 w-full bg-blue-500 flex-grow-0'>
+                {
+                  matchingItems.map(({ id, name }) => <li key={id} className="text-xs">
+                      {name}
+                    </li>
+                  )
+                }
+              </ul>
+            </li>
+          )
+        })
       }
     </ul>
   </section>
