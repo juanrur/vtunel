@@ -1,35 +1,44 @@
 'use client'
 import { useViewStore } from '../../store'
 import { type Event as EventType } from '@events/domain/types'
+import { useTemplatesStore } from 'modules/templates/store'
+import { useEventsStore } from '@events/store'
 
 export default function Month ({ events }: {events: EventType[]}) {
   const { viewDate } = useViewStore()
+  const { templates } = useTemplatesStore()
+  const { insertEvent, changeEventStartTime } = useEventsStore()
 
-  // const handleDrop = (event: any) => {
-  //   console.log('drop')
-  //   event.target = event.target.closest('li')
-  //   event.preventDefault()
-  //   const eventID = event.dataTransfer.getData('text/plain')
+  const handleDrop = (event: any) => {
+    event.target = event.target.closest('li')
+    event.preventDefault()
+    const data = event.dataTransfer.getData('text/plain')
+    const [type, id] = data.split(':')
+    const day = parseInt(event.target.dataset.day)
+    const month = parseInt(event.target.dataset.month)
+    const currentItem = events.find(event => event.id === id)
 
-  //   const draggedEvent = events.find(ev => ev.id === eventID)
+    const newStartTime = new Date(viewDate.getFullYear(), month, day, currentItem?.startTime.getHours(), currentItem?.startTime.getMinutes(), 0)
 
-  //   const newDay = Number(event.target.dataset.day)
-  //   const newMonth = Number(event.target.dataset.month)
+    if (type === 'event') {
+      changeEventStartTime(newStartTime, id)
+    }
 
-  //   const newStartTime = new Date(Date.UTC(day.getFullYear(), newMonth, newDay, draggedEvent?.startTime.getUTCHours(), draggedEvent?.startTime.getUTCMinutes()))
-
-  //   changeEventStartTime(newStartTime, eventID)
-  // }
-
-  // const handleDragOver = (event: any) => {
-  //   event.preventDefault()
-  // }
-
-  // const handleDragLeave = (event: any) => {
-  //   event.preventDefault()
-  // }
-
-  // const actualMonth = day.getMonth()
+    if (type === 'template') {
+      const template = templates.find(template => template.id === id)
+      if (!template) return
+      insertEvent({
+        name: template.title,
+        startTime: newStartTime,
+        endTime: new Date(newStartTime.getTime() + template.duration * 60 * 1000),
+        recurrenceType: null,
+        recurrenceInterval: null,
+        recurrenceDays: null,
+        recurrenceEnd: null,
+        exceptionDates: null
+      })
+    }
+  }
 
   function getDaysInMonth (year: number, month: number) {
     return new Date(year, month + 1, 0).getDate()
@@ -66,16 +75,20 @@ export default function Month ({ events }: {events: EventType[]}) {
   return <section className="h-full">
     <ul className="h-full grid grid-cols-7 grid-rows-5 p-1">
       {
-        dayNumbers.map(({ day }, idx) => {
-          const matchingItems = events.filter(({ startTime }) => startTime.getDate() === day && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear())
+        dayNumbers.map(({ day, month }, idx) => {
+          const matchingItems = events.filter(({ startTime }) => startTime.getDate() === day && startTime.getMonth() === month && startTime.getFullYear() === viewDate.getFullYear())
           return (
             <li key={idx}
               className="border border-primary flex items-center justify-start py-4 flex-col"
+              onDrop={handleDrop}
+              onDragOver={(event) => event.preventDefault()}
+              onDragLeave={(event) => event.preventDefault()}
+              data-day={day} data-month={month}
             >
               {day}
-              <ul className='flex-1 w-full bg-blue-500 flex-grow-0'>
+              <ul className='flex-1 w-full flex-grow-0 px-2'>
                 {
-                  matchingItems.map(({ id, name }) => <li key={id} className="text-xs">
+                  matchingItems.map(({ id, name }) => <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', 'event:' + id)} key={id} className="text-xs bg-secondary border p-0.5 rounded">
                       {name}
                     </li>
                   )
