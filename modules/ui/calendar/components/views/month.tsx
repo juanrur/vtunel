@@ -18,8 +18,7 @@ export default function Month ({ events }: {events: EventType[]}) {
     const month = parseInt(event.target.dataset.month)
     const currentItem = events.find(event => event.id === id)
 
-    const newStartTime = new Date(viewDate.getFullYear(), month, day, currentItem?.startTime.getHours(), currentItem?.startTime.getMinutes(), 0)
-
+    const newStartTime = new Date(viewDate.getFullYear(), month, day, currentItem?.startTime.getHours() || 0, currentItem?.startTime.getMinutes() || 0, 0)
     if (type === 'event') {
       changeEventStartTime(newStartTime, id)
     }
