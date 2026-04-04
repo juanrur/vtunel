@@ -78,16 +78,16 @@ export default function Month ({ events }: {events: EventType[]}) {
           const matchingItems = events.filter(({ startTime }) => startTime.getDate() === day && startTime.getMonth() === month && startTime.getFullYear() === viewDate.getFullYear())
           return (
             <li key={idx}
-              className="border border-primary flex items-center justify-start py-4 flex-col"
+              className="border border-primary flex items-center justify-start pt-2 pb-4 overflow-hidden flex-col"
               onDrop={handleDrop}
               onDragOver={(event) => event.preventDefault()}
               onDragLeave={(event) => event.preventDefault()}
               data-day={day} data-month={month}
             >
-              {day}
-              <ul className='flex-1 w-full flex-grow-0 px-2'>
+              <h1 className='pb-1'>{day}</h1>
+              <ul className='flex-1 w-full flex-grow-0 px-2 space-y-2'>
                 {
-                  matchingItems.map(({ id, name }) => <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', 'event:' + id)} key={id} className="text-xs bg-secondary border p-0.5 rounded">
+                  matchingItems.map(({ id, name }) => <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', 'event:' + id)} key={id} className="text-xs bg-secondary border p-0.5 px-1 rounded">
                       {name}
                     </li>
                   )
