@@ -1,5 +1,5 @@
 'use client'
-import type { Event } from '@events/domain/types'
+import type { Event } from '@events/types'
 import { useRef } from 'react'
 import { useEventsStore } from '@events/store'
 import EventDialog from '@ui/shared/events/components/event-dialog'

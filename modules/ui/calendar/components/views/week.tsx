@@ -1,6 +1,6 @@
 import Day from '@ui/calendar/components/views/day'
 import { getWeekStartEndDates } from '@/utils'
-import { type Event } from '@events/domain/types'
+import { type Event } from '@events/types'
 import type { Week as WeekType } from '@ui/calendar/types'
 import { useViewStore } from '../../store'
 

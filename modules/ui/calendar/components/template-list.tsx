@@ -1,4 +1,4 @@
-import { Template } from 'modules/templates/domain/types'
+import { Template } from 'modules/templates/types'
 export default function TemplateList ({ templates }: { templates: Template[] }) {
   return <ul className='space-y-4'>
     {templates.map((template) => (

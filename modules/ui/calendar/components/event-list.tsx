@@ -1,5 +1,5 @@
 'use client'
-import type { Event } from '@events/domain/types'
+import type { Event } from '@events/types'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import EventInfo from '@ui/calendar/components/event-info'
 

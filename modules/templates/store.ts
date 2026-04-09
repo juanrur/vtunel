@@ -1,5 +1,5 @@
-import { SupabaseTemplatesRepository } from './infrastructure/supabase-templates-repository'
-import { Template } from './domain/types'
+import { SupabaseTemplatesRepository } from './supabase-templates-repository'
+import { Template } from './types'
 import { create } from 'zustand'
 
 interface TemplatesStore {

@@ -1,4 +1,4 @@
-import { Event } from '@events/domain/types'
+import { Event } from '@events/types'
 
 export type Day = Event[]
 

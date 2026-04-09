@@ -1,6 +1,6 @@
 'use client'
 import { useViewStore } from '../../store'
-import { type Event as EventType } from '@events/domain/types'
+import { type Event as EventType } from '@events/types'
 import { useTemplatesStore } from 'modules/templates/store'
 import { useEventsStore } from '@events/store'
 

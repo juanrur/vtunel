@@ -1,5 +1,5 @@
-import { SupabaseEventsRepository } from './infrastructure/supabase-events-repository'
-import { Event } from './domain/types'
+import { SupabaseEventsRepository } from './supabase-events-repository'
+import { Event } from './types'
 import { create } from 'zustand'
 
 interface EventsStore {

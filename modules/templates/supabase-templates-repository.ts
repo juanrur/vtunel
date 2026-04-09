@@ -1,5 +1,5 @@
 import { CrudRepository } from '@shared/domain/crud-repository'
-import type { Template } from '../domain/types'
+import type { Template } from './types'
 import { supabase } from '@shared/supabase/client'
 
 type TemplateRow = {

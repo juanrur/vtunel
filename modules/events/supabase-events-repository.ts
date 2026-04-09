@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { supabase } from '@shared/supabase/client'
-import type { Event } from '@events/domain/types'
+import type { Event } from '@events/types'
 import { CrudRepository } from '@shared/domain/crud-repository'
 
 export const SupabaseEventsRepository: CrudRepository<Event> = {
