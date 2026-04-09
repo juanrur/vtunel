@@ -7,20 +7,16 @@ import { NextResponse } from 'next/server'
 export async function GET (request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
-  console.log('Code received:', code)
   try {
     if (code) {
       const supabase = createServerClient(cookies)
 
-      const { data: exchangeData, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-      if (exchangeError) {
-        console.error('Exchange error:', exchangeError)
-      } else {
-        console.log('Exchange result:', exchangeData)
-      }
+      const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
 
-      const { data: { session } } = await supabase.auth.getSession()
-      console.log('Session after exchange:', session)
+      if (exchangeError) {
+        console.error('Error exchanging code for session:', exchangeError)
+        return NextResponse.json({ error: 'Failed to sign in' }, { status: 500 })
+      }
     }
   } catch (error) {
     console.error('Error exchanging code for session:', error)

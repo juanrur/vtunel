@@ -69,7 +69,6 @@ export default function Month ({ events }: {events: EventType[]}) {
   }
 
   const dayNumbers = getDaysInMonthView(viewDate.getFullYear(), viewDate.getMonth())
-  console.log({ events })
 
   return <section className="h-full">
     <ul className="h-full grid grid-cols-7 grid-rows-5 p-1">
