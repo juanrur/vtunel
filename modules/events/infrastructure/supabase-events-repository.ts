@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import { EventsRepository } from '@events/domain/events-repository'
 import { supabase } from '@shared/supabase/client'
 import type { Event } from '@events/domain/types'
+import { CrudRepository } from '@shared/domain/crud-repository'
 
-export const SupabaseEventsRepository: EventsRepository = {
+export const SupabaseEventsRepository: CrudRepository<Event> = {
   async getAll (): Promise<Event[]> {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('Not authenticated')

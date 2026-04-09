@@ -1,4 +1,4 @@
-import { TemplatesRepository } from '../domain/template-repository'
+import { CrudRepository } from '@shared/domain/crud-repository'
 import type { Template } from '../domain/types'
 import { supabase } from '@shared/supabase/client'
 
@@ -9,7 +9,7 @@ type TemplateRow = {
   user_id: string
 }
 
-export const SupabaseTemplatesRepository: TemplatesRepository = {
+export const SupabaseTemplatesRepository: CrudRepository<Template> = {
   async getAll (): Promise<Template[]> {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('Not authenticated')
