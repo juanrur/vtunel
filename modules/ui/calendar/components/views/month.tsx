@@ -3,11 +3,14 @@ import { useViewStore } from '../../store'
 import { type Event as EventType } from '@events/types'
 import { useTemplatesStore } from 'modules/templates/store'
 import { useEventsStore } from '@events/store'
+import { updateDroppedItem } from '@ui/calendar/utils'
+import { useTasksStore } from '@tasks/store'
 
 export default function Month ({ events }: {events: EventType[]}) {
   const { viewDate } = useViewStore()
   const { templates } = useTemplatesStore()
   const { insertEvent, changeEventStartTime } = useEventsStore()
+  const { changeTaskStartTime } = useTasksStore()
 
   const handleDrop = (event: any) => {
     event.target = event.target.closest('li')
@@ -19,24 +22,8 @@ export default function Month ({ events }: {events: EventType[]}) {
     const currentItem = events.find(event => event.id === id)
 
     const newStartTime = new Date(viewDate.getFullYear(), month, day, currentItem?.startTime.getHours() || 0, currentItem?.startTime.getMinutes() || 0, 0)
-    if (type === 'event') {
-      changeEventStartTime(newStartTime, id)
-    }
 
-    if (type === 'template') {
-      const template = templates.find(template => template.id === id)
-      if (!template) return
-      insertEvent({
-        name: template.title,
-        startTime: newStartTime,
-        endTime: new Date(newStartTime.getTime() + template.duration * 60 * 1000),
-        recurrenceType: null,
-        recurrenceInterval: null,
-        recurrenceDays: null,
-        recurrenceEnd: null,
-        exceptionDates: null
-      })
-    }
+    updateDroppedItem({ type, id, newDate: newStartTime, template: templates.find(template => template.id === id) ?? undefined, changeEventStartTime, insertEvent, changeTaskStartTime })
   }
 
   function getDaysInMonth (year: number, month: number) {

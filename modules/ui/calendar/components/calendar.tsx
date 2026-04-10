@@ -7,6 +7,7 @@ import RemoveScrollbar from '@/remove-scrollbar.module.css'
 import { useMemo } from 'react'
 import { useViewStore } from '../store'
 import Month from './views/month'
+import { useTasksStore } from '@tasks/store'
 
 const Views = {
   day: 'day',
@@ -17,6 +18,7 @@ const Views = {
 export default function Calendar () {
   const { viewDate, view } = useViewStore()
   const { events } = useEventsStore()
+  const { tasks } = useTasksStore()
 
   const weekdays = [
     'Sunday',
@@ -29,8 +31,11 @@ export default function Calendar () {
   ] as const
 
   const thisDayEvents = useMemo(
-    () => events.filter(({ startTime }) => startTime.getDate() === viewDate.getDate() && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear()),
-    [events, viewDate]
+    () => [
+      ...events.filter(({ startTime }) => startTime.getDate() === viewDate.getDate() && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear()),
+      ...tasks.filter(({ startTime }) => startTime.getDate() === viewDate.getDate() && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear())
+    ],
+    [events, tasks, viewDate]
   )
 
   return <main className={`${RemoveScrollbar.remove} max-md:w-[700px] flex-1 min-h-0 overflow-auto max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
@@ -41,7 +46,7 @@ export default function Calendar () {
       </div>
     }
     {view === Views.week &&
-      <Week events={events} />
+      <Week events={[events, tasks]} />
     }
     {view === Views.day &&
       <div className='flex flex-col'>

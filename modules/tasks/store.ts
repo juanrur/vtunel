@@ -9,6 +9,7 @@ interface TasksStore {
   createTask(task: Omit<Task, 'id'>): Promise<Task>
   updateTask(id: string, newTask: Partial<Omit<Task, 'id'>>): Promise<Task>
   deleteTask(id: string): Promise<void>
+  changeTaskStartTime (newStartTime: Date, taskId: string): Promise<void>
 }
 
 export const useTasksStore = create<TasksStore>((set) => ({
@@ -39,5 +40,24 @@ export const useTasksStore = create<TasksStore>((set) => ({
   deleteTask: async (id) => {
     await SupabaseTaskRepository.delete(id)
     set((state) => ({ tasks: state.tasks.filter((task) => task.id !== id) }))
+  },
+
+  changeTaskStartTime: async (newStartTime: Date, taskId: string) => {
+    let newEndTime
+
+    set(({ tasks }) => {
+      return {
+        tasks: tasks.map((task) => {
+          if (task.id === taskId) {
+            newEndTime = new Date(task.endTime.getTime() + (newStartTime.getTime() - task.startTime.getTime()))
+            return { ...task, startTime: newStartTime, endTime: newEndTime }
+          }
+          return task
+        }
+        )
+      }
+    })
+
+    await SupabaseTaskRepository.update(taskId, { startTime: newStartTime, endTime: newEndTime })
   }
 }))

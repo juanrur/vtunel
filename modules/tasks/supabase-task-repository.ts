@@ -66,15 +66,19 @@ const TaskMapper = {
       done: row.done
     }
   },
-  async toRow (task: Partial<Task>): Promise<TaskRow> {
+  async toRow (task: Partial<Task>): Promise<Partial<TaskRow>> {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('Not authenticated')
-    const userId = user.id
-    return {
-      ...task,
-      end_time: task.endTime?.toISOString(),
-      start_time: task.startTime?.toISOString(),
-      user_id: userId
-    } as TaskRow
+
+    const row: Partial<TaskRow> = {
+      user_id: user.id
+    }
+
+    if (task.title !== undefined) row.title = task.title
+    if (task.done !== undefined) row.done = task.done
+    if (task.startTime !== undefined) row.start_time = task.startTime.toISOString()
+    if (task.endTime !== undefined) row.end_time = task.endTime.toISOString()
+
+    return row
   }
 }

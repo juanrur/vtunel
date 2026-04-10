@@ -23,6 +23,7 @@
       "@/*": ["./app/*"],
       "@icons/*": ["modules/ui/shared/icons/*"],
       "@events/*": ["modules/events/*"],
+      "@tasks/*": ["modules/tasks/*"],
       "@ui/*": ["modules/ui/*"],
       "@shared/*": ["modules/shared/*"],
     }
