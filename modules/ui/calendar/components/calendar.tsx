@@ -46,7 +46,7 @@ export default function Calendar () {
       </div>
     }
     {view === Views.week &&
-      <Week events={[events, tasks]} />
+      <Week items={[...events, ...tasks]} />
     }
     {view === Views.day &&
       <div className='flex flex-col'>

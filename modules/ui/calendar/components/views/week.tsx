@@ -3,22 +3,23 @@ import { getWeekStartEndDates } from '@/utils'
 import { type Event } from '@events/types'
 import type { Week as WeekType } from '@ui/calendar/types'
 import { useViewStore } from '../../store'
+import { Task } from '@tasks/types'
 
-export default function Week ({ events }: {events: Event[]}) {
+export default function Week ({ items }: { items: (Event | Task)[] }) {
   const {
     viewDate
   } = useViewStore()
 
   const { startOfWeek, endOfWeek } = getWeekStartEndDates(viewDate)
 
-  const weekEvents : WeekType = Array.from({ length: 7 }, () => [])
+  const weekItems : WeekType = Array.from({ length: 7 }, () => [])
 
-  events.filter((event) => {
-    const eventDate = new Date(event.startTime)
-    return eventDate >= startOfWeek && eventDate <= endOfWeek
-  }).forEach((event) => {
-    const day = (event.startTime.getDay() || 7) - 1
-    weekEvents[day].push(event)
+  items.filter((item) => {
+    const itemDate = new Date(item.startTime)
+    return itemDate >= startOfWeek && itemDate <= endOfWeek
+  }).forEach((item) => {
+    const day = (item.startTime.getDay() || 7) - 1
+    weekItems[day].push(item)
   })
 
   const weekdays = [
@@ -77,8 +78,8 @@ export default function Week ({ events }: {events: Event[]}) {
       </header>
 
       <section className={'min-h-0 grid grid-cols-7 overflow-auto flex-1'}>
-        {weekEvents.map((day, idx) =>
-          <Day key={idx} dayIndex={idx} events={day} />
+        {weekItems.map((day, idx) =>
+          <Day key={idx} dayIndex={idx} items={day} />
         )}
       </section>
     </div>

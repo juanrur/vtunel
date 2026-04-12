@@ -20,6 +20,7 @@ export function updateDroppedItem ({
   changeTaskStartTime
 }: UpdateDroppedItemParams
 ) {
+  console.log(type)
   if (type === 'event') {
     changeEventStartTime(newDate, id)
   }

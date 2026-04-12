@@ -2,13 +2,15 @@
 import Event from '@ui/calendar/components/event'
 import { useEventsStore } from '@events/store'
 import { useSettingsStore } from '@ui/calendar/settings/store'
-import type { Day as DayType } from '@ui/calendar/types'
+import type { Event as EventType } from '@events/types'
 import { useViewStore } from '../../store'
 import { useTemplatesStore } from 'modules/templates/store'
 import { updateDroppedItem } from '@ui/calendar/utils'
 import { useTasksStore } from '@tasks/store'
+import { Task as TaskType } from '@tasks/types'
+import Task from '../task'
 
-export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?: number }) {
+export default function Day ({ items, dayIndex }: { items: (EventType | TaskType)[], dayIndex?: number }) {
   const { pixelsPerMinute, minutesPerDivision } = useSettingsStore()
   const { viewDate } = useViewStore()
   const { changeEventStartTime, insertEvent } = useEventsStore()
@@ -76,12 +78,12 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
       // make a list of 24 hours with x divisions each
       Array.from({ length: 24 * (60 / minutesPerDivision) }).map((_, idx) => {
         // find all events that start at this hour
-        const matchingEvents = events.filter(({ startTime }) =>
+        const matchingItems = items.filter(({ startTime }) =>
           idx === (startTime.getHours() * (60 / minutesPerDivision)) + Math.floor(startTime.getMinutes() / 60 * (60 / minutesPerDivision))
         )
 
         // sort events by start time and then by duration
-        const sortedMatchingEvents = matchingEvents.sort((a, b) => {
+        const sortedMatchingItems = matchingItems.sort((a, b) => {
           const startDiff = a.startTime.getTime() - b.startTime.getTime()
           if (startDiff !== 0) return startDiff
 
@@ -100,18 +102,29 @@ export default function Day ({ events, dayIndex }: { events: DayType, dayIndex?:
           style={{ height: pixelsPerMinute * minutesPerDivision }}
           key={idx}>
 
-          {sortedMatchingEvents?.map((event, idx) => {
+          {sortedMatchingItems?.map((item, idx) => {
+            const isATask = 'done' in item
             return (
-              <div key={event.id} style={{ marginLeft: idx * 60 + 'px', zIndex: idx, width: idx > 0 ? '60%' : '' }} className='relative'>
-                <Event
-                  name={event.name}
-                  id={event.id}
-                  height={pixelsPerMinute * ((event.endTime.getTime() - event.startTime.getTime()) / 1000 / 60)}
-                  margin={pixelsPerMinute * (event.startTime.getMinutes() % minutesPerDivision)}
-                  startTime={event.startTime}
-                  endTime={event.endTime}
-                />
-              </div>
+              <div key={item.id} style={{ marginLeft: idx * 60 + 'px', zIndex: idx, width: idx > 0 ? '60%' : '' }} className='relative'>
+                {
+                  isATask &&
+                  <Task
+                  task={item}
+                  height={pixelsPerMinute * ((item.endTime.getTime() - item.startTime.getTime()) / 1000 / 60)}
+                  margin={pixelsPerMinute * (item.startTime.getMinutes() % minutesPerDivision)} />
+                }
+                {
+                  !isATask &&
+                  <Event
+                    name={item.name}
+                    id={item.id}
+                    height={pixelsPerMinute * ((item.endTime.getTime() - item.startTime.getTime()) / 1000 / 60)}
+                    margin={pixelsPerMinute * (item.startTime.getMinutes() % minutesPerDivision)}
+                    startTime={item.startTime}
+                    endTime={item.endTime}
+                  />
+                }
+                </div>
             )
           })}
         </li>
