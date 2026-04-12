@@ -2,9 +2,10 @@
 
 import { useEventsStore } from '@events/store'
 import { useRef } from 'react'
-import EventDialog from '@ui/shared/events/components/event-dialog'
 import type { Task as TaskType } from '@tasks/types'
 import { useTasksStore } from '@tasks/store'
+import AddDialog from '@ui/shared/add/add-dialog'
+import { DialogType } from '@ui/shared/add/add-button'
 
 export default function Task ({ task, height, margin }: { task: TaskType, height: number, margin: number }) {
   const { title, id, startTime, endTime } = task
@@ -36,9 +37,13 @@ export default function Task ({ task, height, margin }: { task: TaskType, height
         </div>
       </label>
       <h2>{task.title}</h2>
-      <EventDialog ref={dialogRef} onSubmit={(newEvent) => updateEvent(id, newEvent)} event={{ name: title, startTime, endTime }}>
-        Edit Event
-      </EventDialog>
+      <AddDialog
+      type={DialogType.Task}
+      ref={dialogRef}
+      onSubmit={(newTask) => updateTask(id, newTask as TaskType)}
+      item={task}>
+        Edit Task
+      </AddDialog>
     </article>
   )
 }

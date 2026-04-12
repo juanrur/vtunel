@@ -2,7 +2,9 @@
 
 import { useEventsStore } from '@events/store'
 import { useRef } from 'react'
-import EventDialog from '@ui/shared/events/components/event-dialog'
+import AddDialog from '@ui/shared/add/add-dialog'
+import type { Event as EventType } from '@events/types'
+import { DialogType } from '@ui/shared/add/add-button'
 
 export default function Event ({ name, height, margin, id, startTime, endTime }: { name: string, height: number, margin: number, id: string, startTime: Date, endTime: Date }) {
   const { updateEvent } = useEventsStore()
@@ -21,9 +23,13 @@ export default function Event ({ name, height, margin, id, startTime, endTime }:
     style={{ height: height + 'px', marginTop: margin + 'px' }}
     >
       {name}
-      <EventDialog ref={dialogRef} onSubmit={(newEvent) => updateEvent(id, newEvent)} event={{ name, startTime, endTime }}>
+      <AddDialog
+      type={DialogType.Event}
+      ref={dialogRef}
+      onSubmit={(newEvent) => updateEvent(id, newEvent as EventType)}
+      item={{ name, startTime, endTime } as EventType}>
         Edit Event
-      </EventDialog>
+      </AddDialog>
     </article>
   )
 }

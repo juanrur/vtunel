@@ -26,6 +26,7 @@
       "@tasks/*": ["modules/tasks/*"],
       "@ui/*": ["modules/ui/*"],
       "@shared/*": ["modules/shared/*"],
+      "@templates/*": ["modules/templates/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

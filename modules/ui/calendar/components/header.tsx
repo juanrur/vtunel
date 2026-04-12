@@ -1,5 +1,5 @@
 'use client'
-import AddEventButton from '@ui/shared/events/components/add-event-button'
+import AddEventButton from '@ui/shared/add/add-button'
 import ChangeWeekButton from '@ui/calendar/components/change-view-date-button'
 import { useViewStore } from '@ui/calendar/store'
 import SingOutButton from '@ui/shared/auth/components/sing-out-button'

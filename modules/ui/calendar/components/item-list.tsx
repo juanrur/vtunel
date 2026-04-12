@@ -1,40 +1,50 @@
 import { useEventsStore } from '@events/store'
 import TrashIcon from '@icons/trash'
 import { useTasksStore } from 'modules/tasks/store'
-import { useRef } from 'react'
+import { useRef, createRef, RefObject } from 'react'
 import type { Event } from '@events/types'
 import { Task } from '@tasks/types'
+import AddDialog from '@ui/shared/add/add-dialog'
+import { DialogType } from '@ui/shared/add/add-button'
 
 export default function ItemList ({ items }: { items: (Event | Task)[] }) {
   const { deleteEvent, updateEvent } = useEventsStore()
   const { deleteTask, updateTask } = useTasksStore()
 
-  const EventEditDialog = useRef<HTMLDialogElement>(null)
+  const dialogRefsMap = useRef<Map<string, RefObject<HTMLDialogElement>>>(new Map())
 
-  const showEditDialog = () => {
-    if (EventEditDialog.current) {
-      EventEditDialog.current.showModal()
+  const getOrCreateRef = (itemId: string) => {
+    if (!dialogRefsMap.current.has(itemId)) {
+      dialogRefsMap.current.set(itemId, createRef<HTMLDialogElement>())
     }
+    return dialogRefsMap.current.get(itemId)!
+  }
+
+  const showEditDialog = (itemId: string) => {
+    const ref = dialogRefsMap.current.get(itemId)
+    ref?.current?.showModal()
   }
 
   return <ul className='flex flex-col gap-4'>
     {items.map((item) => {
       const isATask = 'done' in item
       return (
-          <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', (isATask ? 'task:' : 'event:') + item.id)} onDragEnd={event => event.preventDefault()} className='border rounded-lg flex p-3 bg-secondary items-center gap-4 border-primary' key={item.id} onClick={showEditDialog}>
+          <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', (isATask ? 'task:' : 'event:') + item.id)} onDragEnd={event => event.preventDefault()} className='border rounded-lg flex p-3 bg-secondary items-center gap-4 border-primary' key={item.id} onClick={() => showEditDialog(item.id)}>
 
-          {/* <EventDialog
-            key={event.id + event.startTime.getTime() + event.endTime.getTime()} // fuerza remount si cambian los datos
-            ref={EventEditDialog}
-            onSubmit={(newEvent) => updateEvent(event.id, newEvent)}
-            event={event}>
-            Edit Event
-          </EventDialog> */}
+          <AddDialog
+            key={item.id + item.startTime.getTime() + item.endTime.getTime()}
+            ref={getOrCreateRef(item.id)}
+            onSubmit={(newItem) => updateEvent(item.id, newItem as Event | Task)}
+            item={item}
+            type={isATask ? DialogType.Task : DialogType.Event}
+            >
+            Edit {isATask ? 'Task' : 'Event'}
+          </AddDialog>
 
           <div className='flex justify-between items-center flex-1'>
             <div>
               <header className='flex items-center gap-2'>
-                <label className="flex items-center gap-2 cursor-pointer">
+                <label onClick={event => event.stopPropagation()} className="flex items-center gap-2 cursor-pointer">
                   { isATask &&
                     <>
                         <input type="checkbox" defaultChecked={item.done} onChange={(event) => updateTask(item.id, { done: event.target.checked })} className="peer hidden" />

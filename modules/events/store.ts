@@ -6,7 +6,7 @@ interface EventsStore {
   events: Event[]
   eventsAreLoading: boolean
   getAllEvents: () => void
-  insertEvent: (event: Omit<Event, 'id' | 'userId'>) => void
+  insertEvent: (event: Omit<Event, 'id'>) => void
   deleteEvent: (eventID: string) => void
   changeEventStartTime: (newStartTime: Date, eventID: string) => void
   updateEvent: (eventID: string, updatedData: Partial<Event>) => void
