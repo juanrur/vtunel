@@ -1,4 +1,4 @@
-import { SupabaseTaskRepository } from './supabase-task-repository'
+import { PocketbaseTaskRepository } from './pocketbase-task-repository'
 import { Task } from './types'
 import { create } from 'zustand'
 
@@ -17,20 +17,20 @@ export const useTasksStore = create<TasksStore>((set) => ({
   tasksAreLoading: false,
 
   createTask: async (task) => {
-    const createdTask = await SupabaseTaskRepository.create(task)
+    const createdTask = await PocketbaseTaskRepository.create(task)
     set((state) => ({ tasks: [...state.tasks, createdTask] }))
     return createdTask
   },
 
   getAllTasks: async () => {
     set({ tasksAreLoading: true })
-    const tasks = await SupabaseTaskRepository.getAll()
+    const tasks = await PocketbaseTaskRepository.getAll()
     set({ tasks, tasksAreLoading: false })
     return tasks
   },
 
   updateTask: async (id, newTask) => {
-    const updatedTask = await SupabaseTaskRepository.update(id, newTask)
+    const updatedTask = await PocketbaseTaskRepository.update(id, newTask)
     set((state) => ({
       tasks: state.tasks.map((task) => (task.id === id ? updatedTask : task))
     }))
@@ -38,7 +38,7 @@ export const useTasksStore = create<TasksStore>((set) => ({
   },
 
   deleteTask: async (id) => {
-    await SupabaseTaskRepository.delete(id)
+    await PocketbaseTaskRepository.delete(id)
     set((state) => ({ tasks: state.tasks.filter((task) => task.id !== id) }))
   },
 
@@ -58,6 +58,6 @@ export const useTasksStore = create<TasksStore>((set) => ({
       }
     })
 
-    await SupabaseTaskRepository.update(taskId, { startTime: newStartTime, endTime: newEndTime })
+    await PocketbaseTaskRepository.update(taskId, { startTime: newStartTime, endTime: newEndTime })
   }
 }))
