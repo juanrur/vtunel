@@ -1,4 +1,4 @@
-import { Filter } from '@/components/aside'
+import { Filter } from '@ui/calendar/components/aside'
 
 export default function FilterButton ({ value, filterState, onClick }: { value: Filter, filterState: Filter, onClick: (value: Filter) => void }) {
   const isActive = value === filterState
