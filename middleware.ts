@@ -9,6 +9,12 @@ export async function middleware (request: NextRequest) {
     return NextResponse.next()
   }
 
+  const response = NextResponse.next({
+    request: {
+      headers: request.headers
+    }
+  })
+
   // Para otras rutas, verificar sesión
   const supabase = createServerClientSupabase(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
@@ -21,6 +27,7 @@ export async function middleware (request: NextRequest) {
         setAll (cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
             request.cookies.set(name, value)
+            response.cookies.set(name, value, options)
           })
         }
       }
@@ -33,7 +40,7 @@ export async function middleware (request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {
