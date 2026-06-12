@@ -1,14 +1,13 @@
 'use client'
-import { supabase } from '@shared/supabase/client'
+import { pb } from '@shared/pocketbase/client'
 
 export default function SingInButtons () {
   const handleGitHubSignIn = async () => {
     try {
-      await supabase.auth.signInWithOAuth({
+      const redirectURL = `${window.location.origin}/auth/callback?provider=github`
+      await pb.collection('users').authWithOAuth2({
         provider: 'github',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
+        redirectURL
       })
     } catch (error) {
       console.error('Error signing in:', error)
@@ -17,11 +16,10 @@ export default function SingInButtons () {
 
   const handleGoogleSignIn = async () => {
     try {
-      await supabase.auth.signInWithOAuth({
+      const redirectURL = `${window.location.origin}/auth/callback?provider=google`
+      await pb.collection('users').authWithOAuth2({
         provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
+        redirectURL
       })
     } catch (error) {
       console.error('Error signing in:', error)

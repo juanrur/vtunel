@@ -1,12 +1,12 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@shared/supabase/client'
+import { pb } from '@shared/pocketbase/client'
 
 export default function SingOutButton () {
   const router = useRouter()
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
+    pb.authStore.clear()
     router.refresh()
   }
 

@@ -1,38 +1,34 @@
-import { type NextRequest } from 'next/server'
-import { cookies } from 'next/headers'
-import { createServerClient } from '@/utils'
-
-import { NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
+import PocketBase from 'pocketbase'
 
 export async function GET (request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
+  const provider = requestUrl.searchParams.get('provider') || 'github'
+  const redirectURL = `${requestUrl.origin}/auth/callback?provider=${provider}`
+
   try {
-    if (code) {
-      const supabase = createServerClient(cookies)
-
-      const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-
-      if (exchangeError) {
-        console.error('Error exchanging code for session:', exchangeError)
-        return NextResponse.json({ error: 'Failed to sign in' }, { status: 500 })
-      }
+    if (!code) {
+      return NextResponse.redirect(`${requestUrl.origin}/login`)
     }
+
+    const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL ?? '')
+    await pb.collection('users').authWithOAuth2({
+      provider,
+      code,
+      redirectURL
+    })
+
+    const response = NextResponse.redirect(requestUrl.origin)
+    response.cookies.set('pb_auth', pb.authStore.token, {
+      path: '/',
+      httpOnly: false,
+      sameSite: 'lax'
+    })
+
+    return response
   } catch (error) {
-    console.error('Error exchanging code for session:', error)
-    return NextResponse.json({ error: 'Failed to sign in' }, { status: 500 })
+    console.error('Error during OAuth callback:', error)
+    return NextResponse.redirect(`${requestUrl.origin}/login`)
   }
-
-  // If a session was created, return to origin; otherwise send user to login to avoid redirect loops
-  try {
-    const supabase = createServerClient(cookies)
-    const { data: { session } } = await supabase.auth.getSession()
-    if (session) {
-      return NextResponse.redirect(requestUrl.origin)
-    }
-  } catch (err) {
-    console.error('Error checking session after exchange:', err)
-  }
-
-  return NextResponse.redirect(`${requestUrl.origin}/login`)
 }
