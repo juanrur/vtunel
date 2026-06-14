@@ -3,27 +3,20 @@ import { pb } from '@shared/pocketbase/client'
 
 export default function SingInButtons () {
   const handleGitHubSignIn = async () => {
-    try {
-      const redirectURL = `${window.location.origin}/auth/callback?provider=github`
-      await pb.collection('users').authWithOAuth2({
-        provider: 'github',
-        redirectURL
-      })
-    } catch (error) {
-      console.error('Error signing in:', error)
-    }
+    pb.collection('users').authWithOAuth2({
+      provider: 'github'
+    }).then(() => {
+      document.cookie = pb.authStore.exportToCookie({ secure: false, sameSite: 'Lax', httpOnly: false })
+      window.location.href = '/'
+    })
   }
 
   const handleGoogleSignIn = async () => {
-    try {
-      const redirectURL = `${window.location.origin}/auth/callback?provider=google`
-      await pb.collection('users').authWithOAuth2({
-        provider: 'google',
-        redirectURL
-      })
-    } catch (error) {
-      console.error('Error signing in:', error)
-    }
+    pb.collection('users').authWithOAuth2({
+      provider: 'google'
+    }).then(() => {
+      document.cookie = pb.authStore.exportToCookie()
+    })
   }
 
   return <>
