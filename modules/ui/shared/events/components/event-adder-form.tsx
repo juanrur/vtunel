@@ -1,12 +1,12 @@
 'use client'
-import { useEventsStore } from '@/store'
-// import { Event } from '@/types'
-import DayInput from '@ui/shared/components/day-input'
-import TimeInput from '@ui/shared/components/time-input'
+import { useEventsStore } from '@events/store'
+// import { Event } from '@events/types'
+import DayInput from '@ui/shared/events/components/day-input'
+import TimeInput from '@ui/shared/events/components/time-input'
 import { useRef } from 'react'
 
 export default function AddEvent () {
-  const { insertEvent, token } = useEventsStore()
+  const { insertEvent } = useEventsStore()
   const formRef = useRef<HTMLFormElement>(null)
 
   async function addEventInDB (formData: FormData) {
@@ -27,7 +27,7 @@ export default function AddEvent () {
       name
     }
 
-    if (token) insertEvent(event, token)
+    insertEvent(event)
     formRef.current?.reset()
   }
 

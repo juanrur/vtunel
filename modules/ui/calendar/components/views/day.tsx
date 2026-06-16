@@ -78,12 +78,12 @@ export default function Day ({ items, dayIndex }: { items: (EventType | TaskType
       // make a list of 24 hours with x divisions each
       Array.from({ length: 24 * (60 / minutesPerDivision) }).map((_, idx) => {
         // find all events that start at this hour
-        const matchingItems = items.filter(({ startTime }) =>
+        const matchingItems = items?.filter(({ startTime }) =>
           idx === (startTime.getHours() * (60 / minutesPerDivision)) + Math.floor(startTime.getMinutes() / 60 * (60 / minutesPerDivision))
         )
 
         // sort events by start time and then by duration
-        const sortedMatchingItems = matchingItems.sort((a, b) => {
+        const sortedMatchingItems = matchingItems?.sort((a, b) => {
           const startDiff = a.startTime.getTime() - b.startTime.getTime()
           if (startDiff !== 0) return startDiff
 

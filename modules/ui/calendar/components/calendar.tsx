@@ -54,7 +54,7 @@ export default function Calendar () {
           <h2>{weekdays[viewDate.getDay()]}</h2>
           <p>{viewDate.getDate()}</p>
         </header>
-        <Day events={thisDayEvents}></Day>
+        <Day items={thisDayEvents}></Day>
       </div>
     }
     {view === 'month' &&
