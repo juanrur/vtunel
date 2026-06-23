@@ -29,7 +29,7 @@ export default function Task ({ task, height, margin }: { task: TaskType, height
         className="mt-0.5 h-fit"
         onClick={event => event.stopPropagation()}
       >
-        <input type="checkbox" defaultChecked={task.done} onChange={(event) => updateTask(task.id, { done: event.target.checked })} className="peer hidden" />
+        <input type="checkbox" checked={task.done} onChange={(event) => updateTask(task.id, { done: event.target.checked })} className="peer hidden" />
         <div className="w-5 h-5 border rounded peer-checked:bg-indigo-900 grid place-content-center peer-checked:*:opacity-100 transition-all">
           <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white opacity-20 peer-checked:opacity-100">
             <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.192 9.205-4.192-4.205a1 1 0 0 0-1.414 1.418l5 5a1 1 0 0 0 1.414 0l10-10z" />
