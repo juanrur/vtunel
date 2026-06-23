@@ -1,7 +1,7 @@
 export type Task = {
   id: string;
   title: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: Date | null;
+  endTime: Date | null;
   done: boolean;
 }

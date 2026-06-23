@@ -32,9 +32,9 @@ export default function ItemList ({ items }: { items: (Event | Task)[] }) {
           <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', (isATask ? 'task:' : 'event:') + item.id)} onDragEnd={event => event.preventDefault()} className='border rounded-lg flex p-3 bg-secondary items-center gap-4 border-primary' key={item.id} onClick={() => showEditDialog(item.id)}>
 
           <AddDialog
-            key={item.id + item.startTime.getTime() + item.endTime.getTime()}
+            key={item.id + (item.startTime?.getTime() ?? '') + (item.endTime?.getTime() ?? '')}
             ref={getOrCreateRef(item.id)}
-            onSubmit={(newItem) => updateEvent(item.id, newItem as Event | Task)}
+            onSubmit={(newItem) => isATask ? updateTask(item.id, newItem as Task) : updateEvent(item.id, newItem as Event)}
             item={item}
             type={isATask ? DialogType.Task : DialogType.Event}
             >
@@ -60,11 +60,17 @@ export default function ItemList ({ items }: { items: (Event | Task)[] }) {
               </header>
 
               <div className='text-sm text-zinc-500'>
-                <span>{item.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                -
-                <span>{item.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                <br />
-                <span>{item.startTime.toLocaleDateString('es-ES', { day: 'numeric', month: 'numeric' })}</span>
+                {item.startTime && item.endTime
+                  ? (
+                    <>
+                      <span>{item.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      -
+                      <span>{item.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      <br />
+                      <span>{item.startTime.toLocaleDateString('es-ES', { day: 'numeric', month: 'numeric' })}</span>
+                    </>
+                    )
+                  : <span>No date</span>}
               </div>
             </div>
 

@@ -8,8 +8,8 @@ const TaskMapper = {
     return {
       id: r.id,
       title: r.title,
-      startTime: convertToLocalTime(r.start_time ?? r.startTime),
-      endTime: convertToLocalTime(r.end_time ?? r.endTime),
+      startTime: r.start_time ?? r.startTime ? convertToLocalTime(r.start_time ?? r.startTime) : null,
+      endTime: r.end_time ?? r.endTime ? convertToLocalTime(r.end_time ?? r.endTime) : null,
       done: r.done
     }
   },
@@ -19,8 +19,8 @@ const TaskMapper = {
     const row: any = { user_id: currentUser.id }
     if (task.title !== undefined) row.title = task.title
     if (task.done !== undefined) row.done = task.done
-    if (task.startTime !== undefined) row.start_time = task.startTime.toISOString()
-    if (task.endTime !== undefined) row.end_time = task.endTime.toISOString()
+    if (task.startTime !== undefined) row.start_time = task.startTime?.toISOString() ?? null
+    if (task.endTime !== undefined) row.end_time = task.endTime?.toISOString() ?? null
     return row
   }
 }

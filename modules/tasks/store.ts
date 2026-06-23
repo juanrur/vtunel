@@ -43,13 +43,15 @@ export const useTasksStore = create<TasksStore>((set) => ({
   },
 
   changeTaskStartTime: async (newStartTime: Date, taskId: string) => {
-    let newEndTime
+    let newEndTime = new Date(newStartTime.getTime() + 60 * 60 * 1000)
 
     set(({ tasks }) => {
       return {
         tasks: tasks.map((task) => {
           if (task.id === taskId) {
-            newEndTime = new Date(task.endTime.getTime() + (newStartTime.getTime() - task.startTime.getTime()))
+            newEndTime = task.endTime && task.startTime
+              ? new Date(task.endTime.getTime() + (newStartTime.getTime() - task.startTime.getTime()))
+              : new Date(newStartTime.getTime() + 60 * 60 * 1000)
             return { ...task, startTime: newStartTime, endTime: newEndTime }
           }
           return task

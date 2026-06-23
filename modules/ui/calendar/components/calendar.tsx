@@ -33,7 +33,7 @@ export default function Calendar () {
   const thisDayEvents = useMemo(
     () => [
       ...events.filter(({ startTime }) => startTime.getDate() === viewDate.getDate() && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear()),
-      ...tasks.filter(({ startTime }) => startTime.getDate() === viewDate.getDate() && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear())
+      ...tasks.filter(({ startTime }) => startTime !== null && startTime.getDate() === viewDate.getDate() && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear())
     ],
     [events, tasks, viewDate]
   )
