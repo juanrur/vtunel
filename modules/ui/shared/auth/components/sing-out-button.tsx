@@ -7,6 +7,8 @@ export default function SingOutButton () {
 
   const handleSignOut = async () => {
     pb.authStore.clear()
+    document.cookie = 'pb_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; sameSite=Lax; secure=false'
+    router.push('/login')
     router.refresh()
   }
 
