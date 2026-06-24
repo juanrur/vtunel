@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import NavLink from './nav-link'
+import AddButton from '@ui/shared/add/add-button'
+import SingOutButton from '@ui/shared/auth/components/sing-out-button'
 
 export default function Nav () {
   return (
@@ -13,6 +15,10 @@ export default function Nav () {
       <div className='flex items-center gap-2'>
         <NavLink href='/'>Calendar</NavLink>
         <NavLink href='/tasks'>Tasks</NavLink>
+      </div>
+      <div className='flex items-center gap-3'>
+        <AddButton />
+        <SingOutButton />
       </div>
     </nav>
   )
