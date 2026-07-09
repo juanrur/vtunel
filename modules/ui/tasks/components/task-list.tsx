@@ -24,21 +24,27 @@ export default function TaskList () {
   }
 
   return (
-    <section className='flex flex-col gap-4 p-4'>
-      <div className='flex items-end justify-end w-full'>
+    <section className='flex flex-col gap-4 p-4 h-full min-h-0'>
+      <div className='flex items-center justify-between'>
+        <h2 className='text-lg font-semibold opacity-80'>Your tasks</h2>
         <button
           onClick={() => createDialogRef.current?.showModal()}
-          className='rounded-full bg-secondary p-2 text-white flex justify-center items-center size-10'
+          className='rounded-full bg-secondary p-2 flex justify-center items-center size-10 border hover:bg-primary transition-colors'
           aria-label='Add task'
         >
           <PlusIcon />
         </button>
       </div>
 
-      <ul className='flex flex-col gap-2'>
+      <ul className='flex flex-col gap-2 overflow-y-auto pr-1'>
         {tasks.map(task => (
           <TaskComponent key={task.id} task={task} handleEditClick={handleEditClick} />
         ))}
+        {tasks.length === 0 && (
+          <li className='text-center opacity-60 py-8 border rounded-lg border-dashed'>
+            No tasks yet. Add one to get started.
+          </li>
+        )}
       </ul>
 
       <AddDialog
