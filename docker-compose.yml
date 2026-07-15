@@ -1,0 +1,13 @@
+services:
+  db:
+    build: ./db
+    volumes:
+      - pb_data:/pb/pb_data
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+
+volumes:
+  pb_data:

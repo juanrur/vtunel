@@ -8,7 +8,7 @@ export async function middleware (request: NextRequest) {
     return NextResponse.next()
   }
 
-  const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL || '')
+  const pb = new PocketBase(process.env.POCKETBASE_URL || 'http://db:8080')
 
   const cookieHeader = request.headers.get('cookie') || ''
   pb.authStore.loadFromCookie(cookieHeader)

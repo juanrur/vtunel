@@ -1,4 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  output: 'standalone',
+  async rewrites () {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://db:8080/api/:path*'
+      }
+    ]
+  }
+}
 
-export default nextConfig;
+export default nextConfig
