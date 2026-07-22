@@ -6,7 +6,7 @@ services:
     volumes:
       - pb_data:/pb/pb_data
     env_file:
-      - .env.local
+      - .env
 
   app:
     build: .
