@@ -1,0 +1,19 @@
+services:
+  db:
+    build: ./db
+    ports:
+      - "8080:8080"
+    volumes:
+      - pb_data:/pb/pb_data
+    env_file:
+      - .env.local
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - POCKETBASE_URL=http://db:8080
+
+volumes:
+  pb_data:

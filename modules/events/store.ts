@@ -1,4 +1,4 @@
-import { SupabaseEventsRepository } from './supabase-events-repository'
+import { PocketbaseEventsRepository } from './pocketbase-events-repository'
 import { Event } from './types'
 import { create } from 'zustand'
 
@@ -31,24 +31,24 @@ export const useEventsStore = create<EventsStore>((set) => ({
       }
     })
 
-    await SupabaseEventsRepository.update(eventID, { startTime: newStartTime, endTime: newEndTime })
+    await PocketbaseEventsRepository.update(eventID, { startTime: newStartTime, endTime: newEndTime })
   },
 
   getAllEvents: async () => {
     set(() => ({ eventsAreLoading: true }))
-    const eventsResponse = await SupabaseEventsRepository.getAll()
+    const eventsResponse = await PocketbaseEventsRepository.getAll()
     set(() => ({ events: eventsResponse }))
     set(() => ({ eventsAreLoading: false }))
   },
 
   insertEvent: async (event) => {
-    await SupabaseEventsRepository.create(event)
-    const updatedEvents = await SupabaseEventsRepository.getAll()
+    await PocketbaseEventsRepository.create(event)
+    const updatedEvents = await PocketbaseEventsRepository.getAll()
     set(() => ({ events: updatedEvents }))
   },
 
   updateEvent: async (eventID: string, updatedData: Partial<Omit<Event, 'id' | 'userId'>>) => {
-    await SupabaseEventsRepository.update(eventID, updatedData)
+    await PocketbaseEventsRepository.update(eventID, updatedData)
     set(({ events }) => {
       return {
         events: events.map((event) => {
@@ -67,6 +67,6 @@ export const useEventsStore = create<EventsStore>((set) => ({
       return { events: updatedEvents }
     })
 
-    await SupabaseEventsRepository.delete(eventID)
+    await PocketbaseEventsRepository.delete(eventID)
   }
 }))

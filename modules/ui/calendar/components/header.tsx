@@ -1,8 +1,6 @@
 'use client'
-import AddEventButton from '@ui/shared/add/add-button'
 import ChangeWeekButton from '@ui/calendar/components/change-view-date-button'
 import { useViewStore } from '@ui/calendar/store'
-import SingOutButton from '@ui/shared/auth/components/sing-out-button'
 import ChangeView from './change-view'
 import ViewSettings from './view-settings'
 
@@ -19,11 +17,9 @@ export default function Header () {
         <ChangeWeekButton action={increaseViewDate} rotate />
       </div>
       <h1 className='font-semibold text-2xl'>{month + ' ' + year}</h1>
-      <ViewSettings />
-      <ChangeView />
-      <div className='flex gap-3'>
-        <AddEventButton />
-        <SingOutButton />
+      <div className='flex items-center gap-2'>
+        <ViewSettings />
+        <ChangeView />
       </div>
     </header>
   )

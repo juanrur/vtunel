@@ -18,3 +18,6 @@
 ### Calendar component
 
 - [X] solve the error of the calendar that goes over the hours
+
+### Security
+- [ ] check if logout and login way and cookies are completely secure

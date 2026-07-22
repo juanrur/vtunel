@@ -1,4 +1,4 @@
-import { SupabaseTemplatesRepository } from './supabase-templates-repository'
+import { PocketbaseTemplatesRepository } from './pocketbase-templates-repository'
 import { Template } from './types'
 import { create } from 'zustand'
 
@@ -16,29 +16,28 @@ export const useTemplatesStore = create<TemplatesStore>((set) => ({
   templatesAreLoading: false,
 
   createTemplate: async (template) => {
+    const createdTemplate = await PocketbaseTemplatesRepository.create(template)
     set((state) => ({ templates: [...state.templates, createdTemplate] }))
-    const createdTemplate = await SupabaseTemplatesRepository.create(template)
     return createdTemplate
   },
 
   getAllTemplates: async () => {
     set({ templatesAreLoading: true })
-    const templates = await SupabaseTemplatesRepository.getAll()
+    const templates = await PocketbaseTemplatesRepository.getAll()
     set({ templates, templatesAreLoading: false })
     return templates
   },
 
   updateTemplate: async (id, newTemplate) => {
+    const updatedTemplate = await PocketbaseTemplatesRepository.update(id, newTemplate)
     set((state) => ({
       templates: state.templates.map((template) => (template.id === id ? updatedTemplate : template))
     }))
-
-    const updatedTemplate = await SupabaseTemplatesRepository.update(id, newTemplate)
     return updatedTemplate
   },
 
   deleteTemplate: async (id) => {
     set((state) => ({ templates: state.templates.filter((template) => template.id !== id) }))
-    await SupabaseTemplatesRepository.delete(id)
+    await PocketbaseTemplatesRepository.delete(id)
   }
 }))

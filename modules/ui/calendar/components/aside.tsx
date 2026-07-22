@@ -47,7 +47,11 @@ export default function Aside () {
     return false
   })
 
-  const items = [...events, ...tasks].sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
+  const items = [...events, ...tasks].sort((a, b) => {
+    if (!a.startTime) return 1
+    if (!b.startTime) return -1
+    return a.startTime.getTime() - b.startTime.getTime()
+  })
 
   return <aside className='h-full flex flex-col gap-6 p-6 pr-0 overflow-hidden size-100'>
     <div className='flex-1 min-h-0 overflow-auto space-y-6'>

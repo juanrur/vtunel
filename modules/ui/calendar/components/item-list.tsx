@@ -32,9 +32,9 @@ export default function ItemList ({ items }: { items: (Event | Task)[] }) {
           <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', (isATask ? 'task:' : 'event:') + item.id)} onDragEnd={event => event.preventDefault()} className='border rounded-lg flex p-3 bg-secondary items-center gap-4 border-primary' key={item.id} onClick={() => showEditDialog(item.id)}>
 
           <AddDialog
-            key={item.id + item.startTime.getTime() + item.endTime.getTime()}
+            key={item.id + (item.startTime?.getTime() ?? '') + (item.endTime?.getTime() ?? '')}
             ref={getOrCreateRef(item.id)}
-            onSubmit={(newItem) => updateEvent(item.id, newItem as Event | Task)}
+            onSubmit={(newItem) => isATask ? updateTask(item.id, newItem as Task) : updateEvent(item.id, newItem as Event)}
             item={item}
             type={isATask ? DialogType.Task : DialogType.Event}
             >
@@ -47,7 +47,7 @@ export default function ItemList ({ items }: { items: (Event | Task)[] }) {
                 <label onClick={event => event.stopPropagation()} className="flex items-center gap-2 cursor-pointer">
                   { isATask &&
                     <>
-                        <input type="checkbox" defaultChecked={item.done} onChange={(event) => updateTask(item.id, { done: event.target.checked })} className="peer hidden" />
+                        <input type="checkbox" checked={item.done} onChange={(event) => updateTask(item.id, { done: event.target.checked })} className="peer hidden" />
                         <div className="w-5 h-5 border rounded peer-checked:bg-indigo-900 grid place-content-center peer-checked:*:opacity-100 transition-all">
                           <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white opacity-20 peer-checked:opacity-100">
                             <path d="M20.285 6.709a1 1 0 0 0-1.414-1.418l-9.192 9.205-4.192-4.205a1 1 0 0 0-1.414 1.418l5 5a1 1 0 0 0 1.414 0l10-10z" />
@@ -60,11 +60,17 @@ export default function ItemList ({ items }: { items: (Event | Task)[] }) {
               </header>
 
               <div className='text-sm text-zinc-500'>
-                <span>{item.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                -
-                <span>{item.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                <br />
-                <span>{item.startTime.toLocaleDateString('es-ES', { day: 'numeric', month: 'numeric' })}</span>
+                {item.startTime && item.endTime
+                  ? (
+                    <>
+                      <span>{item.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      -
+                      <span>{item.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      <br />
+                      <span>{item.startTime.toLocaleDateString('es-ES', { day: 'numeric', month: 'numeric' })}</span>
+                    </>
+                    )
+                  : <span>No date</span>}
               </div>
             </div>
 

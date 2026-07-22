@@ -15,9 +15,11 @@ export default function Week ({ items }: { items: (Event | Task)[] }) {
   const weekItems : WeekType = Array.from({ length: 7 }, () => [])
 
   items.filter((item) => {
+    if (!item.startTime) return false
     const itemDate = new Date(item.startTime)
     return itemDate >= startOfWeek && itemDate <= endOfWeek
   }).forEach((item) => {
+    if (!item.startTime) return
     const day = (item.startTime.getDay() || 7) - 1
     weekItems[day].push(item)
   })

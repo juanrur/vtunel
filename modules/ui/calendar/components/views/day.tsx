@@ -78,12 +78,14 @@ export default function Day ({ items, dayIndex }: { items: (EventType | TaskType
       // make a list of 24 hours with x divisions each
       Array.from({ length: 24 * (60 / minutesPerDivision) }).map((_, idx) => {
         // find all events that start at this hour
-        const matchingItems = items?.filter(({ startTime }) =>
-          idx === (startTime.getHours() * (60 / minutesPerDivision)) + Math.floor(startTime.getMinutes() / 60 * (60 / minutesPerDivision))
-        )
+        const matchingItems = items?.filter((item) => {
+          if (!item.startTime || !item.endTime) return false
+          return idx === (item.startTime.getHours() * (60 / minutesPerDivision)) + Math.floor(item.startTime.getMinutes() / 60 * (60 / minutesPerDivision))
+        })
 
         // sort events by start time and then by duration
         const sortedMatchingItems = matchingItems?.sort((a, b) => {
+          if (!a.startTime || !a.endTime || !b.startTime || !b.endTime) return 0
           const startDiff = a.startTime.getTime() - b.startTime.getTime()
           if (startDiff !== 0) return startDiff
 
@@ -104,6 +106,7 @@ export default function Day ({ items, dayIndex }: { items: (EventType | TaskType
 
           {sortedMatchingItems?.map((item, idx) => {
             const isATask = 'done' in item
+            if (!item.startTime || !item.endTime) return null
             return (
               <div key={item.id} style={{ marginLeft: idx * 60 + 'px', zIndex: idx, width: idx > 0 ? '60%' : '' }} className='relative'>
                 {

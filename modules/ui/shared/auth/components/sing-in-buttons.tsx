@@ -1,31 +1,22 @@
 'use client'
-import { supabase } from '@shared/supabase/client'
+import { pb } from '@shared/pocketbase/client'
 
 export default function SingInButtons () {
   const handleGitHubSignIn = async () => {
-    try {
-      await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
-      })
-    } catch (error) {
-      console.error('Error signing in:', error)
-    }
+    pb.collection('users').authWithOAuth2({
+      provider: 'github'
+    }).then(() => {
+      document.cookie = pb.authStore.exportToCookie({ secure: false, sameSite: 'Lax', httpOnly: false })
+      window.location.href = '/'
+    })
   }
 
   const handleGoogleSignIn = async () => {
-    try {
-      await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
-      })
-    } catch (error) {
-      console.error('Error signing in:', error)
-    }
+    pb.collection('users').authWithOAuth2({
+      provider: 'google'
+    }).then(() => {
+      document.cookie = pb.authStore.exportToCookie()
+    })
   }
 
   return <>
