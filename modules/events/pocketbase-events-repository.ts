@@ -26,8 +26,8 @@ const EventMapper = {
     if (!user) throw new Error('Not authenticated')
     const row: any = { user_id: user.id }
     if (event.name !== undefined) row.name = event.name
-    if (event.startTime !== undefined) row.startTime = event.startTime.toISOString()
-    if (event.endTime !== undefined) row.endTime = event.endTime.toISOString()
+    if (event.startTime !== undefined) row.start_time = event.startTime.toISOString()
+    if (event.endTime !== undefined) row.end_time = event.endTime.toISOString()
     if (event.recurrenceType !== undefined) row.recurrence_type = event.recurrenceType
     if (event.recurrenceInterval !== undefined) row.recurrence_interval = event.recurrenceInterval
     if (event.recurrenceDays !== undefined) row.recurrence_days = event.recurrenceDays
