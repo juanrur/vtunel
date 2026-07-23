@@ -1,6 +1,6 @@
 services:
   db:
-    ports: []
+    ports: !override []
 
   app:
-    ports: []
+    ports: !override []
