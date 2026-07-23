@@ -1,6 +1,19 @@
 services:
   db:
-    ports: !override []
+    build: ./db
+    volumes:
+      - pb_data:/pb/pb_data
+    env_file:
+      - .env
+    restart: unless-stopped
 
   app:
-    ports: !override []
+    build: .
+    environment:
+      - POCKETBASE_URL=http://db:8080
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  pb_data:
