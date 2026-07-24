@@ -1,10 +1,9 @@
 FROM node:20-alpine AS builder
-ARG NEXT_PUBLIC_POCKETBASE_URL=http://localhost:8080
-ENV NEXT_PUBLIC_POCKETBASE_URL=$NEXT_PUBLIC_POCKETBASE_URL
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+ENV POCKETBASE_URL=${POCKETBASE_URL}
 RUN npm run build
 
 FROM node:20-alpine AS runner

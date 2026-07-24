@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://db:8080/api/:path*'
+        destination: `${process.env.POCKETBASE_URL}/api/:path*`
       }
     ]
   }

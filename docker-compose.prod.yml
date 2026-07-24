@@ -11,6 +11,8 @@ services:
     build: .
     env_file:
       - .env
+    environment:
+      - POCKETBASE_URL=http://db:8080
     depends_on:
       - db
     restart: unless-stopped

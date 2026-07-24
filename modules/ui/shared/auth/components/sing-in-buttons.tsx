@@ -8,6 +8,8 @@ export default function SingInButtons () {
     }).then(() => {
       document.cookie = pb.authStore.exportToCookie({ secure: false, sameSite: 'Lax', httpOnly: false })
       window.location.href = '/'
+    }).catch((err) => {
+      console.error('GitHub sign in failed:', err)
     })
   }
 
@@ -16,6 +18,8 @@ export default function SingInButtons () {
       provider: 'google'
     }).then(() => {
       document.cookie = pb.authStore.exportToCookie()
+    }).catch((err) => {
+      console.error('Google sign in failed:', err)
     })
   }
 

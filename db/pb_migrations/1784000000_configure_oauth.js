@@ -1,10 +1,12 @@
 /// <reference path="../pb_data/types.d.ts" />
 migrate((app) => {
-  const clientId = $os.getenv("GITHUB_CLIENT_ID")
-  const clientSecret = $os.getenv("GITHUB_CLIENT_SECRET")
+  const clientId = process.env.GITHUB_CLIENT_ID
+  const clientSecret = process.env.GITHUB_CLIENT_SECRET
 
   if (!clientId || !clientSecret) {
     console.warn("OAuth providers not configured: GITHUB_CLIENT_ID or GITHUB_CLIENT_SECRET not set")
+    console.log('client id', process.env.GITHUB_CLIENT_ID)
+    console.log('client secret', process.env.GITHUB_CLIENT_SECRET)
     return
   }
 
