@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+ARG POCKETBASE_URL
 ENV POCKETBASE_URL=${POCKETBASE_URL}
 RUN npm run build
 

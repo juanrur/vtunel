@@ -10,7 +10,10 @@ services:
     restart: unless-stopped
 
   app:
-    build: .
+    build:
+      context: .
+      args:
+        POCKETBASE_URL: http://db:8080
     ports:
       - "3000:3000"
     environment:
