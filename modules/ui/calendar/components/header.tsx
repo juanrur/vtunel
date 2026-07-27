@@ -7,7 +7,7 @@ import ViewSettings from './view-settings'
 export default function Header () {
   const { increaseViewDate, decreaseViewDate, viewDate } = useViewStore()
 
-  const month = viewDate.toLocaleString('default', { month: 'long' }).toUpperCase()
+  const month = viewDate.toLocaleString('ES-es', { month: 'long' }).toUpperCase()
   const year = viewDate.getFullYear()
 
   return (
