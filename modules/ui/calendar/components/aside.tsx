@@ -76,9 +76,9 @@ export default function Aside () {
       }
       {
           activeTab === 'items' &&
-          (!eventsAreLoading || !tasksAreLoading
-            ? <ItemList items={items} />
-            : <ItemListSkeleton />)
+          (eventsAreLoading || tasksAreLoading
+            ? <ItemListSkeleton />
+            : <ItemList items={items} />)
       }
     </div>
 

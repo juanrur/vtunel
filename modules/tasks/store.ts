@@ -14,7 +14,7 @@ interface TasksStore {
 
 export const useTasksStore = create<TasksStore>((set) => ({
   tasks: [],
-  tasksAreLoading: false,
+  tasksAreLoading: true,
 
   createTask: async (task) => {
     const createdTask = await PocketbaseTaskRepository.create(task)
