@@ -1,4 +1,5 @@
 import { Task } from '@tasks/types'
+import DateTimeRange from '@ui/shared/components/date-time-range'
 import { FormEvent, useState } from 'react'
 
 const defaultStart = new Date()
@@ -72,39 +73,10 @@ export default function TaskForm ({ task, close, onSubmit }: { task?: Task, clos
       </label>
 
       {hasDate && (
-        <>
-          <label>
-            Day:
-            <input
-              type='date'
-              name='day'
-              className='border rounded p-1 w-full text-black'
-              defaultValue={task?.startTime
-                ? `${task.startTime.getFullYear()}-${(task.startTime.getMonth() + 1).toString().padStart(2, '0')}-${task.startTime.getDate().toString().padStart(2, '0')}`
-                : `${defaultStart.getFullYear()}-${(defaultStart.getMonth() + 1).toString().padStart(2, '0')}-${defaultStart.getDate().toString().padStart(2, '0')}`} />
-          </label>
-          <label>
-            Start Time:
-            <input
-              type='time'
-              name='startTime'
-              className='border rounded p-1 w-full text-black'
-              defaultValue={task?.startTime
-                ? task.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                : defaultStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} />
-          </label>
-          <label>
-            End Time:
-            <input
-              type='time'
-              name='endTime'
-              className='border rounded p-1 w-full text-black'
-              defaultValue={
-                task?.endTime
-                  ? task.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                  : defaultEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} />
-          </label>
-        </>
+        <DateTimeRange
+          startDate={task?.startTime ?? defaultStart}
+          endDate={task?.endTime ?? defaultEnd}
+        />
       )}
       <button type='submit' className='bg-secondary text-white rounded px-4 py-2 border'>Save</button>
     </form>

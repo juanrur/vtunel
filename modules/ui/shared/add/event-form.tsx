@@ -1,4 +1,5 @@
 import { Event } from '@events/types'
+import DateTimeRange from '@ui/shared/components/date-time-range'
 import { FormEvent } from 'react'
 
 const defaultStart = new Date()
@@ -42,30 +43,10 @@ export default function EventForm ({ event = { name: '', startTime: defaultStart
         Name:
         <input type='text' name='name' className='border rounded p-1 w-full text-black' defaultValue={event?.name} />
       </label>
-      <label>
-        Day:
-        <input
-          type='date'
-          name='day'
-          className='border rounded p-1 w-full text-black'
-          defaultValue={`${event?.startTime.getFullYear()}-${(event ? event.startTime.getMonth() + 1 : '').toString().padStart(2, '0')}-${event?.startTime.getDate().toString().padStart(2, '0')}`} />
-      </label>
-      <label>
-        Start Time:
-        <input
-          type='time'
-          name='startTime'
-          className='border rounded p-1 w-full text-black'
-          defaultValue={event?.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} />
-      </label>
-      <label>
-        End Time:
-        <input
-          type='time'
-          name='endTime'
-          className='border rounded p-1 w-full text-black'
-          defaultValue={event?.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}/>
-      </label>
+      <DateTimeRange
+        startDate={event?.startTime ?? defaultStart}
+        endDate={event?.endTime ?? defaultEnd}
+      />
       <button type='submit' className='bg-secondary text-white rounded px-4 py-2 border'>Save</button>
     </form>
   )
