@@ -26,8 +26,8 @@ export default function TemplateForm ({ template, close, onSubmit }: { template?
   }
 
   return (
-    <form method='dialog' onSubmit={handleSubmit} className='flex flex-col gap-4 dark:text-white text-zinc-800'>
-      <button className='absolute top-3 right-4 text-white rounded-full size-10 border-2'
+    <form onSubmit={handleSubmit} className='flex flex-col gap-4 dark:text-white text-zinc-800'>
+      <button type='button' className='absolute top-3 right-4 text-white rounded-full size-10 border-2'
         onClick={event => {
           event.stopPropagation()
           event.preventDefault()
