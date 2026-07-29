@@ -48,11 +48,11 @@ export default function DateTimeRange ({
       </label>
       <label>
         Start Time:
-        <TimePicker name={startName} defaultValue={defaultStart} step={5} />
+        <TimePicker name={startName} defaultValue={defaultStart} step={15} />
       </label>
       <label>
         End Time:
-        <TimePicker name={endName} defaultValue={defaultEnd} step={5} />
+        <TimePicker name={endName} defaultValue={defaultEnd} step={15} />
       </label>
     </div>
   )
