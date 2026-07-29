@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import NavLink from './nav-link'
-import AddButton from '@ui/shared/add/add-button'
-import SingOutButton from '@ui/shared/auth/components/sing-out-button'
+import AddButton from '@ui/shared/components/add/add-button'
+import SingOutButton from '@ui/shared/components/auth/sing-out-button'
 
 export default function Nav () {
   return (

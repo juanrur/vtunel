@@ -1,5 +1,5 @@
 import { Event } from '@events/types'
-import DateTimeRange from '@ui/shared/components/date-time-range'
+import DateTimeRange from '@ui/shared/components/add/date-time-range'
 import { FormEvent } from 'react'
 
 const defaultStart = new Date()

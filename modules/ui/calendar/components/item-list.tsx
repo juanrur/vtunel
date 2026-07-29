@@ -1,11 +1,11 @@
 import { useEventsStore } from '@events/store'
-import TrashIcon from '@icons/trash'
+import TrashIcon from '@ui/shared/components/icons/trash'
 import { useTasksStore } from 'modules/tasks/store'
 import { useRef, createRef, RefObject } from 'react'
 import type { Event } from '@events/types'
 import { Task } from '@tasks/types'
-import AddDialog from '@ui/shared/add/add-dialog'
-import { DialogType } from '@ui/shared/add/add-button'
+import AddDialog from '@ui/shared/components/add/add-dialog'
+import { DialogType } from '@ui/shared/components/add/add-button'
 
 export default function ItemList ({ items }: { items: (Event | Task)[] }) {
   const { deleteEvent, updateEvent } = useEventsStore()

@@ -1,9 +1,9 @@
 import React, { forwardRef } from 'react'
 import type { Event } from '@events/types'
-import EventForm from '@ui/shared/add/event-form'
+import EventForm from '@ui/shared/components/add/event-form'
 import { Task } from '@tasks/types'
 import { Template } from 'modules/templates/types'
-import TemplateForm from '@ui/shared/add/template-form'
+import TemplateForm from '@ui/shared/components/add/template-form'
 import TaskForm from './task-form'
 import { DialogType } from './add-button'
 

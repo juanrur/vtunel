@@ -2,9 +2,9 @@
 import type { Event } from '@events/types'
 import { useRef } from 'react'
 import { useEventsStore } from '@events/store'
-import AddDialog from '@ui/shared/add/add-dialog'
-import TrashIcon from '@ui/shared/icons/trash'
-import { DialogType } from '@ui/shared/add/add-button'
+import AddDialog from '@ui/shared/components/add/add-dialog'
+import TrashIcon from '@ui/shared/components/icons/trash'
+import { DialogType } from '@ui/shared/components/add/add-button'
 
 export default function EventInfo ({ event }: { event: Event }) {
   const { deleteEvent, updateEvent } = useEventsStore()

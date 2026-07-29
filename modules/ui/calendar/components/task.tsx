@@ -4,8 +4,8 @@ import { useEventsStore } from '@events/store'
 import { useRef } from 'react'
 import type { Task as TaskType } from '@tasks/types'
 import { useTasksStore } from '@tasks/store'
-import AddDialog from '@ui/shared/add/add-dialog'
-import { DialogType } from '@ui/shared/add/add-button'
+import AddDialog from '@ui/shared/components/add/add-dialog'
+import { DialogType } from '@ui/shared/components/add/add-button'
 
 export default function Task ({ task, height, margin }: { task: TaskType, height: number, margin: number }) {
   const { title, id, startTime, endTime } = task

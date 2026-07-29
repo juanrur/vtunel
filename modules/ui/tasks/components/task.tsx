@@ -1,4 +1,4 @@
-import TrashIcon from '@icons/trash'
+import TrashIcon from '@ui/shared/components/icons/trash'
 import { useTasksStore } from '@tasks/store'
 import { Task as TaskType } from '@tasks/types'
 

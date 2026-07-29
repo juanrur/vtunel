@@ -1,4 +1,4 @@
-import Nav from '@ui/shared/nav/nav'
+import Nav from '@ui/shared/components/nav/nav'
 import React from 'react'
 
 export default function AppLayout ({

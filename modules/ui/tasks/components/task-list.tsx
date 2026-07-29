@@ -2,9 +2,9 @@
 
 import { useTasksStore } from '@tasks/store'
 import { Task } from '@tasks/types'
-import AddDialog from '@ui/shared/add/add-dialog'
-import { DialogType } from '@ui/shared/add/add-button'
-import PlusIcon from '@ui/shared/icons/plus'
+import AddDialog from '@ui/shared/components/add/add-dialog'
+import { DialogType } from '@ui/shared/components/add/add-button'
+import PlusIcon from '@ui/shared/components/icons/plus'
 import { useEffect, useRef, useState } from 'react'
 import TaskComponent from '@ui/tasks/components/task'
 

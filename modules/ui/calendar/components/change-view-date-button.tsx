@@ -1,4 +1,4 @@
-import Arrow from '@ui/shared/icons/arrow'
+import Arrow from '@ui/shared/components/icons/arrow'
 
 export default function ChangeViewDateButton ({
   action, rotate = false

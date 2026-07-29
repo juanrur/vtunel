@@ -2,9 +2,9 @@
 
 import { useEventsStore } from '@events/store'
 import { useRef } from 'react'
-import AddDialog from '@ui/shared/add/add-dialog'
+import AddDialog from '@ui/shared/components/add/add-dialog'
 import type { Event as EventType } from '@events/types'
-import { DialogType } from '@ui/shared/add/add-button'
+import { DialogType } from '@ui/shared/components/add/add-button'
 
 export default function Event ({ name, height, margin, id, startTime, endTime }: { name: string, height: number, margin: number, id: string, startTime: Date, endTime: Date }) {
   const { updateEvent } = useEventsStore()

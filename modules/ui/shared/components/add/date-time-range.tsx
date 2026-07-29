@@ -1,6 +1,6 @@
 'use client'
 
-import TimePicker from './time-picker'
+import TimePicker from '@ui/shared/components/add/time-picker'
 
 interface DateTimeRangeProps {
   dayName?: string
