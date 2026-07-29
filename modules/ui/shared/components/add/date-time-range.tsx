@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import TimePicker from '@ui/shared/components/add/time-picker'
 
 interface DateTimeRangeProps {
@@ -26,7 +27,12 @@ export default function DateTimeRange ({
   endDate,
   className = ''
 }: DateTimeRangeProps) {
+  const dayInputRef = useRef<HTMLInputElement>(null)
   const now = new Date()
+
+  const handleDayChange = () => {
+    dayInputRef.current?.blur()
+  }
 
   const defaultStart = startDate ?? now
   const defaultEnd = endDate ?? (() => {
@@ -40,10 +46,12 @@ export default function DateTimeRange ({
       <label>
         Day:
         <input
+          ref={dayInputRef}
           type='date'
           name={dayName}
           className='border rounded p-1 w-full text-black'
           defaultValue={toDateValue(defaultStart)}
+          onChange={handleDayChange}
         />
       </label>
       <label>

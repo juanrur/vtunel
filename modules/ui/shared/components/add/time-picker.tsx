@@ -65,6 +65,7 @@ export default function TimePicker ({
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
   const selectedRef = useRef<HTMLLIElement>(null)
+  const skipBlurRef = useRef(false)
   const times = useMemo(() => generateTimes(step), [step])
   const nearestTime = useMemo(() => getNearestTime(value, times), [value, times])
 
@@ -87,6 +88,8 @@ export default function TimePicker ({
   const handleSelect = (time: string) => {
     setValue(time)
     setIsOpen(false)
+    skipBlurRef.current = true
+    inputRef.current?.blur()
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +97,11 @@ export default function TimePicker ({
   }
 
   const handleBlur = () => {
+    if (skipBlurRef.current) {
+      skipBlurRef.current = false
+      setIsOpen(false)
+      return
+    }
     const parsed = parseTime(value)
     if (parsed) {
       setValue(toTimeValue(parsed))
