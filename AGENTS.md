@@ -40,6 +40,12 @@ State pattern: Zustand stores are the single source of truth for UI state. They 
 - All entity repositories implement `CrudRepository<T>` from `modules/shared/domain/crud-repository.ts`.
 - Date fields come from PocketBase as `start_time`/`end_time` and are mapped to domain `startTime`/`endTime` in `pocketbase-events-repository.ts`.
 
+### UI component naming
+- Route pages live in `app/(app)/<route>/page.tsx` and import the feature's entry component from `modules/ui/<feature>/components/`.
+- The entry component can be named like the feature (e.g. `modules/ui/schedule/components/schedule.tsx`, `modules/ui/calendar/components/calendar.tsx`).
+- Subcomponents inside the same feature do **not** repeat the feature name. Use short names: `item.tsx`, `gap.tsx`, `day.tsx`, `config.tsx`, `header.tsx`.
+- Avoid custom `useXxx` hooks. Prefer state managed by a Zustand store (`store.ts`) or local component state with helpers in `state.ts`/`utils.ts`. If you need a hook on top of a Zustand store, define both the store and the hook in the same file (e.g. `modules/ui/<feature>/store.ts`).
+
 ## Auth
 - GitHub OAuth via PocketBase's OAuth2 provider.
 - `middleware.ts` redirects unauthenticated users to `/login` except for `/login`, `/api/*`, `/auth/*`, and Next.js static files.
