@@ -87,7 +87,6 @@ export default function TimePicker ({
   const handleSelect = (time: string) => {
     setValue(time)
     setIsOpen(false)
-    inputRef.current?.blur()
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,6 +98,7 @@ export default function TimePicker ({
     if (parsed) {
       setValue(toTimeValue(parsed))
     }
+    setIsOpen(false)
   }
 
   return (
