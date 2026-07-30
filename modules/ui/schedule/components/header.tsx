@@ -1,6 +1,6 @@
 'use client'
 
-import Arrow from '@ui/shared/icons/arrow'
+import Arrow from '@ui/shared/components/icons/arrow'
 import Config from './config'
 import { useScheduleStore } from '../store'
 

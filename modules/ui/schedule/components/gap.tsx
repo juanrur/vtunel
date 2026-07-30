@@ -3,8 +3,8 @@
 import { useRef } from 'react'
 import type { Event } from '@events/types'
 import { useEventsStore } from '@events/store'
-import AddDialog from '@ui/shared/add/add-dialog'
-import { DialogType } from '@ui/shared/add/add-button'
+import AddDialog from '@ui/shared/components/add/add-dialog'
+import { DialogType } from '@ui/shared/components/add/add-button'
 import TimeLabel from './time-label'
 
 interface GapProps {

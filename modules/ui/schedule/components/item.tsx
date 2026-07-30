@@ -5,9 +5,9 @@ import type { Event } from '@events/types'
 import type { Task } from '@tasks/types'
 import { useEventsStore } from '@events/store'
 import { useTasksStore } from '@tasks/store'
-import AddDialog from '@ui/shared/add/add-dialog'
-import { DialogType } from '@ui/shared/add/add-button'
-import TrashIcon from '@ui/shared/icons/trash'
+import AddDialog from '@ui/shared/components/add/add-dialog'
+import { DialogType } from '@ui/shared/components/add/add-button'
+import TrashIcon from '@ui/shared/components/icons/trash'
 import TimeLabel from './time-label'
 
 interface ItemProps {
