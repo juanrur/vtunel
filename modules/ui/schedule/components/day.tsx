@@ -33,6 +33,15 @@ export default function Day ({ date, items }: DayProps) {
     lastEnd = item.endTime!
   })
 
+  const endOfDay = new Date(date)
+  endOfDay.setHours(24, 0, 0, 0)
+
+  if (entries.length === 0) {
+    entries.push({ type: 'gap', startTime: lastEnd, endTime: endOfDay })
+  } else if (lastEnd < endOfDay) {
+    entries.push({ type: 'gap', startTime: lastEnd, endTime: endOfDay })
+  }
+
   const weekday = date.toLocaleDateString('es-ES', { weekday: 'long' })
   const dayNumber = date.getDate()
 
@@ -43,10 +52,7 @@ export default function Day ({ date, items }: DayProps) {
         <p className='text-zinc-400 text-2xl'>{dayNumber}</p>
       </header>
 
-      <div className='flex-1 overflow-y-auto p-4 space-y-4 min-h-0'>
-        {entries.length === 0 && (
-          <p className='text-center text-zinc-500 py-8'>No items for this day</p>
-        )}
+      <div className='flex-1 overflow-y-auto p-4 space-y-4 min-h-0 [&_article:first-child_aside]:-translate-y-0'>
         {entries.map((entry, index) => (
           entry.type === 'item'
             ? <Item key={entry.item.id} item={entry.item} />
