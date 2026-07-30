@@ -1,12 +1,14 @@
 import { Task } from '@tasks/types'
 import DateTimeRange from '@ui/shared/components/add/date-time-range'
 import { FormEvent, useState } from 'react'
+import DeleteButton from './delete-button'
+import CloseButton from './close-button'
 
 const defaultStart = new Date()
 const defaultEnd = new Date(defaultStart)
 defaultEnd.setHours(defaultEnd.getHours() + 1)
 
-export default function TaskForm ({ task, close, onSubmit }: { task?: Task, close: () => void, onSubmit: (task: Omit<Task, 'id'>) => void }) {
+export default function TaskForm ({ task, close, onSubmit, onDelete }: { task?: Task, close: () => void, onSubmit: (task: Omit<Task, 'id'>) => void, onDelete?: () => void }) {
   const [hasDate, setHasDate] = useState(Boolean(task?.startTime))
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
@@ -51,12 +53,10 @@ export default function TaskForm ({ task, close, onSubmit }: { task?: Task, clos
 
   return (
     <form onSubmit={handleSubmit} className='flex flex-col gap-4 dark:text-white text-zinc-800'>
-      <button type='button' className='absolute top-3 right-4 text-white rounded-full size-10 border-2'
-        onClick={event => {
-          event.stopPropagation()
-          event.preventDefault()
-          close()
-        }}>X</button>
+      <div className='absolute top-3 right-4 flex items-center gap-2'>
+        {task?.id && onDelete && <DeleteButton onDelete={onDelete} close={close} />}
+        <CloseButton close={close} />
+      </div>
       <label>
         Title:
         <input type='text' name='title' className='border rounded p-1 w-full text-black' defaultValue={task?.title} />

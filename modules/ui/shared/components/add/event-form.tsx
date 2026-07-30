@@ -1,12 +1,14 @@
 import { Event } from '@events/types'
 import DateTimeRange from '@ui/shared/components/add/date-time-range'
 import { FormEvent } from 'react'
+import DeleteButton from './delete-button'
+import CloseButton from './close-button'
 
 const defaultStart = new Date()
 const defaultEnd = new Date(defaultStart)
 defaultEnd.setHours(defaultEnd.getHours() + 1)
 
-export default function EventForm ({ event = { name: '', startTime: defaultStart, endTime: defaultEnd }, close, onSubmit }: { event?: any | Event, close: () => void, onSubmit: (event: Omit<Event, 'id'>) => void }) {
+export default function EventForm ({ event = { name: '', startTime: defaultStart, endTime: defaultEnd }, close, onSubmit, onDelete }: { event?: any | Event, close: () => void, onSubmit: (event: Omit<Event, 'id'>) => void, onDelete?: () => void }) {
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const formData = new FormData(evt.currentTarget)
@@ -33,12 +35,10 @@ export default function EventForm ({ event = { name: '', startTime: defaultStart
 
   return (
     <form onSubmit={handleSubmit} className='flex flex-col gap-4 dark:text-white text-zinc-800'>
-      <button type='button' className='absolute top-3 right-4 text-white rounded-full size-10 border-2'
-        onClick={event => {
-          event.stopPropagation()
-          event.preventDefault()
-          close()
-        }}>X</button>
+      <div className='absolute top-3 right-4 flex items-center gap-2'>
+        {event?.id && onDelete && <DeleteButton onDelete={onDelete} close={close} />}
+        <CloseButton close={close} />
+      </div>
       <label>
         Name:
         <input type='text' name='name' className='border rounded p-1 w-full text-black' defaultValue={event?.name} />

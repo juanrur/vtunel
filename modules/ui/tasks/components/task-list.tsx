@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react'
 import TaskComponent from '@ui/tasks/components/task'
 
 export default function TaskList () {
-  const { tasks, getAllTasks, createTask, updateTask } = useTasksStore()
+  const { tasks, getAllTasks, createTask, updateTask, deleteTask } = useTasksStore()
   const [selectedTask, setSelectedTask] = useState<Task | undefined>()
   const createDialogRef = useRef<HTMLDialogElement>(null)
   const editDialogRef = useRef<HTMLDialogElement>(null)
@@ -62,6 +62,11 @@ export default function TaskList () {
         onSubmit={(updatedTask) => {
           if (selectedTask) {
             updateTask(selectedTask.id, updatedTask as Omit<Task, 'id'>)
+          }
+        }}
+        onDelete={() => {
+          if (selectedTask) {
+            deleteTask(selectedTask.id)
           }
         }}
       >

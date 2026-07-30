@@ -35,6 +35,11 @@ export default function Item ({ item }: ItemProps) {
     else deleteEvent(item.id)
   }
 
+  function handleDeleteFromDialog () {
+    if (isTask) deleteTask(item.id)
+    else deleteEvent(item.id)
+  }
+
   function handleToggleDone (event: React.ChangeEvent<HTMLInputElement>) {
     event.stopPropagation()
     if (isTask) updateTask(item.id, { done: event.target.checked })
@@ -92,6 +97,7 @@ export default function Item ({ item }: ItemProps) {
         type={isTask ? DialogType.Task : DialogType.Event}
         item={item}
         onSubmit={handleSubmit}
+        onDelete={handleDeleteFromDialog}
       >
         Edit {isTask ? 'Task' : 'Event'}
       </AddDialog>

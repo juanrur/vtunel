@@ -10,7 +10,7 @@ import { DialogType } from '@ui/shared/components/add/add-button'
 export default function Task ({ task, height, margin }: { task: TaskType, height: number, margin: number }) {
   const { title, id, startTime, endTime } = task
   const { updateEvent } = useEventsStore()
-  const { updateTask } = useTasksStore()
+  const { updateTask, deleteTask } = useTasksStore()
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   const handleDragStart = (event: any) => {
@@ -41,6 +41,7 @@ export default function Task ({ task, height, margin }: { task: TaskType, height
       type={DialogType.Task}
       ref={dialogRef}
       onSubmit={(newTask) => updateTask(id, newTask as TaskType)}
+      onDelete={() => deleteTask(id)}
       item={task}>
         Edit Task
       </AddDialog>

@@ -7,7 +7,7 @@ import type { Event as EventType } from '@events/types'
 import { DialogType } from '@ui/shared/components/add/add-button'
 
 export default function Event ({ name, height, margin, id, startTime, endTime }: { name: string, height: number, margin: number, id: string, startTime: Date, endTime: Date }) {
-  const { updateEvent } = useEventsStore()
+  const { updateEvent, deleteEvent } = useEventsStore()
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   const handleDragStart = (event: any) => {
@@ -27,7 +27,8 @@ export default function Event ({ name, height, margin, id, startTime, endTime }:
       type={DialogType.Event}
       ref={dialogRef}
       onSubmit={(newEvent) => updateEvent(id, newEvent as EventType)}
-      item={{ name, startTime, endTime } as EventType}>
+      onDelete={() => deleteEvent(id)}
+      item={{ id, name, startTime, endTime } as EventType}>
         Edit Event
       </AddDialog>
     </article>

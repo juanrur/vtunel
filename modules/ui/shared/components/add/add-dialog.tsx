@@ -12,10 +12,13 @@ interface AddDialogProps {
   item?: Task | Event | Template
   type: DialogType
   onSubmit: (data: Omit<Task, 'id'> | Omit<Event, 'id'> | Omit<Template, 'id'>) => void
+  onDelete?: () => void
 }
 
 const AddDialog = forwardRef<HTMLDialogElement, AddDialogProps>(
-  function AddDialog ({ children, item, type, onSubmit }, ref) {
+  function AddDialog ({ children, item, type, onSubmit, onDelete }, ref) {
+    const closeDialog = () => (ref as React.RefObject<HTMLDialogElement>)?.current?.close()
+
     return (
       <dialog
         className='bg-primary border-2 rounded-lg p-4 shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 relative'
@@ -25,23 +28,27 @@ const AddDialog = forwardRef<HTMLDialogElement, AddDialogProps>(
         {
           type === DialogType.Event &&
           <EventForm
-          close={() => (ref as React.RefObject<HTMLDialogElement>)?.current?.close()}
-          onSubmit={onSubmit}
-          event={item as Event} />
+            close={closeDialog}
+            onSubmit={onSubmit}
+            onDelete={onDelete}
+            event={item as Event}
+          />
         }
         {
           type === DialogType.Task &&
           <TaskForm
-            close={() => (ref as React.RefObject<HTMLDialogElement>)?.current?.close()}
+            close={closeDialog}
             onSubmit={onSubmit}
+            onDelete={onDelete}
             task={item as Task}
           />
         }
         {
           type === DialogType.Template &&
           <TemplateForm
-            close={() => (ref as React.RefObject<HTMLDialogElement>)?.current?.close()}
+            close={closeDialog}
             onSubmit={onSubmit}
+            onDelete={onDelete}
             template={item as Template}
           />
         }
