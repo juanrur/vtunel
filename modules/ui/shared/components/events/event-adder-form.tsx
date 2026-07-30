@@ -1,8 +1,8 @@
 'use client'
 import { useEventsStore } from '@events/store'
 // import { Event } from '@events/types'
-import DayInput from '@ui/shared/events/components/day-input'
-import TimeInput from '@ui/shared/events/components/time-input'
+import DayInput from '@ui/shared/components/events/day-input'
+import TimeInput from '@ui/shared/components/events/time-input'
 import { useRef } from 'react'
 
 export default function AddEvent () {

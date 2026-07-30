@@ -2,6 +2,8 @@
 
 import { useRef } from 'react'
 import type { Event } from '@events/types'
+import type { Task } from '@tasks/types'
+import type { Template } from 'modules/templates/types'
 import { useEventsStore } from '@events/store'
 import AddDialog from '@ui/shared/components/add/add-dialog'
 import { DialogType } from '@ui/shared/components/add/add-button'
@@ -25,8 +27,8 @@ export default function Gap ({ startTime, endTime }: GapProps) {
     dialogRef.current?.showModal()
   }
 
-  function handleSubmit (newItem: Omit<Event, 'id'>) {
-    insertEvent(newItem)
+  function handleSubmit (newItem: Omit<Event, 'id'> | Omit<Task, 'id'> | Omit<Template, 'id'>) {
+    insertEvent(newItem as Omit<Event, 'id'>)
   }
 
   const defaultEvent = {

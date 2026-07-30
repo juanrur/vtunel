@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import type { Event } from '@events/types'
 import type { Task } from '@tasks/types'
+import type { Template } from 'modules/templates/types'
 import { useEventsStore } from '@events/store'
 import { useTasksStore } from '@tasks/store'
 import AddDialog from '@ui/shared/components/add/add-dialog'
@@ -45,7 +46,7 @@ export default function Item ({ item }: ItemProps) {
     if (isTask) updateTask(item.id, { done: event.target.checked })
   }
 
-  function handleSubmit (newItem: Omit<Task, 'id'> | Omit<Event, 'id'>) {
+  function handleSubmit (newItem: Omit<Task, 'id'> | Omit<Event, 'id'> | Omit<Template, 'id'>) {
     if (isTask) updateTask(item.id, newItem as Task)
     else updateEvent(item.id, newItem as Event)
   }
