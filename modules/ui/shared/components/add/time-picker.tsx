@@ -71,7 +71,7 @@ export default function TimePicker ({
 
   useEffect(() => {
     if (isOpen && selectedRef.current && listRef.current) {
-      selectedRef.current.scrollIntoView({ block: 'nearest' })
+      selectedRef.current.scrollIntoView({ block: 'center', behavior: 'instant' })
     }
   }, [isOpen])
 
