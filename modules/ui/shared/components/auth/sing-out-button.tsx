@@ -13,6 +13,6 @@ export default function SingOutButton () {
   }
 
   return (
-    <button className='p-2 rounded-lg w-32' onClick={handleSignOut}>Sing Out</button>
+    <button className='p-2 rounded-lg w-full md:w-32 text-sm' onClick={handleSignOut}>Sign Out</button>
   )
 }

@@ -42,7 +42,7 @@ export default function AddButton () {
     <div className='relative'>
       <button
         onClick={handleClick}
-        className="text-3xl rounded-full text-white p-1 flex justify-center items-center size-10"
+        className="text-2xl md:text-3xl rounded-full text-white p-1 flex justify-center items-center size-8 md:size-10"
       >
         {isSelectOpen ? '-' : <PlusIcon />}
       </button>
