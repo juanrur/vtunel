@@ -46,8 +46,8 @@ export default function Calendar () {
 
   return <main className={`${RemoveScrollbar.remove} flex-1 min-h-0 overflow-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[50px,1fr] md:grid-cols-[70px,1fr]' : ''} pb-20 md:pb-0`}>
     {view !== Views.month &&
-      <div>
-        <h2 className='text-center md:text-end md:px-4 h-[60px] grid md:pt-3 max-md:text-[12px]'>Hours</h2>
+      <div className='space-y-2 md:space-y-6'>
+        <h2 className='text-center md:text-end md:px-4 grid md:pt-3 max-md:text-[12px]'>Hours</h2>
         <HoursCol />
       </div>
     }
