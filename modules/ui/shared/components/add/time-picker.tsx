@@ -5,6 +5,10 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 interface TimePickerProps {
   name: string
   defaultValue?: Date
+  value?: string
+  onChange?: (value: string) => void
+  min?: string
+  referenceTime?: string
   className?: string
   step?: number
 }
@@ -36,6 +40,12 @@ const generateTimes = (step: number) => {
   return times
 }
 
+const timeToMinutes = (value: string) => {
+  const parsed = parseTime(value)
+  if (!parsed) return 0
+  return parsed.getHours() * 60 + parsed.getMinutes()
+}
+
 const getNearestTime = (value: string, times: string[]) => {
   const parsed = parseTime(value)
   if (!parsed) return times[0]
@@ -53,13 +63,31 @@ const getNearestTime = (value: string, times: string[]) => {
   return nearest
 }
 
+const formatDuration = (time: string, reference: string) => {
+  const diffMinutes = timeToMinutes(time) - timeToMinutes(reference)
+  const absMinutes = Math.abs(diffMinutes)
+  const hours = Math.floor(absMinutes / 60)
+  const minutes = absMinutes % 60
+  const sign = diffMinutes < 0 ? '-' : '+'
+  if (hours === 0) return `${sign}${minutes}m`
+  if (minutes === 0) return `${sign}${hours}h`
+  return `${sign}${hours}h ${minutes}m`
+}
+
 export default function TimePicker ({
   name,
   defaultValue,
+  value: controlledValue,
+  onChange,
+  min,
+  referenceTime,
   className = '',
   step = 5
 }: TimePickerProps) {
-  const [value, setValue] = useState(() => defaultValue ? toTimeValue(defaultValue) : '')
+  const isControlled = controlledValue !== undefined
+  const initialValue = defaultValue ? toTimeValue(defaultValue) : ''
+  const [internalValue, setInternalValue] = useState(initialValue)
+  const value = isControlled ? controlledValue : internalValue
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -67,7 +95,12 @@ export default function TimePicker ({
   const selectedRef = useRef<HTMLLIElement>(null)
   const skipBlurRef = useRef(false)
   const times = useMemo(() => generateTimes(step), [step])
-  const nearestTime = useMemo(() => getNearestTime(value, times), [value, times])
+  const validTimes = useMemo(() => {
+    if (!min) return times
+    const minMinutes = timeToMinutes(min)
+    return times.filter((time) => timeToMinutes(time) >= minMinutes)
+  }, [times, min])
+  const nearestTime = useMemo(() => getNearestTime(value, validTimes), [value, validTimes])
 
   useEffect(() => {
     if (isOpen && selectedRef.current && listRef.current) {
@@ -85,15 +118,29 @@ export default function TimePicker ({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const updateValue = (nextValue: string) => {
+    if (!isControlled) {
+      setInternalValue(nextValue)
+    }
+    onChange?.(nextValue)
+  }
+
+  const clampTime = (nextValue: string) => {
+    if (!min) return nextValue
+    if (timeToMinutes(nextValue) < timeToMinutes(min)) return min
+    return nextValue
+  }
+
   const handleSelect = (time: string) => {
-    setValue(time)
+    const nextValue = clampTime(time)
+    updateValue(nextValue)
     setIsOpen(false)
     skipBlurRef.current = true
     inputRef.current?.blur()
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value)
+    updateValue(event.target.value)
   }
 
   const handleBlur = () => {
@@ -104,7 +151,7 @@ export default function TimePicker ({
     }
     const parsed = parseTime(value)
     if (parsed) {
-      setValue(toTimeValue(parsed))
+      updateValue(clampTime(toTimeValue(parsed)))
     }
     setIsOpen(false)
   }
@@ -124,14 +171,14 @@ export default function TimePicker ({
       <input type='hidden' name={name} value={value} />
       {isOpen && (
         <ul ref={listRef} className='absolute top-full left-0 z-[100] max-h-40 overflow-y-auto bg-white border rounded shadow-lg w-full mt-1'>
-          {times.map((time) => {
+          {validTimes.map((time) => {
             const isSelected = time === value
             const isNearest = time === nearestTime
             return (
               <li
                 key={time}
                 ref={isNearest ? selectedRef : undefined}
-                className={`px-3 py-2 cursor-pointer ${
+                className={`px-3 py-2 cursor-pointer flex justify-between items-center ${
                   isSelected
                     ? 'bg-secondary text-white'
                     : isNearest
@@ -143,7 +190,12 @@ export default function TimePicker ({
                   handleSelect(time)
                 }}
               >
-                {time}
+                <span>{time}</span>
+                {referenceTime && (
+                  <span className='text-xs opacity-70 ml-2'>
+                    {formatDuration(time, referenceTime)}
+                  </span>
+                )}
               </li>
             )
           })}
