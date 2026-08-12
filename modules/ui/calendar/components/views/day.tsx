@@ -108,7 +108,7 @@ export default function Day ({ items, dayIndex }: { items: (EventType | TaskType
             const isATask = 'done' in item
             if (!item.startTime || !item.endTime) return null
             return (
-              <div key={item.id} style={{ marginLeft: idx * 60 + 'px', zIndex: idx, width: idx > 0 ? '60%' : '' }} className='relative'>
+              <div key={item.id} style={{ marginLeft: idx * 30 + 'px', zIndex: idx, width: idx > 0 ? '70%' : '95%' }} className='relative'>
                 {
                   isATask &&
                   <Task

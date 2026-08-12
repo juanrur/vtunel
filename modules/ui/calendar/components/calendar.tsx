@@ -4,7 +4,7 @@ import Day from '@ui/calendar/components/views/day'
 import { useEventsStore } from '@events/store'
 import HoursCol from '@ui/calendar/components/hours-col'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useViewStore } from '../store'
 import Month from './views/month'
 import { useTasksStore } from '@tasks/store'
@@ -16,9 +16,15 @@ const Views = {
 } as const
 
 export default function Calendar () {
-  const { viewDate, view } = useViewStore()
+  const { viewDate, view, setView } = useViewStore()
   const { events } = useEventsStore()
   const { tasks } = useTasksStore()
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setView('day')
+    }
+  }, [])
 
   const weekdays = [
     'Sunday',
@@ -38,10 +44,10 @@ export default function Calendar () {
     [events, tasks, viewDate]
   )
 
-  return <main className={`${RemoveScrollbar.remove} max-md:w-[700px] flex-1 min-h-0 overflow-auto max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
+  return <main className={`${RemoveScrollbar.remove} flex-1 min-h-0 overflow-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[50px,1fr] md:grid-cols-[70px,1fr]' : ''} pb-20 md:pb-0`}>
     {view !== Views.month &&
       <div>
-        <h2 className='text-end px-4 h-[60px] grid pt-3'>Hours</h2>
+        <h2 className='text-center md:text-end md:px-4 h-[60px] grid md:pt-3 max-md:text-[12px]'>Hours</h2>
         <HoursCol />
       </div>
     }

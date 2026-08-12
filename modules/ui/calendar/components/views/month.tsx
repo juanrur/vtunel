@@ -62,22 +62,29 @@ export default function Month ({ events }: {events: EventType[]}) {
       {
         dayNumbers.map(({ day, month }, idx) => {
           const matchingItems = events.filter(({ startTime }) => startTime.getDate() === day && startTime.getMonth() === month && startTime.getFullYear() === viewDate.getFullYear())
+          const maxVisible = 2
+          const visibleItems = matchingItems.slice(0, maxVisible)
+          const hiddenCount = matchingItems.length - maxVisible
+
           return (
             <li key={idx}
-              className="border border-primary flex items-center justify-start pt-2 pb-4 overflow-hidden flex-col"
+              className="border border-primary flex items-center justify-start pt-1 md:pt-2 pb-2 md:pb-4 overflow-hidden flex-col"
               onDrop={handleDrop}
               onDragOver={(event) => event.preventDefault()}
               onDragLeave={(event) => event.preventDefault()}
               data-day={day} data-month={month}
             >
-              <h1 className='pb-1'>{day}</h1>
-              <ul className='flex-1 w-full flex-grow-0 px-2 space-y-2'>
+              <h1 className='pb-1 text-xs md:text-base'>{day}</h1>
+              <ul className='flex-1 w-full flex-grow-0 px-1 md:px-2 space-y-1 md:space-y-2'>
                 {
-                  matchingItems.map(({ id, name }) => <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', 'event:' + id)} key={id} className="text-xs bg-secondary border p-0.5 px-1 rounded">
+                  visibleItems.map(({ id, name }) => <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', 'event:' + id)} key={id} className="text-[10px] md:text-xs bg-secondary border p-0.5 px-1 rounded truncate">
                       {name}
                     </li>
                   )
                 }
+                {hiddenCount > 0 && (
+                  <li className="text-[10px] md:text-xs text-zinc-500">+{hiddenCount}</li>
+                )}
               </ul>
             </li>
           )

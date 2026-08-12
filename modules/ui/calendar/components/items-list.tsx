@@ -1,0 +1,83 @@
+'use client'
+import { useEventsStore } from '@events/store'
+import { useEffect, useState } from 'react'
+import { getWeekStartEndDates } from '@/utils'
+import FilterButton from './filter-button'
+import ItemListSkeleton from './item-list-skeleton'
+import { useViewStore } from '../store'
+import { useTemplatesStore } from 'modules/templates/store'
+import TemplateList from './template-list'
+import { useTasksStore } from 'modules/tasks/store'
+import ItemList from './item-list'
+
+const FILTER = {
+  ALL: 'all',
+  TODAY: 'today',
+  WEEK: 'week',
+  MONTH: 'month'
+} as const
+
+export type Filter = typeof FILTER[keyof typeof FILTER]
+
+export default function ItemsList () {
+  const [filter, setFilter] = useState<Filter>(FILTER.ALL)
+  const [activeTab, setActiveTab] = useState<'items' | 'templates'>('items')
+
+  const { viewDate } = useViewStore()
+  const { events, getAllEvents, eventsAreLoading } = useEventsStore()
+  const { templates, getAllTemplates } = useTemplatesStore()
+  const { tasks, getAllTasks, tasksAreLoading } = useTasksStore()
+
+  useEffect(() => {
+    getAllEvents()
+    getAllTemplates()
+    getAllTasks()
+  }, [getAllEvents, getAllTemplates, getAllTasks])
+
+  const eventsFiltered = events.filter((event) => {
+    const eventDate = new Date(event.startTime)
+    const { startOfWeek, endOfWeek } = getWeekStartEndDates(viewDate)
+
+    if (filter === FILTER.ALL) return true
+    if (filter === FILTER.TODAY) return eventDate.toDateString() === viewDate.toDateString()
+    if (filter === FILTER.MONTH) return eventDate.getMonth() === viewDate.getMonth() && eventDate.getFullYear() === viewDate.getFullYear()
+    if (filter === FILTER.WEEK) return eventDate >= startOfWeek && eventDate <= endOfWeek
+    return false
+  })
+
+  const items = [...events, ...tasks].sort((a, b) => {
+    if (!a.startTime) return 1
+    if (!b.startTime) return -1
+    return a.startTime.getTime() - b.startTime.getTime()
+  })
+
+  return (
+    <div className='flex-1 min-h-0 overflow-auto space-y-6'>
+      <nav className='flex gap-2 *:rounded *:p-2'>
+        <button
+          className={activeTab === 'items' ? 'bg-secondary' : ''}
+          onClick={() => setActiveTab('items')}
+        >Items</button>
+        <button
+          className={activeTab === 'templates' ? 'bg-secondary' : ''}
+          onClick={() => setActiveTab('templates')}
+        >Templates</button>
+      </nav>
+      <div className='flex justify-around gap-2'>
+        <FilterButton onClick={setFilter} filterState={filter} value={FILTER.ALL} />
+        <FilterButton onClick={setFilter} filterState={filter} value={FILTER.TODAY} />
+        <FilterButton onClick={setFilter} filterState={filter} value={FILTER.WEEK} />
+      </div>
+
+      {activeTab === 'templates' &&
+        <TemplateList templates={templates} />
+      }
+      {
+        activeTab === 'items' &&
+        (eventsAreLoading || tasksAreLoading
+          ? <ItemListSkeleton />
+          : <ItemList items={items} />)
+      }
+    </div>
+  )
+}
