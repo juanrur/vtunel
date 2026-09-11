@@ -48,7 +48,7 @@ export default function AddButton () {
       </button>
 
       { isSelectOpen &&
-        <ul className='absolute flex flex-col top-full bg-secondary [&_button]:border-none border rounded *:p-2 *:border'>
+        <ul className='absolute bottom-full left-1/2 z-50 mb-2 flex flex-col whitespace-nowrap bg-secondary [&_button]:border-none border rounded *:p-2 *:border'>
           <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Event)}>Add Event</button></li>
           <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Task)}>Add Task</button></li>
           <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Template)}>Add Template</button></li>
