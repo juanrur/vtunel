@@ -15,7 +15,7 @@ export enum DialogType {
   Template = 'template'
 }
 
-export default function AddButton () {
+export default function AddButton ({ expanded }: { expanded: boolean }) {
   const [isSelectOpen, setIsSelectOpen] = useState(false)
   const [type, setType] = useState<DialogType>()
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -42,7 +42,7 @@ export default function AddButton () {
     <div className='relative'>
       <button
         onClick={handleClick}
-        className="text-3xl rounded-full text-white p-1 flex justify-center items-center size-10"
+        className={`text-3xl rounded-full text-white p-1 flex justify-center items-center size-10 md:h-10 ${expanded ? 'md:w-full' : ''}`}
       >
         {isSelectOpen ? '-' : <PlusIcon />}
       </button>

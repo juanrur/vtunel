@@ -1,8 +1,9 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { pb } from '@shared/pocketbase/client'
+import LogoutIcon from '@icons/logout'
 
-export default function SingOutButton () {
+export default function SingOutButton ({ expanded }: { expanded: boolean }) {
   const router = useRouter()
 
   const handleSignOut = async () => {
@@ -13,6 +14,9 @@ export default function SingOutButton () {
   }
 
   return (
-    <button type='button' onClick={handleSignOut}>Sign Out</button>
+    <button type='button' className='flex items-center justify-center gap-3 rounded-lg border px-3 py-2 text-sm font-medium transition-colors hover:bg-secondary md:w-full' onClick={handleSignOut} title='Sign out'>
+      <LogoutIcon />
+      <span className={(expanded ? '' : 'md:hidden') + ' text-nowrap font-bold'}>Sign Out</span>
+    </button>
   )
 }

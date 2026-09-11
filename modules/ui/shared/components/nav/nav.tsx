@@ -8,7 +8,6 @@ import CalendarIcon from '@icons/calendar'
 import ScheduleIcon from '@icons/schedule'
 import TasksIcon from '@icons/tasks'
 import ChevronIcon from '@icons/chevron'
-import LogoutIcon from '@icons/logout'
 
 export default function Nav () {
   const [expanded, setExpanded] = useState(false)
@@ -38,11 +37,9 @@ export default function Nav () {
         <NavLink href='/schedule' expanded={expanded} icon={<ScheduleIcon />}>Schedule</NavLink>
         <NavLink href='/tasks' expanded={expanded} icon={<TasksIcon />}>Tasks</NavLink>
       </div>
-      <div className='flex items-center gap-3 md:mt-auto md:flex-col'>
-        <AddButton />
-        <NavLink href='/login' expanded={expanded} icon={<LogoutIcon />}>
-          <SingOutButton />
-        </NavLink>
+      <div className='flex items-center gap-3 md:mt-auto md:flex-col md:items-stretch'>
+        <AddButton expanded={expanded} />
+        <SingOutButton expanded={expanded} />
       </div>
     </nav>
   )
