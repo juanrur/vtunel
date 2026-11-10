@@ -8,6 +8,8 @@ import { useMemo } from 'react'
 import { useViewStore } from '../store'
 import Month from './views/month'
 import { useTasksStore } from '@tasks/store'
+import AllDay from '@ui/calendar/components/all-day'
+import { occursOnDay } from '@shared/utils'
 
 const Views = {
   day: 'day',
@@ -30,10 +32,11 @@ export default function Calendar () {
     'Saturday'
   ] as const
 
+  // occursOnDay instead of comparing the start day, so items of several days also show on the days after the first one
   const thisDayEvents = useMemo(
     () => [
-      ...events.filter(({ startTime }) => startTime.getDate() === viewDate.getDate() && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear()),
-      ...tasks.filter(({ startTime }) => startTime !== null && startTime.getDate() === viewDate.getDate() && startTime.getMonth() === viewDate.getMonth() && startTime.getFullYear() === viewDate.getFullYear())
+      ...events.filter(event => occursOnDay(event, viewDate)),
+      ...tasks.filter(task => occursOnDay(task, viewDate))
     ],
     [events, tasks, viewDate]
   )
@@ -42,6 +45,8 @@ export default function Calendar () {
     {view !== Views.month &&
       <div>
         <h2 className='text-end px-4 h-[60px] grid pt-3'>Hours</h2>
+        {/* Same height as the "All day" band (all-day.tsx) so the hours stay aligned with the grid */}
+        <p className='text-end px-4 h-[52px] text-xs text-zinc-500 border-b border-primary pt-1'>All day</p>
         <HoursCol />
       </div>
     }
@@ -54,7 +59,8 @@ export default function Calendar () {
           <h2>{weekdays[viewDate.getDay()]}</h2>
           <p>{viewDate.getDate()}</p>
         </header>
-        <Day items={thisDayEvents}></Day>
+        <AllDay days={[viewDate]} items={thisDayEvents} />
+        <Day items={thisDayEvents} date={viewDate}></Day>
       </div>
     }
     {view === 'month' &&

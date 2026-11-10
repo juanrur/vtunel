@@ -5,6 +5,7 @@ import { useTemplatesStore } from 'modules/templates/store'
 import { useEventsStore } from '@events/store'
 import { updateDroppedItem } from '@ui/calendar/utils'
 import { useTasksStore } from '@tasks/store'
+import { occursOnDay } from '@shared/utils'
 
 export default function Month ({ events }: {events: EventType[]}) {
   const { viewDate } = useViewStore()
@@ -61,7 +62,8 @@ export default function Month ({ events }: {events: EventType[]}) {
     <ul className="h-full grid grid-cols-7 grid-rows-5 p-1">
       {
         dayNumbers.map(({ day, month }, idx) => {
-          const matchingItems = events.filter(({ startTime }) => startTime.getDate() === day && startTime.getMonth() === month && startTime.getFullYear() === viewDate.getFullYear())
+          // occursOnDay instead of comparing the start day, so events of several days show on every day they cover
+          const matchingItems = events.filter(event => occursOnDay(event, new Date(viewDate.getFullYear(), month, day)))
           return (
             <li key={idx}
               className="border border-primary flex items-center justify-start pt-2 pb-4 overflow-hidden flex-col"

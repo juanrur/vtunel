@@ -9,6 +9,11 @@ interface DateTimeRangeProps {
   dayName?: string
   startName?: string
   endName?: string
+  // Needed for events of several days: the range can end on a different day than it starts
+  endDayName?: string
+  // Needed for items that last the whole day: the time pickers are hidden
+  allDayName?: string
+  allDay?: boolean
   startDate?: Date
   endDate?: Date
   className?: string
@@ -48,6 +53,9 @@ export default function DateTimeRange ({
   dayName = 'day',
   startName = 'startTime',
   endName = 'endTime',
+  endDayName = 'endDay',
+  allDayName = 'allDay',
+  allDay: defaultAllDay = false,
   startDate,
   endDate,
   className = ''
@@ -55,16 +63,26 @@ export default function DateTimeRange ({
   const dayInputRef = useRef<HTMLInputElement>(null)
   const now = new Date()
 
-  const handleDayChange = () => {
-    dayInputRef.current?.blur()
-  }
-
   const defaultStart = startDate ?? now
   const defaultEnd = endDate ?? (() => {
     const d = new Date(now)
     d.setHours(d.getHours() + 1)
     return d
   })()
+
+  // Needed to show or hide the time pickers when "All day" is toggled
+  const [allDay, setAllDay] = useState(defaultAllDay)
+  // Needed to keep the end day from being before the start day
+  const [startDay, setStartDay] = useState(toDateValue(defaultStart))
+  const [endDay, setEndDay] = useState(toDateValue(defaultEnd))
+
+  const handleDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dayInputRef.current?.blur()
+    const value = event.target.value
+    if (!value) return
+    setStartDay(value)
+    if (endDay < value) setEndDay(value)
+  }
 
   const [startTime, setStartTime] = useState(toTimeValue(defaultStart))
   const [endTime, setEndTime] = useState(toTimeValue(defaultEnd))
@@ -84,6 +102,15 @@ export default function DateTimeRange ({
 
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
+      <label className='flex items-center gap-2 cursor-pointer'>
+        <input
+          type='checkbox'
+          name={allDayName}
+          checked={allDay}
+          onChange={(event) => setAllDay(event.target.checked)}
+        />
+        All day
+      </label>
       <label>
         Day:
         <input
@@ -96,27 +123,43 @@ export default function DateTimeRange ({
         />
       </label>
       <label>
-        Start Time:
-        <TimePicker
-          name={startName}
-          defaultValue={defaultStart}
-          value={startTime}
-          onChange={handleStartChange}
-          step={15}
+        End Day:
+        <input
+          type='date'
+          name={endDayName}
+          className='border rounded p-1 w-full text-black'
+          value={endDay}
+          min={startDay}
+          onChange={(event) => event.target.value && setEndDay(event.target.value)}
         />
       </label>
-      <label>
-        End Time:
-        <TimePicker
-          name={endName}
-          defaultValue={defaultEnd}
-          value={endTime}
-          onChange={handleEndChange}
-          min={startTime}
-          referenceTime={startTime}
-          step={15}
-        />
-      </label>
+      {!allDay && (
+        <>
+          <label>
+            Start Time:
+            <TimePicker
+              name={startName}
+              defaultValue={defaultStart}
+              value={startTime}
+              onChange={handleStartChange}
+              step={15}
+            />
+          </label>
+          <label>
+            End Time:
+            <TimePicker
+              name={endName}
+              defaultValue={defaultEnd}
+              value={endTime}
+              onChange={handleEndChange}
+              // When the end is on a later day it can be at an earlier hour than the start
+              min={startDay === endDay ? startTime : undefined}
+              referenceTime={startTime}
+              step={15}
+            />
+          </label>
+        </>
+      )}
     </div>
   )
 }

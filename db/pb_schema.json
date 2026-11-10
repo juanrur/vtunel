@@ -958,6 +958,15 @@
       },
       {
         "hidden": false,
+        "id": "bool_pbc_events_all_day",
+        "name": "all_day",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "bool"
+      },
+      {
+        "hidden": false,
         "id": "autodate2990389176",
         "name": "created",
         "onCreate": true,
@@ -1067,6 +1076,15 @@
         "required": true,
         "system": false,
         "type": "relation"
+      },
+      {
+        "hidden": false,
+        "id": "bool_pbc_tasks_all_day",
+        "name": "all_day",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "bool"
       },
       {
         "hidden": false,

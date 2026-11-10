@@ -27,6 +27,7 @@ export default function TaskForm ({ task, close, onSubmit, onDelete }: { task?: 
         title,
         startTime: null,
         endTime: null,
+        allDay: false,
         done: task?.done ?? false
       })
       return
@@ -35,18 +36,22 @@ export default function TaskForm ({ task, close, onSubmit, onDelete }: { task?: 
     const startTime = String(formData.get('startTime'))
     const endTime = String(formData.get('endTime'))
     const day = String(formData.get('day'))
+    const endDay = String(formData.get('endDay'))
+    const allDay = formData.get('allDay') === 'on'
 
-    if (!startTime || !endTime || !day) {
+    if (!day || !endDay || (!allDay && (!startTime || !endTime))) {
       console.error('All date fields are required')
       return
     }
 
     close()
 
+    // A task with a day but no hour goes from 00:00 to 23:59 of that day
     onSubmit({
       title,
-      startTime: new Date(`${day}T${startTime}`),
-      endTime: new Date(`${day}T${endTime}`),
+      allDay,
+      startTime: new Date(`${day}T${allDay ? '00:00' : startTime}`),
+      endTime: new Date(allDay ? `${endDay}T23:59:59.999` : `${endDay}T${endTime}`),
       done: task?.done ?? false
     })
   }
@@ -76,6 +81,7 @@ export default function TaskForm ({ task, close, onSubmit, onDelete }: { task?: 
         <DateTimeRange
           startDate={task?.startTime ?? defaultStart}
           endDate={task?.endTime ?? defaultEnd}
+          allDay={task?.allDay ?? false}
         />
       )}
       <button type='submit' className='bg-secondary text-white rounded px-4 py-2 border'>Save</button>

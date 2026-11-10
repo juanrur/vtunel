@@ -4,25 +4,24 @@ import { type Event } from '@events/types'
 import type { Week as WeekType } from '@ui/calendar/types'
 import { useViewStore } from '../../store'
 import { Task } from '@tasks/types'
+import AllDay from '@ui/calendar/components/all-day'
+import { occursOnDay } from '@shared/utils'
 
 export default function Week ({ items }: { items: (Event | Task)[] }) {
   const {
     viewDate
   } = useViewStore()
 
-  const { startOfWeek, endOfWeek } = getWeekStartEndDates(viewDate)
+  const { startOfWeek } = getWeekStartEndDates(viewDate)
 
-  const weekItems : WeekType = Array.from({ length: 7 }, () => [])
-
-  items.filter((item) => {
-    if (!item.startTime) return false
-    const itemDate = new Date(item.startTime)
-    return itemDate >= startOfWeek && itemDate <= endOfWeek
-  }).forEach((item) => {
-    if (!item.startTime) return
-    const day = (item.startTime.getDay() || 7) - 1
-    weekItems[day].push(item)
+  // Needed for items of several days: each item goes to every day of the week it covers,
+  // not only to the day it starts on
+  const weekDates = Array.from({ length: 7 }, (_, idx) => {
+    const date = new Date(startOfWeek)
+    date.setDate(date.getDate() + idx)
+    return date
   })
+  const weekItems : WeekType = weekDates.map(date => items.filter(item => occursOnDay(item, date)))
 
   const weekdays = [
     'Monday',
@@ -79,9 +78,11 @@ export default function Week ({ items }: { items: (Event | Task)[] }) {
         }
       </header>
 
+      <AllDay days={weekDates} items={items} />
+
       <section className={'min-h-0 grid grid-cols-7 overflow-auto flex-1'}>
         {weekItems.map((day, idx) =>
-          <Day key={idx} dayIndex={idx} items={day} />
+          <Day key={idx} dayIndex={idx} items={day} date={weekDates[idx]} />
         )}
       </section>
     </div>

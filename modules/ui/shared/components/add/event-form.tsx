@@ -16,16 +16,20 @@ export default function EventForm ({ event = { name: '', startTime: defaultStart
     const startTime = formData.get('startTime') as string
     const endTime = formData.get('endTime') as string
     const day = formData.get('day') as string
+    const endDay = formData.get('endDay') as string
+    const allDay = formData.get('allDay') === 'on'
 
-    if (!name || !startTime || !endTime || !day) {
+    if (!name || !day || !endDay || (!allDay && (!startTime || !endTime))) {
       console.error('All fields are required')
       return
     }
 
+    // All-day events go from 00:00 of the first day to 23:59 of the last day
     const newEvent: any = {
       name,
-      startTime: new Date(new Date(`${day}T${startTime}`)),
-      endTime: new Date(new Date(`${day}T${endTime}`))
+      allDay,
+      startTime: new Date(new Date(`${day}T${allDay ? '00:00' : startTime}`)),
+      endTime: new Date(new Date(allDay ? `${endDay}T23:59:59.999` : `${endDay}T${endTime}`))
     }
 
     close()
@@ -46,6 +50,7 @@ export default function EventForm ({ event = { name: '', startTime: defaultStart
       <DateTimeRange
         startDate={event?.startTime ?? defaultStart}
         endDate={event?.endTime ?? defaultEnd}
+        allDay={event?.allDay ?? false}
       />
       <button type='submit' className='bg-secondary text-white rounded px-4 py-2 border'>Save</button>
     </form>
