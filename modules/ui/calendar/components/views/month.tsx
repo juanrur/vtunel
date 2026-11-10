@@ -14,8 +14,11 @@ export default function Month ({ events }: {events: EventType[]}) {
   const { changeTaskStartTime } = useTasksStore()
 
   const handleDrop = (event: any) => {
-    event.target = event.target.closest('li')
+    // The cell under the pointer, found by position because the drop can land on a bar of several days,
+    // which is on top of the cells and not inside them
+    event.target = document.elementsFromPoint(event.clientX, event.clientY).find(element => element.matches('li[data-day]'))
     event.preventDefault()
+    if (!event.target) return
     const data = event.dataTransfer.getData('text/plain')
     const [type, id] = data.split(':')
     const day = parseInt(event.target.dataset.day)
@@ -58,14 +61,52 @@ export default function Month ({ events }: {events: EventType[]}) {
 
   const dayNumbers = getDaysInMonthView(viewDate.getFullYear(), viewDate.getMonth())
 
+  // Needed to draw events of several days as one continuous bar per week row instead of one box per day.
+  // Each bar spans from the first to the last day it covers in that row and goes in the first free lane,
+  // so bars don't overlap. Cells leave empty space on top for the lanes of their row
+  const dates = dayNumbers.map(({ day, month }) => new Date(viewDate.getFullYear(), month, day))
+  const isMultiDay = (event: EventType) =>
+    event.endTime > event.startTime && event.startTime.toDateString() !== new Date(event.endTime.getTime() - 1).toDateString()
+  const multiDayEvents = events.filter(isMultiDay).sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+  const rowLanes: number[] = []
+  const bars = Array.from({ length: Math.ceil(dates.length / 7) }, (_, row) => {
+    const rowDates = dates.slice(row * 7, row * 7 + 7)
+    const laneEnds: number[] = []
+    const rowBars = multiDayEvents.flatMap(event => {
+      const first = rowDates.findIndex(date => occursOnDay(event, date))
+      if (first === -1) return []
+      const last = rowDates.findLastIndex(date => occursOnDay(event, date))
+      let lane = laneEnds.findIndex(laneEnd => laneEnd < first)
+      if (lane === -1) lane = laneEnds.length
+      laneEnds[lane] = last
+      return [{
+        event,
+        row,
+        first,
+        last,
+        lane,
+        // Rounded ends only where the event really starts / ends, not where it continues from or to another row
+        startsHere: event.startTime >= rowDates[first],
+        endsHere: !occursOnDay(event, new Date(rowDates[last].getFullYear(), rowDates[last].getMonth(), rowDates[last].getDate() + 1))
+      }]
+    })
+    rowLanes[row] = laneEnds.length
+    return rowBars
+  }).flat()
+  const LANE_HEIGHT = 26
+  // Space taken by the day number on top of each cell (pt-2 + h1 + pb-1)
+  const DAY_NUMBER_HEIGHT = 36
+
   return <section className="h-full">
     <ul className="h-full grid grid-cols-7 grid-rows-5 p-1">
       {
         dayNumbers.map(({ day, month }, idx) => {
           // occursOnDay instead of comparing the start day, so events of several days show on every day they cover
-          const matchingItems = events.filter(event => occursOnDay(event, new Date(viewDate.getFullYear(), month, day)))
+          const matchingItems = events.filter(event => !isMultiDay(event) && occursOnDay(event, new Date(viewDate.getFullYear(), month, day)))
           return (
             <li key={idx}
+              // Explicit position so the bars, placed over the cells with the same grid, don't move them
+              style={{ gridColumn: idx % 7 + 1, gridRow: Math.floor(idx / 7) + 1 }}
               className="border border-primary flex items-center justify-start pt-2 pb-4 overflow-hidden flex-col"
               onDrop={handleDrop}
               onDragOver={(event) => event.preventDefault()}
@@ -73,7 +114,7 @@ export default function Month ({ events }: {events: EventType[]}) {
               data-day={day} data-month={month}
             >
               <h1 className='pb-1'>{day}</h1>
-              <ul className='flex-1 w-full flex-grow-0 px-2 space-y-2'>
+              <ul className='flex-1 w-full flex-grow-0 px-2 space-y-2' style={{ paddingTop: rowLanes[Math.floor(idx / 7)] * LANE_HEIGHT }}>
                 {
                   matchingItems.map(({ id, name }) => <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', 'event:' + id)} key={id} className="text-xs bg-secondary border p-0.5 px-1 rounded">
                       {name}
@@ -84,6 +125,21 @@ export default function Month ({ events }: {events: EventType[]}) {
             </li>
           )
         })
+      }
+      {
+        bars.map(({ event, row, first, last, lane, startsHere, endsHere }) => (
+          <li
+            key={event.id + ':' + row}
+            draggable
+            onDragStart={(dragEvent) => dragEvent.dataTransfer?.setData('text/plain', 'event:' + event.id)}
+            onDrop={handleDrop}
+            onDragOver={(dragEvent) => dragEvent.preventDefault()}
+            className={`z-10 self-start h-[22px] text-xs bg-secondary border p-0.5 px-1 truncate ${startsHere ? 'ml-2 rounded-l' : ''} ${endsHere ? 'mr-2 rounded-r' : ''}`}
+            style={{ gridColumn: `${first + 1} / ${last + 2}`, gridRow: row + 1, marginTop: DAY_NUMBER_HEIGHT + lane * LANE_HEIGHT }}
+          >
+            {event.name}
+          </li>
+        ))
       }
     </ul>
   </section>
