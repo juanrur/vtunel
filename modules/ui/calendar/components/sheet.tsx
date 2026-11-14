@@ -9,7 +9,7 @@ interface SheetProps {
 export default function Sheet ({ children, isOpen, onClose }: SheetProps) {
   return (
     <div
-      className={`fixed inset-0 z-50 bg-primary transition-transform duration-300 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+      className={`md:hidden fixed inset-0 z-50 bg-primary transition-transform duration-300 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
     >
       <button
         onClick={onClose}

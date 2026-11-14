@@ -55,11 +55,11 @@ export default function Week ({ items }: { items: (Event | Task)[] }) {
 
   const weekDayNumbers = getWeekDays(viewDate)
 
-  const dayAbbreviations = ['L', 'Mar', 'Mi', 'J', 'V', 'S', 'D']
+  const dayAbbreviations = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
   return (
     <div className='flex flex-col'>
-      <header className='text-center grid grid-cols-7 pb-3 flex-shrink-0 text-xs md:text-base'>
+      <header className='text-center grid grid-cols-7 pb-3 flex-shrink-0 max-md:h-[60px] max-md:pb-0 max-md:text-xs'>
         {
           weekdays.map((day, idx) => {
             const today = new Date()
@@ -67,12 +67,12 @@ export default function Week ({ items }: { items: (Event | Task)[] }) {
               weekDayNumbers[idx] === today.getDate() &&
               viewDate.getMonth() === today.getMonth() &&
               viewDate.getFullYear() === today.getFullYear()
-                ? 'rounded-full bg-secondary flex flex-col mx-auto px-1 md:px-4'
+                ? 'rounded-full bg-secondary flex flex-col mx-auto px-4 max-md:px-1'
                 : ''
 
             return (
               <div className={className} key={idx}>
-                <h2 className='hidden md:block'>{weekDayNumbers[idx]}</h2>
+                <h2>{weekDayNumbers[idx]}</h2>
                 <p className='text-[10px] md:hidden'>{dayAbbreviations[idx]}</p>
                 <p className='hidden md:block'>{day}</p>
               </div>

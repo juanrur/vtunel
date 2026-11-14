@@ -4,7 +4,7 @@ import Day from '@ui/calendar/components/views/day'
 import { useEventsStore } from '@events/store'
 import HoursCol from '@ui/calendar/components/hours-col'
 import RemoveScrollbar from '@/remove-scrollbar.module.css'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useViewStore } from '../store'
 import Month from './views/month'
 import { useTasksStore } from '@tasks/store'
@@ -18,9 +18,14 @@ const Views = {
 } as const
 
 export default function Calendar () {
-  const { viewDate, view } = useViewStore()
+  const { viewDate, view, setView } = useViewStore()
   const { events } = useEventsStore()
   const { tasks } = useTasksStore()
+
+  // The week and month views don't fit on a phone, so it starts on the day view
+  useEffect(() => {
+    if (window.innerWidth < 768) setView('day')
+  }, [setView])
 
   const weekdays = [
     'Sunday',
@@ -41,12 +46,12 @@ export default function Calendar () {
     [events, tasks, viewDate]
   )
 
-  return <main className={`${RemoveScrollbar.remove} max-md:w-[700px] flex-1 min-h-0 overflow-auto max-md:overflow-x-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[70px,1fr]' : ''}`}>
+  return <main className={`${RemoveScrollbar.remove} flex-1 min-h-0 overflow-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[50px,1fr] md:grid-cols-[70px,1fr]' : ''} max-md:pb-24`}>
     {view !== Views.month &&
       <div>
-        <h2 className='text-end px-4 h-[60px] grid pt-3'>Hours</h2>
+        <h2 className='text-end px-4 h-[60px] grid pt-3 max-md:text-center max-md:px-0 max-md:text-xs'>Hours</h2>
         {/* Same height as the "All day" band (all-day.tsx) so the hours stay aligned with the grid */}
-        <p className='text-end px-4 h-[52px] text-xs text-zinc-500 pt-1'>All day</p>
+        <p className='text-end px-4 h-[52px] text-xs text-zinc-500 pt-1 max-md:text-center max-md:px-0 max-md:text-[10px]'>All day</p>
         <HoursCol />
       </div>
     }

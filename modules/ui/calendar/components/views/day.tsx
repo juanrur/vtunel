@@ -135,7 +135,7 @@ export default function Day ({ items, dayIndex, date }: { items: (EventType | Ta
             const isATask = 'done' in item
             if (!item.startTime || !item.endTime) return null
             return (
-              <div key={item.id} style={{ marginLeft: idx * 30 + 'px', zIndex: idx, width: idx > 0 ? '70%' : '95%' }} className='relative'>
+              <div key={item.id} style={{ '--idx': idx, zIndex: idx } as React.CSSProperties} className={`relative ml-[calc(var(--idx)*60px)] max-md:ml-[calc(var(--idx)*30px)] ${idx > 0 ? 'w-[60%] max-md:w-[70%]' : 'max-md:w-[95%]'}`}>
                 {
                   isATask &&
                   <Task

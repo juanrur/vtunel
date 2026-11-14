@@ -19,13 +19,13 @@ export default function CalendarWrapper () {
 
   return (
     <>
-      <div className='h-full flex flex-col min-h-0 md:pb-0'>
+      <div className='h-full flex flex-col min-h-0'>
         <Header />
         <Calendar />
       </div>
       <BottomBar onOpenSheet={handleOpenSheet} />
       <Sheet isOpen={isSheetOpen} onClose={handleCloseSheet}>
-        <ItemsList />
+        {isSheetOpen && <ItemsList />}
       </Sheet>
     </>
   )

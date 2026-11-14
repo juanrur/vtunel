@@ -3,13 +3,14 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
-export default function NavLink ({ href, children, icon, expanded }: { href: string, children: React.ReactNode, icon: React.ReactNode, expanded: boolean }) {
+export default function NavLink ({ href, children, icon, expanded, onClick }: { href: string, children: React.ReactNode, icon: React.ReactNode, expanded: boolean, onClick?: () => void }) {
   const pathname = usePathname()
   const isActive = pathname === href
 
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={`
         flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition-colors text-sm
         ${expanded ? 'md:justify-start' : 'md:justify-center'}

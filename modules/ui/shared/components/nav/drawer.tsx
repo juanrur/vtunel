@@ -9,7 +9,7 @@ interface DrawerProps {
 export default function Drawer ({ children, isOpen, onClose }: DrawerProps) {
   return (
     <div
-      className={`fixed inset-0 z-50 transition-opacity duration-200 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      className={`md:hidden fixed inset-0 z-50 transition-opacity duration-200 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
     >
       <div className='absolute inset-0 bg-black/50' onClick={onClose} />
       <div
