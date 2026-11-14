@@ -107,19 +107,22 @@ export default function Month ({ events }: {events: EventType[]}) {
             <li key={idx}
               // Explicit position so the bars, placed over the cells with the same grid, don't move them
               style={{ gridColumn: idx % 7 + 1, gridRow: Math.floor(idx / 7) + 1 }}
-              className="border border-primary flex items-center justify-start pt-2 pb-4 overflow-hidden flex-col"
+              className="border border-primary flex items-center justify-start pt-2 pb-4 max-md:pb-1 overflow-hidden flex-col"
               onDrop={handleDrop}
               onDragOver={(event) => event.preventDefault()}
               onDragLeave={(event) => event.preventDefault()}
               data-day={day} data-month={month}
             >
-              <h1 className='pb-1'>{day}</h1>
-              <ul className='flex-1 w-full flex-grow-0 px-2 space-y-2' style={{ paddingTop: rowLanes[Math.floor(idx / 7)] * LANE_HEIGHT }}>
+              <h1 className='pb-1 max-md:text-xs max-md:leading-6'>{day}</h1>
+              <ul className='flex-1 w-full flex-grow-0 px-2 space-y-2 max-md:px-0.5 max-md:space-y-0.5' style={{ paddingTop: rowLanes[Math.floor(idx / 7)] * LANE_HEIGHT }}>
                 {
-                  matchingItems.map(({ id, name }) => <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', 'event:' + id)} key={id} className="text-xs bg-secondary border p-0.5 px-1 rounded">
+                  matchingItems.map(({ id, name }) => <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', 'event:' + id)} key={id} className="text-xs bg-secondary border p-0.5 px-1 rounded max-md:text-[10px] max-md:truncate max-md:[&:nth-child(n+3)]:hidden">
                       {name}
                     </li>
                   )
+                }
+                {matchingItems.length > 2 &&
+                  <li className="md:hidden text-[10px] text-zinc-500">+{matchingItems.length - 2}</li>
                 }
               </ul>
             </li>
@@ -134,7 +137,7 @@ export default function Month ({ events }: {events: EventType[]}) {
             onDragStart={(dragEvent) => dragEvent.dataTransfer?.setData('text/plain', 'event:' + event.id)}
             onDrop={handleDrop}
             onDragOver={(dragEvent) => dragEvent.preventDefault()}
-            className={`z-10 self-start h-[22px] text-xs bg-secondary border p-0.5 px-1 truncate ${startsHere ? 'ml-2 rounded-l' : ''} ${endsHere ? 'mr-2 rounded-r' : ''}`}
+            className={`z-10 self-start h-[22px] text-xs max-md:text-[10px] bg-secondary border p-0.5 px-1 truncate ${startsHere ? 'ml-2 rounded-l' : ''} ${endsHere ? 'mr-2 rounded-r' : ''}`}
             style={{ gridColumn: `${first + 1} / ${last + 2}`, gridRow: row + 1, marginTop: DAY_NUMBER_HEIGHT + lane * LANE_HEIGHT }}
           >
             {event.name}

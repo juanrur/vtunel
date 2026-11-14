@@ -22,9 +22,9 @@ export default function HoursCol () {
     return hours
   }
 
-  return <ul className='tabular-nums text-right pr-4 -translate-y-2'>
+  return <ul className='tabular-nums text-right pr-4 max-md:pr-1 -translate-y-2'>
     {getHours(minutesPerDivision).map(v =>
-      <li className="text-zinc-500 font-semibold text-sm" style={{ height: pixelsPerMinute * minutesPerDivision + 'px' }} key={v}>
+      <li className="text-zinc-500 font-semibold text-sm max-md:text-xs" style={{ height: pixelsPerMinute * minutesPerDivision + 'px' }} key={v}>
         {v}
       </li>
     )}

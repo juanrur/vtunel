@@ -16,9 +16,11 @@ export default function Header () {
         <ChangeWeekButton action={decreaseViewDate} />
         <ChangeWeekButton action={increaseViewDate} rotate />
       </div>
-      <h1 className='font-semibold text-2xl'>{month + ' ' + year}</h1>
+      <h1 className='font-semibold text-lg md:text-2xl'>{month + ' ' + year}</h1>
       <div className='flex items-center gap-2'>
-        <ViewSettings />
+        <div className='hidden md:flex'>
+          <ViewSettings />
+        </div>
         <ChangeView />
       </div>
     </header>

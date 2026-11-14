@@ -1,6 +1,5 @@
-import Calendar from '@ui/calendar/components/calendar'
 import Aside from '@ui/calendar/components/aside'
-import Header from '@ui/calendar/components/header'
+import CalendarWrapper from '@ui/calendar/components/calendar-wrapper'
 
 export default async function Home () {
   return (
@@ -8,10 +7,7 @@ export default async function Home () {
       <div className='max-md:hidden'>
         <Aside />
       </div>
-      <div className='h-full flex flex-col min-h-0'>
-        <Header />
-        <Calendar />
-      </div>
+      <CalendarWrapper />
     </main>
   )
 }

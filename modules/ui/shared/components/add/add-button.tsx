@@ -42,13 +42,13 @@ export default function AddButton ({ expanded }: { expanded: boolean }) {
     <div className='relative'>
       <button
         onClick={handleClick}
-        className={`text-3xl rounded-full text-white p-1 flex justify-center items-center size-10 md:h-10 ${expanded ? 'md:w-full' : ''}`}
+        className={`text-3xl max-md:text-2xl rounded-full text-white p-1 flex justify-center items-center size-10 max-md:size-8 md:h-10 ${expanded ? 'md:w-full' : ''}`}
       >
         {isSelectOpen ? '-' : <PlusIcon />}
       </button>
 
       { isSelectOpen &&
-        <ul className='absolute bottom-full left-1/2 z-50 mb-2 flex flex-col whitespace-nowrap bg-secondary [&_button]:border-none border rounded *:p-2 *:border'>
+        <ul className='absolute bottom-full left-1/2 z-50 mb-2 max-md:bottom-auto max-md:top-full max-md:left-auto max-md:right-0 max-md:mb-0 max-md:mt-2 flex flex-col whitespace-nowrap bg-secondary [&_button]:border-none border rounded *:p-2 *:border'>
           <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Event)}>Add Event</button></li>
           <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Task)}>Add Task</button></li>
           <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Template)}>Add Template</button></li>
