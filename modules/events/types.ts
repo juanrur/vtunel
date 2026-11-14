@@ -1,6 +1,7 @@
 export interface Event {
   startTime: Date
   endTime: Date
+  allDay: boolean
   name: string
   id: string
   userId: string

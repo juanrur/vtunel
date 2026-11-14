@@ -3,21 +3,22 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
-export default function NavLink ({ href, children, className = '', onClick }: { href: string, children: React.ReactNode, className?: string, onClick?: () => void }) {
+export default function NavLink ({ href, children, icon, expanded }: { href: string, children: React.ReactNode, icon: React.ReactNode, expanded: boolean }) {
   const pathname = usePathname()
   const isActive = pathname === href
 
   return (
     <Link
-      onClick={onClick}
       href={href}
       className={`
-        px-4 py-2 rounded-lg font-medium transition-colors text-sm
+        flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition-colors text-sm
+        ${expanded ? 'md:justify-start' : 'md:justify-center'}
         ${isActive ? 'bg-secondary border' : 'hover:bg-secondary'}
-        ${className}
       `}
+      title={expanded ? undefined : String(children)}
     >
-      {children}
+      {icon}
+      <span className={expanded ? '' : 'md:hidden'}>{children}</span>
     </Link>
   )
 }

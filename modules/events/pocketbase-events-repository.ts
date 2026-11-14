@@ -13,6 +13,7 @@ const EventMapper = {
       name: getField(row, 'name', 'title'),
       startTime: convertToLocalTime(getField(row, 'startTime', 'start_time')),
       endTime: convertToLocalTime(getField(row, 'endTime', 'end_time')),
+      allDay: Boolean(getField(row, 'allDay', 'all_day')),
       userId: getField(row, 'user_id', 'user'),
       recurrenceType: getField(row, 'recurrenceType', 'recurrence_type') ?? 'none',
       recurrenceInterval: getField(row, 'recurrenceInterval', 'recurrence_interval') ?? 1,
@@ -28,6 +29,7 @@ const EventMapper = {
     if (event.name !== undefined) row.name = event.name
     if (event.startTime !== undefined) row.start_time = event.startTime.toISOString()
     if (event.endTime !== undefined) row.end_time = event.endTime.toISOString()
+    if (event.allDay !== undefined) row.all_day = event.allDay
     if (event.recurrenceType !== undefined) row.recurrence_type = event.recurrenceType
     if (event.recurrenceInterval !== undefined) row.recurrence_interval = event.recurrenceInterval
     if (event.recurrenceDays !== undefined) row.recurrence_days = event.recurrenceDays

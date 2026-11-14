@@ -3,5 +3,6 @@ export type Task = {
   title: string;
   startTime: Date | null;
   endTime: Date | null;
+  allDay: boolean;
   done: boolean;
 }

@@ -10,6 +10,7 @@ const TaskMapper = {
       title: r.title,
       startTime: r.start_time ?? r.startTime ? convertToLocalTime(r.start_time ?? r.startTime) : null,
       endTime: r.end_time ?? r.endTime ? convertToLocalTime(r.end_time ?? r.endTime) : null,
+      allDay: Boolean(r.all_day ?? r.allDay),
       done: r.done
     }
   },
@@ -21,6 +22,7 @@ const TaskMapper = {
     if (task.done !== undefined) row.done = task.done
     if (task.startTime !== undefined) row.start_time = task.startTime?.toISOString() ?? null
     if (task.endTime !== undefined) row.end_time = task.endTime?.toISOString() ?? null
+    if (task.allDay !== undefined) row.all_day = task.allDay
     return row
   }
 }

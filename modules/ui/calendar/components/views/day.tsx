@@ -9,13 +9,30 @@ import { updateDroppedItem } from '@ui/calendar/utils'
 import { useTasksStore } from '@tasks/store'
 import { Task as TaskType } from '@tasks/types'
 import Task from '../task'
+import { occursOnDay } from '@shared/utils'
 
-export default function Day ({ items, dayIndex }: { items: (EventType | TaskType)[], dayIndex?: number }) {
+// `date` is needed to know which part of an item of several days falls inside this day
+export default function Day ({ items, dayIndex, date }: { items: (EventType | TaskType)[], dayIndex?: number, date: Date }) {
   const { pixelsPerMinute, minutesPerDivision } = useSettingsStore()
   const { viewDate } = useViewStore()
-  const { changeEventStartTime, insertEvent } = useEventsStore()
+  const { events, changeEventStartTime, insertEvent, updateEvent } = useEventsStore()
   const { templates } = useTemplatesStore()
-  const { changeTaskStartTime } = useTasksStore()
+  const { tasks, changeTaskStartTime, updateTask } = useTasksStore()
+
+  // Needed for items of several days: only the part inside this day is drawn,
+  // e.g. 22:00 → 02:00 is drawn 22:00 → 00:00 on the first day and 00:00 → 02:00 on the second one.
+  // All-day items are not drawn here, they go in the "All day" band above the hours
+  const dayStart = new Date(date)
+  dayStart.setHours(0, 0, 0, 0)
+  const nextDayStart = new Date(dayStart)
+  nextDayStart.setDate(nextDayStart.getDate() + 1)
+  const segments = items
+    .filter(item => !item.allDay && occursOnDay(item, date))
+    .map(item => ({
+      item,
+      start: item.startTime! < dayStart ? dayStart : item.startTime!,
+      end: item.endTime! > nextDayStart ? nextDayStart : item.endTime!
+    }))
 
   const handleDrop = (event: any) => {
     event.target = event.target.closest('li')
@@ -54,6 +71,18 @@ export default function Day ({ items, dayIndex }: { items: (EventType | TaskType
     const newDate = new Date(Date.UTC(viewDate.getFullYear(), viewDate.getMonth(), newDay, Number(hour), Number(minutes)))
     newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
 
+    // Needed because moving an all-day item to an hour would keep it all-day but starting at that hour.
+    // It becomes a normal 1h item instead
+    const droppedAllDayItem = type === 'event'
+      ? events.find(item => item.id === id && item.allDay)
+      : type === 'task' ? tasks.find(item => item.id === id && item.allDay) : undefined
+    if (droppedAllDayItem) {
+      const newRange = { allDay: false, startTime: newDate, endTime: new Date(newDate.getTime() + 60 * 60 * 1000) }
+      if (type === 'event') updateEvent(id, newRange)
+      else updateTask(id, newRange)
+      return
+    }
+
     updateDroppedItem({
       type,
       id,
@@ -78,19 +107,17 @@ export default function Day ({ items, dayIndex }: { items: (EventType | TaskType
       // make a list of 24 hours with x divisions each
       Array.from({ length: 24 * (60 / minutesPerDivision) }).map((_, idx) => {
         // find all events that start at this hour
-        const matchingItems = items?.filter((item) => {
-          if (!item.startTime || !item.endTime) return false
-          return idx === (item.startTime.getHours() * (60 / minutesPerDivision)) + Math.floor(item.startTime.getMinutes() / 60 * (60 / minutesPerDivision))
+        const matchingItems = segments.filter(({ start }) => {
+          return idx === (start.getHours() * (60 / minutesPerDivision)) + Math.floor(start.getMinutes() / 60 * (60 / minutesPerDivision))
         })
 
         // sort events by start time and then by duration
-        const sortedMatchingItems = matchingItems?.sort((a, b) => {
-          if (!a.startTime || !a.endTime || !b.startTime || !b.endTime) return 0
-          const startDiff = a.startTime.getTime() - b.startTime.getTime()
+        const sortedMatchingItems = matchingItems.sort((a, b) => {
+          const startDiff = a.start.getTime() - b.start.getTime()
           if (startDiff !== 0) return startDiff
 
-          const durationA = a.endTime.getTime() - a.startTime.getTime()
-          const durationB = b.endTime.getTime() - b.startTime.getTime()
+          const durationA = a.end.getTime() - a.start.getTime()
+          const durationB = b.end.getTime() - b.start.getTime()
 
           return durationB - durationA
         })
@@ -104,7 +131,7 @@ export default function Day ({ items, dayIndex }: { items: (EventType | TaskType
           style={{ height: pixelsPerMinute * minutesPerDivision }}
           key={idx}>
 
-          {sortedMatchingItems?.map((item, idx) => {
+          {sortedMatchingItems.map(({ item, start, end }, idx) => {
             const isATask = 'done' in item
             if (!item.startTime || !item.endTime) return null
             return (
@@ -113,16 +140,16 @@ export default function Day ({ items, dayIndex }: { items: (EventType | TaskType
                   isATask &&
                   <Task
                   task={item}
-                  height={pixelsPerMinute * ((item.endTime.getTime() - item.startTime.getTime()) / 1000 / 60)}
-                  margin={pixelsPerMinute * (item.startTime.getMinutes() % minutesPerDivision)} />
+                  height={pixelsPerMinute * ((end.getTime() - start.getTime()) / 1000 / 60)}
+                  margin={pixelsPerMinute * (start.getMinutes() % minutesPerDivision)} />
                 }
                 {
                   !isATask &&
                   <Event
                     name={item.name}
                     id={item.id}
-                    height={pixelsPerMinute * ((item.endTime.getTime() - item.startTime.getTime()) / 1000 / 60)}
-                    margin={pixelsPerMinute * (item.startTime.getMinutes() % minutesPerDivision)}
+                    height={pixelsPerMinute * ((end.getTime() - start.getTime()) / 1000 / 60)}
+                    margin={pixelsPerMinute * (start.getMinutes() % minutesPerDivision)}
                     startTime={item.startTime}
                     endTime={item.endTime}
                   />
