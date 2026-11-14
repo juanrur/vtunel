@@ -46,7 +46,7 @@ export default function Calendar () {
       <div>
         <h2 className='text-end px-4 h-[60px] grid pt-3'>Hours</h2>
         {/* Same height as the "All day" band (all-day.tsx) so the hours stay aligned with the grid */}
-        <p className='text-end px-4 h-[52px] text-xs text-zinc-500 border-b border-primary pt-1'>All day</p>
+        <p className='text-end px-4 h-[52px] text-xs text-zinc-500 pt-1'>All day</p>
         <HoursCol />
       </div>
     }
