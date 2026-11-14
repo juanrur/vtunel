@@ -27,7 +27,7 @@ PocketBase local URL is set in `.env` as `POCKETBASE_URL=http://localhost:8090`.
   - `modules/templates/` — templates repository + store
   - `modules/ui/` — React components
   - `modules/shared/` — PocketBase client, repository interface, utilities
-- `db/` — PocketBase migrations, schema, and Dockerfile
+- `db/` — PocketBase migrations and Dockerfile
 
 State pattern: Zustand stores are the single source of truth for UI state. They call PocketBase repositories, mutate local state optimistically or immediately, then persist to DB.
 
@@ -54,7 +54,7 @@ State pattern: Zustand stores are the single source of truth for UI state. They 
 
 ## PocketBase / backend
 - `db/Dockerfile` downloads PocketBase v0.39.6 and applies migrations from `db/pb_migrations/`.
-- `db/pb_schema.json` is the schema dump and is the source of truth for collections.
+- `db/pb_migrations/` is the source of truth for collections.
 - Migrations include OAuth setup (`1784000000_configure_oauth.js`) and collections for users, events, tasks, and templates.
 - To run the whole stack: `docker-compose up --build` (app + db).
 - Production variant: `docker-compose -f docker-compose.prod.yml up --build` (no host port exposed for db).
@@ -83,7 +83,7 @@ State pattern: Zustand stores are the single source of truth for UI state. They 
 2. Add a PocketBase repository in `modules/<domain>/pocketbase-<domain>-repository.ts` implementing `CrudRepository<T>`.
 3. Add a Zustand store in `modules/<domain>/store.ts`.
 4. Add UI under `modules/ui/<feature>/`.
-5. Add a `pb_migrations` migration or update `db/pb_schema.json` to reflect the collection.
+5. Add a `pb_migrations` migration to create or change the collection.
 
 ## Agent permissions
 The following actions require explicit confirmation from the user before proceeding:
@@ -98,7 +98,6 @@ Always ask first. Do not run these silently.
 - `next.config.mjs` — rewrites / standalone output
 - `middleware.ts` — auth routing
 - `tsconfig.json` — path aliases
-- `db/pb_schema.json` — PocketBase schema
 - `db/Dockerfile` — backend image build
 - `docker-compose.yml` — full local stack
 - `README.md` — high-level product description (but backend stack is wrong)
