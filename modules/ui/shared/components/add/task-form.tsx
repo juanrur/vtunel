@@ -84,7 +84,7 @@ export default function TaskForm ({ task, close, onSubmit, onDelete }: { task?: 
           allDay={task?.allDay ?? false}
         />
       )}
-      <button type='submit' className='bg-secondary text-white rounded px-4 py-2 border'>Save</button>
+      <button type='submit' className='bg-secondary text-white rounded px-4 py-2 border dark:bg-indigo-900 dark:border-indigo-700 dark:hover:bg-indigo-800 font-medium'>Save</button>
     </form>
   )
 }

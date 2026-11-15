@@ -15,7 +15,7 @@ export default function Routine ({ occurrence, height, margin }: { occurrence: R
   return (
     <article
       onClick={() => dialogRef.current?.showModal()}
-      className='bg-indigo-950 dark:bg-indigo-950/80 dark:hover:bg-indigo-950 transition-colors w-3/4 inline-flex gap-1 overflow-hidden py-1 px-1.5 rounded-r absolute border-2 border-l-indigo-400 border-[var(--background-color)] cursor-pointer'
+      className='bg-indigo-950 dark:bg-indigo-950/80 dark:hover:bg-indigo-950 transition-colors w-3/4 inline-flex gap-1 overflow-hidden py-1 px-1.5 rounded-r-md absolute border-2 border-l-indigo-400 border-[var(--background-color)] cursor-pointer'
       style={{ height: height + 'px', marginTop: margin + 'px' }}
     >
       <RepeatIcon className='size-3.5 shrink-0 mt-1 opacity-70' />

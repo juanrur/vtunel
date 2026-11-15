@@ -8,7 +8,7 @@ export default function CloseButton ({ close }: CloseButtonProps) {
   return (
     <button
       type='button'
-      className='text-white rounded-full size-10 border-2'
+      className='text-white rounded-full size-10 border'
       onClick={event => {
         event.stopPropagation()
         event.preventDefault()

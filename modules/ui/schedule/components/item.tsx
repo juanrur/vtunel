@@ -57,7 +57,7 @@ export default function Item ({ item }: ItemProps) {
     >
       <TimeLabel time={item.startTime} />
 
-      <article className='p-4 border border-primary min-h-[82px] rounded-xl shadow bg-secondary flex flex-col justify-center relative'>
+      <article className='p-4 border border-primary min-h-[82px] rounded-xl shadow bg-secondary dark:shadow-black/30 dark:group-hover:border-zinc-600 transition-colors flex flex-col justify-center relative'>
         <div>
           <header className='flex items-center gap-2'>
             {isTask && (

@@ -14,7 +14,7 @@ export default function NavLink ({ href, children, icon, expanded, onClick }: { 
       className={`
         flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition-colors text-sm
         ${expanded ? 'md:justify-start' : 'md:justify-center'}
-        ${isActive ? 'bg-secondary border' : 'hover:bg-secondary'}
+        ${isActive ? 'bg-secondary border dark:text-white' : 'hover:bg-secondary dark:text-zinc-400 dark:hover:text-zinc-100'}
       `}
       title={expanded ? undefined : String(children)}
     >

@@ -128,7 +128,7 @@ export default function Day ({ items, dayIndex, date }: { items: CalendarItem[],
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className='border-b first:border-t border-primary'
+          className='border-b first:border-t border-primary dark:border-white/[0.06]'
           style={{ height: pixelsPerMinute * minutesPerDivision }}
           key={idx}>
 

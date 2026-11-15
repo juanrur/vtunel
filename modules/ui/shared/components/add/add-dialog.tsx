@@ -39,7 +39,7 @@ const AddDialog = forwardRef<HTMLDialogElement, AddDialogProps>(
         onClick={event => event.stopPropagation()}
         onDoubleClick={event => event.stopPropagation()}
         onDragStart={event => event.stopPropagation()}
-        className='bg-primary border-2 rounded-lg p-4 shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 relative overflow-visible'
+        className='bg-primary border rounded-xl p-5 shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 relative overflow-visible'
         ref={ref}
       >
         <h2 className='text-2xl font-bold mb-4 text-white capitalize'>{children}</h2>

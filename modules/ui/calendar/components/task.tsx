@@ -22,7 +22,7 @@ export default function Task ({ task, height, margin }: { task: TaskType, height
 
   return (
     <article draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} onClick={event => dialogRef.current?.showModal() }
-    className='bg-zinc-600 dark:bg-zinc-700/80 dark:hover:bg-zinc-700 transition-colors cursor-pointer w-3/4 inline-flex gap-1 overflow-hidden py-1 px-1.5 rounded-r absolute border-2 border-[var(--background-color)]'
+    className='bg-zinc-600 dark:bg-zinc-700/80 dark:hover:bg-zinc-700 transition-colors cursor-pointer w-3/4 inline-flex gap-1 overflow-hidden py-1 px-1.5 rounded-r-md absolute border-2 border-[var(--background-color)]'
     style={{ height: height + 'px', marginTop: margin + 'px' }}
     >
       <label

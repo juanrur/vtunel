@@ -17,7 +17,7 @@ export default async function RootLayout ({
 }>) {
   return (
     <html lang="en">
-    <body className={`${inter.className} h-svh`}>{children}</body>
+    <body className={`${inter.className} h-svh antialiased`}>{children}</body>
     </html>
   )
 }
