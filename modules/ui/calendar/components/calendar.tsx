@@ -10,6 +10,9 @@ import Month from './views/month'
 import { useTasksStore } from '@tasks/store'
 import AllDay from '@ui/calendar/components/all-day'
 import { occursOnDay } from '@shared/utils'
+import { useRoutinesStore } from '@routines/store'
+import { getRoutineOccurrences } from '@routines/utils'
+import { getWeekStartEndDates } from '@/utils'
 
 const Views = {
   day: 'day',
@@ -21,6 +24,11 @@ export default function Calendar () {
   const { viewDate, view, setView } = useViewStore()
   const { events } = useEventsStore()
   const { tasks } = useTasksStore()
+  const { routines, getAllRoutines } = useRoutinesStore()
+
+  useEffect(() => {
+    getAllRoutines()
+  }, [getAllRoutines])
 
   // The week and month views don't fit on a phone, so it starts on the day view
   useEffect(() => {
@@ -46,6 +54,15 @@ export default function Calendar () {
     [events, tasks, viewDate]
   )
 
+  // Routines are stored once, so their occurrences are built for the days on screen
+  const routineOccurrences = useMemo(() => {
+    if (view === Views.week) {
+      const { startOfWeek, endOfWeek } = getWeekStartEndDates(viewDate)
+      return getRoutineOccurrences(routines, startOfWeek, endOfWeek)
+    }
+    return getRoutineOccurrences(routines, viewDate, viewDate).filter(occurrence => occursOnDay(occurrence, viewDate))
+  }, [routines, view, viewDate])
+
   return <main className={`${RemoveScrollbar.remove} flex-1 min-h-0 overflow-auto grid ${view === Views.day || view === Views.week ? 'grid-cols-[50px,1fr] md:grid-cols-[70px,1fr]' : ''} max-md:pb-24`}>
     {view !== Views.month &&
       <div>
@@ -56,7 +73,7 @@ export default function Calendar () {
       </div>
     }
     {view === Views.week &&
-      <Week items={[...events, ...tasks]} />
+      <Week items={[...events, ...tasks]} routineOccurrences={routineOccurrences} />
     }
     {view === Views.day &&
       <div className='flex flex-col'>
@@ -65,7 +82,7 @@ export default function Calendar () {
           <p>{viewDate.getDate()}</p>
         </header>
         <AllDay days={[viewDate]} items={thisDayEvents} />
-        <Day items={thisDayEvents} date={viewDate}></Day>
+        <Day items={[...thisDayEvents, ...routineOccurrences]} date={viewDate}></Day>
       </div>
     }
     {view === 'month' &&

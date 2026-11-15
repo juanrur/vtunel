@@ -6,8 +6,10 @@ import { useViewStore } from '../../store'
 import { Task } from '@tasks/types'
 import AllDay from '@ui/calendar/components/all-day'
 import { occursOnDay } from '@shared/utils'
+import type { RoutineOccurrence } from '@routines/types'
 
-export default function Week ({ items }: { items: (Event | Task)[] }) {
+// Routine occurrences come apart from the items because they never go in the "All day" band
+export default function Week ({ items, routineOccurrences }: { items: (Event | Task)[], routineOccurrences: RoutineOccurrence[] }) {
   const {
     viewDate
   } = useViewStore()
@@ -21,7 +23,7 @@ export default function Week ({ items }: { items: (Event | Task)[] }) {
     date.setDate(date.getDate() + idx)
     return date
   })
-  const weekItems : WeekType = weekDates.map(date => items.filter(item => occursOnDay(item, date)))
+  const weekItems : WeekType = weekDates.map(date => [...items, ...routineOccurrences].filter(item => occursOnDay(item, date)))
 
   const weekdays = [
     'Monday',

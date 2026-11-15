@@ -8,11 +8,14 @@ import { Task } from '@tasks/types'
 import { Event } from '@events/types'
 import { useTemplatesStore } from '@templates/store'
 import { Template } from '@templates/types'
+import { useRoutinesStore } from '@routines/store'
+import type { Routine } from '@routines/types'
 
 export enum DialogType {
   Task = 'task',
   Event = 'event',
-  Template = 'template'
+  Template = 'template',
+  Routine = 'routine'
 }
 
 export default function AddButton ({ expanded }: { expanded: boolean }) {
@@ -52,6 +55,7 @@ export default function AddButton ({ expanded }: { expanded: boolean }) {
           <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Event)}>Add Event</button></li>
           <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Task)}>Add Task</button></li>
           <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Template)}>Add Template</button></li>
+          <li className='hover:bg-primary *:hover:bg-primary *:transition-none transition-all'><button onClick={() => handleOptionClick(DialogType.Routine)}>Add Routine</button></li>
         </ul>
       }
       <AddDialog
@@ -63,6 +67,8 @@ export default function AddButton ({ expanded }: { expanded: boolean }) {
             useTasksStore.getState().createTask(newItem as Omit<Task, 'id'>)
           } else if (type === DialogType.Template) {
             useTemplatesStore.getState().createTemplate(newItem as Omit<Template, 'id'>)
+          } else if (type === DialogType.Routine) {
+            useRoutinesStore.getState().createRoutine(newItem as Omit<Routine, 'id'>)
           }
         }}
         type={type!}>

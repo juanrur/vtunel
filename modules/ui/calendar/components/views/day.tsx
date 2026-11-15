@@ -2,17 +2,18 @@
 import Event from '@ui/calendar/components/event'
 import { useEventsStore } from '@events/store'
 import { useSettingsStore } from '@ui/calendar/settings/store'
-import type { Event as EventType } from '@events/types'
 import { useViewStore } from '../../store'
 import { useTemplatesStore } from 'modules/templates/store'
 import { updateDroppedItem } from '@ui/calendar/utils'
 import { useTasksStore } from '@tasks/store'
-import { Task as TaskType } from '@tasks/types'
 import Task from '../task'
 import { occursOnDay } from '@shared/utils'
+import type { CalendarItem } from '@ui/calendar/types'
+import { isRoutineOccurrence } from '@routines/utils'
+import Routine from '../routine'
 
 // `date` is needed to know which part of an item of several days falls inside this day
-export default function Day ({ items, dayIndex, date }: { items: (EventType | TaskType)[], dayIndex?: number, date: Date }) {
+export default function Day ({ items, dayIndex, date }: { items: CalendarItem[], dayIndex?: number, date: Date }) {
   const { pixelsPerMinute, minutesPerDivision } = useSettingsStore()
   const { viewDate } = useViewStore()
   const { events, changeEventStartTime, insertEvent, updateEvent } = useEventsStore()
@@ -133,23 +134,30 @@ export default function Day ({ items, dayIndex, date }: { items: (EventType | Ta
 
           {sortedMatchingItems.map(({ item, start, end }, idx) => {
             const isATask = 'done' in item
+            const isARoutine = isRoutineOccurrence(item)
             if (!item.startTime || !item.endTime) return null
+            const height = pixelsPerMinute * ((end.getTime() - start.getTime()) / 1000 / 60)
+            const margin = pixelsPerMinute * (start.getMinutes() % minutesPerDivision)
             return (
               <div key={item.id} style={{ '--idx': idx, zIndex: idx } as React.CSSProperties} className={`relative ml-[calc(var(--idx)*60px)] max-md:ml-[calc(var(--idx)*30px)] ${idx > 0 ? 'w-[60%] max-md:w-[70%]' : 'max-md:w-[95%]'}`}>
+                {
+                  isARoutine &&
+                  <Routine occurrence={item} height={height} margin={margin} />
+                }
                 {
                   isATask &&
                   <Task
                   task={item}
-                  height={pixelsPerMinute * ((end.getTime() - start.getTime()) / 1000 / 60)}
-                  margin={pixelsPerMinute * (start.getMinutes() % minutesPerDivision)} />
+                  height={height}
+                  margin={margin} />
                 }
                 {
-                  !isATask &&
+                  !isATask && !isARoutine &&
                   <Event
                     name={item.name}
                     id={item.id}
-                    height={pixelsPerMinute * ((end.getTime() - start.getTime()) / 1000 / 60)}
-                    margin={pixelsPerMinute * (start.getMinutes() % minutesPerDivision)}
+                    height={height}
+                    margin={margin}
                     startTime={item.startTime}
                     endTime={item.endTime}
                   />

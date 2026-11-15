@@ -8,6 +8,7 @@ import SingOutButton from '@ui/shared/components/auth/sing-out-button'
 import CalendarIcon from '@icons/calendar'
 import ScheduleIcon from '@icons/schedule'
 import TasksIcon from '@icons/tasks'
+import RepeatIcon from '@icons/repeat'
 import ChevronIcon from '@icons/chevron'
 
 export default function Nav () {
@@ -41,6 +42,7 @@ export default function Nav () {
         <NavLink href='/' expanded={expanded} icon={<CalendarIcon />}>Calendar</NavLink>
         <NavLink href='/schedule' expanded={expanded} icon={<ScheduleIcon />}>Schedule</NavLink>
         <NavLink href='/tasks' expanded={expanded} icon={<TasksIcon />}>Tasks</NavLink>
+        <NavLink href='/routines' expanded={expanded} icon={<RepeatIcon />}>Routines</NavLink>
       </div>
       <div className='flex items-center gap-3 md:mt-auto md:flex-col md:items-stretch'>
         <AddButton expanded={expanded} />
@@ -64,6 +66,7 @@ export default function Nav () {
       <NavLink href='/' expanded icon={<CalendarIcon />} onClick={closeDrawer}>Calendar</NavLink>
       <NavLink href='/schedule' expanded icon={<ScheduleIcon />} onClick={closeDrawer}>Schedule</NavLink>
       <NavLink href='/tasks' expanded icon={<TasksIcon />} onClick={closeDrawer}>Tasks</NavLink>
+      <NavLink href='/routines' expanded icon={<RepeatIcon />} onClick={closeDrawer}>Routines</NavLink>
       <SingOutButton expanded />
     </Drawer>
     </>

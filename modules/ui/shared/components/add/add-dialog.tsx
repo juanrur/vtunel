@@ -5,13 +5,17 @@ import { Task } from '@tasks/types'
 import { Template } from 'modules/templates/types'
 import TemplateForm from '@ui/shared/components/add/template-form'
 import TaskForm from './task-form'
+import RoutineForm from './routine-form'
 import { DialogType } from './add-button'
+import type { Routine } from '@routines/types'
+
+export type AddDialogData = Omit<Task, 'id'> | Omit<Event, 'id'> | Omit<Template, 'id'> | Omit<Routine, 'id'>
 
 interface AddDialogProps {
   children: React.ReactNode
-  item?: Task | Event | Template
+  item?: Task | Event | Template | Routine
   type: DialogType
-  onSubmit: (data: Omit<Task, 'id'> | Omit<Event, 'id'> | Omit<Template, 'id'>) => void
+  onSubmit: (data: AddDialogData) => void
   onDelete?: () => void
 }
 
@@ -50,6 +54,17 @@ const AddDialog = forwardRef<HTMLDialogElement, AddDialogProps>(
             onSubmit={onSubmit}
             onDelete={onDelete}
             template={item as Template}
+          />
+        }
+        {
+          type === DialogType.Routine &&
+          <RoutineForm
+            // Needed so the form fields reset when the same dialog is opened for another routine
+            key={item?.id ?? 'new'}
+            close={closeDialog}
+            onSubmit={onSubmit}
+            onDelete={onDelete}
+            routine={item as Routine}
           />
         }
       </dialog>

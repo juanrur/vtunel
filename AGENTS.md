@@ -34,7 +34,7 @@ State pattern: Zustand stores are the single source of truth for UI state. They 
 ## Key conventions
 - Path aliases in `tsconfig.json`:
   - `@/*` → `app/*`
-  - `@events/*`, `@tasks/*`, `@templates/*`, `@ui/*`, `@shared/*`, `@icons/*` → `modules/*`
+  - `@events/*`, `@tasks/*`, `@templates/*`, `@routines/*`, `@ui/*`, `@shared/*`, `@icons/*` → `modules/*`
 - ESLint extends `standard` (semicolons are not required, camelCase enforced, etc.). `pocketbase-events-repository.ts` disables `camelcase` for DB field mapping.
 - The project uses **space-before-function-paren** style and no semicolons (standard JS style).
 - All entity repositories implement `CrudRepository<T>` from `modules/shared/domain/crud-repository.ts`.
