@@ -29,7 +29,7 @@ export default function ItemList ({ items }: { items: (Event | Task)[] }) {
     {items.map((item) => {
       const isATask = 'done' in item
       return (
-          <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', (isATask ? 'task:' : 'event:') + item.id)} onDragEnd={event => event.preventDefault()} className='border rounded-lg flex p-3 bg-secondary items-center gap-4 border-primary' key={item.id} onClick={() => showEditDialog(item.id)}>
+          <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', (isATask ? 'task:' : 'event:') + item.id)} onDragEnd={event => event.preventDefault()} className='border rounded-lg flex p-3 bg-secondary items-center gap-4 border-primary dark:hover:border-zinc-600 dark:hover:shadow-lg dark:hover:shadow-black/30 transition-all cursor-pointer' key={item.id} onClick={() => showEditDialog(item.id)}>
 
           <AddDialog
             key={item.id + (item.startTime?.getTime() ?? '') + (item.endTime?.getTime() ?? '')}

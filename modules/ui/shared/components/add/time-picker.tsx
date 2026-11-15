@@ -170,7 +170,7 @@ export default function TimePicker ({
       />
       <input type='hidden' name={name} value={value} />
       {isOpen && (
-        <ul ref={listRef} className='absolute top-full left-0 z-[100] max-h-40 overflow-y-auto bg-white border rounded shadow-lg w-full mt-1'>
+        <ul ref={listRef} className='absolute top-full left-0 z-[100] max-h-40 overflow-y-auto bg-white dark:bg-[var(--background-secondary)] border rounded shadow-lg dark:shadow-black/40 w-full mt-1'>
           {validTimes.map((time) => {
             const isSelected = time === value
             const isNearest = time === nearestTime
@@ -182,8 +182,8 @@ export default function TimePicker ({
                   isSelected
                     ? 'bg-secondary text-white'
                     : isNearest
-                      ? 'bg-gray-200 text-black'
-                      : 'text-black hover:bg-gray-100'
+                      ? 'bg-gray-200 text-black dark:bg-indigo-500/30 dark:text-white'
+                      : 'text-black hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-white/5'
                 }`}
                 onMouseDown={(event) => {
                   event.preventDefault()

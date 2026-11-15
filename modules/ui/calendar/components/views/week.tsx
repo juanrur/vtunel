@@ -69,7 +69,7 @@ export default function Week ({ items, routineOccurrences }: { items: (Event | T
               weekDayNumbers[idx] === today.getDate() &&
               viewDate.getMonth() === today.getMonth() &&
               viewDate.getFullYear() === today.getFullYear()
-                ? 'rounded-full bg-secondary flex flex-col mx-auto px-4 max-md:px-1'
+                ? 'rounded-full bg-secondary dark:ring-1 dark:ring-indigo-400/50 flex flex-col mx-auto px-4 max-md:px-1'
                 : ''
 
             return (

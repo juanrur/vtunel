@@ -34,7 +34,7 @@ function Item ({ item, style }: { item: Event | Task, style: React.CSSProperties
 
   return (
     <li
-      className={`text-xs bg-zinc-600 rounded px-1 truncate cursor-pointer ${isTask && item.done ? 'line-through opacity-50' : ''}`}
+      className={`text-xs bg-zinc-600 dark:bg-zinc-700/80 dark:hover:bg-zinc-700 transition-colors rounded px-1 truncate cursor-pointer ${isTask && item.done ? 'line-through opacity-50' : ''}`}
       onClick={() => dialogRef.current?.showModal()}
       style={style}
     >

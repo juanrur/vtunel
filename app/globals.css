@@ -18,10 +18,61 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
+    color-scheme: dark;
+    --foreground-rgb: 236, 235, 240;
     --background-color: #18171c;
     --background-secondary: #242328;
-    --border-color: #494949;
+    --border-color: #3a393f;
+    --accent: #818cf8;
+    --accent-soft: rgba(129, 140, 248, 0.35);
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+  }
+
+  /* Scrollbars discretas */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #3a393f transparent;
+  }
+
+  /* Campos de formulario: el borde negro desaparecía sobre el fondo oscuro */
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    /* Gana a los text-black / bg-white de los componentes, pensados para el modo claro */
+    color: rgb(var(--foreground-rgb));
+    background-color: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  input:not([type='checkbox']):not([type='radio']):hover,
+  select:hover,
+  textarea:hover {
+    border-color: #55545b;
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  /* Diálogos: sombra más profunda y fondo difuminado */
+  dialog {
+    border-color: var(--border-color);
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  dialog::backdrop {
+    background: rgba(8, 8, 12, 0.6);
+    backdrop-filter: blur(3px);
   }
 }
 
@@ -59,11 +110,19 @@ input {
     border-color: var(--border-color);
   }
   button {
-    transition: background-color 100ms ease;
-    border: 2px solid var(--border-color);
+    transition: background-color 100ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    border: 1px solid var(--border-color);
   }
 
   button:hover {
     background-color: var(--background-secondary);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  @layer base {
+    button:hover {
+      border-color: #55545b;
+    }
   }
 }
