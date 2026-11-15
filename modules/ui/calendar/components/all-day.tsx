@@ -39,20 +39,17 @@ function Item ({ item, style }: { item: Event | Task, style: React.CSSProperties
       style={style}
     >
       <span className={`block truncate ${isTask && item.done ? 'line-through opacity-50' : ''}`}>
-      {isTask ? item.title : item.name}
+        {isTask ? item.title : item.name}
       </span>
-
-      <div className='absolute text-base cursor-auto' onClick={event => event.stopPropagation()}>
-        <AddDialog
-          ref={dialogRef}
-          type={isTask ? DialogType.Task : DialogType.Event}
-          item={item}
-          onSubmit={handleSubmit}
-          onDelete={handleDelete}
-        >
-          Edit {isTask ? 'Task' : 'Event'}
-        </AddDialog>
-      </div>
+      <AddDialog
+        ref={dialogRef}
+        type={isTask ? DialogType.Task : DialogType.Event}
+        item={item}
+        onSubmit={handleSubmit}
+        onDelete={handleDelete}
+      >
+        Edit {isTask ? 'Task' : 'Event'}
+      </AddDialog>
     </li>
   )
 }

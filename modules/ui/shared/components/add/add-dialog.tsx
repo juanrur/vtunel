@@ -24,8 +24,13 @@ const AddDialog = forwardRef<HTMLDialogElement, AddDialogProps>(
     const closeDialog = () => (ref as React.RefObject<HTMLDialogElement>)?.current?.close()
 
     return (
+      // The dialog is usually rendered inside the item that opens it, so:
+      // - cursor-auto / text-base: it would inherit the cursor and font size of that item
+      // - stopPropagation: its clicks would reach that item's onClick / onDoubleClick
       <dialog
-        className='bg-primary border-2 rounded-lg p-4 shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 relative overflow-visible'
+        onClick={event => event.stopPropagation()}
+        onDoubleClick={event => event.stopPropagation()}
+        className='cursor-auto text-base bg-primary border-2 rounded-lg p-4 shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 relative overflow-visible'
         ref={ref}
       >
         <h2 className='text-2xl font-bold mb-4 text-white capitalize'>{children}</h2>
