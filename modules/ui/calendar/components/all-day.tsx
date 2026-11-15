@@ -34,12 +34,15 @@ function Item ({ item, style }: { item: Event | Task, style: React.CSSProperties
 
   return (
     <li
-      className={`text-xs bg-zinc-600 dark:bg-zinc-700/80 dark:hover:bg-zinc-700 transition-colors rounded px-1 truncate cursor-pointer ${isTask && item.done ? 'line-through opacity-50' : ''}`}
+      className='text-xs bg-zinc-600 dark:bg-zinc-700/80 dark:hover:bg-zinc-700 transition-colors rounded px-1 cursor-pointer min-w-0'
       onClick={() => dialogRef.current?.showModal()}
       style={style}
     >
+      <span className={`block truncate ${isTask && item.done ? 'line-through opacity-50' : ''}`}>
       {isTask ? item.title : item.name}
-      <div className='absolute text-base'>
+      </span>
+
+      <div className='absolute text-base cursor-auto' onClick={event => event.stopPropagation()}>
         <AddDialog
           ref={dialogRef}
           type={isTask ? DialogType.Task : DialogType.Event}
