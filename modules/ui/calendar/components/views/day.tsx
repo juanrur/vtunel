@@ -10,6 +10,7 @@ import Task from '../task'
 import { occursOnDay } from '@shared/utils'
 import type { CalendarItem } from '@ui/calendar/types'
 import { isRoutineOccurrence } from '@routines/utils'
+import { useRoutinesStore } from '@routines/store'
 import Routine from '../routine'
 
 // `date` is needed to know which part of an item of several days falls inside this day
@@ -19,6 +20,7 @@ export default function Day ({ items, dayIndex, date }: { items: CalendarItem[],
   const { events, changeEventStartTime, insertEvent, updateEvent } = useEventsStore()
   const { templates } = useTemplatesStore()
   const { tasks, changeTaskStartTime, updateTask } = useTasksStore()
+  const { changeRoutineStartTime } = useRoutinesStore()
 
   // Needed for items of several days: only the part inside this day is drawn,
   // e.g. 22:00 → 02:00 is drawn 22:00 → 00:00 on the first day and 00:00 → 02:00 on the second one.
@@ -39,7 +41,7 @@ export default function Day ({ items, dayIndex, date }: { items: CalendarItem[],
     event.target = event.target.closest('li')
     event.preventDefault()
     const data = event.dataTransfer.getData('text/plain')
-    const [type, id] = data.split(':')
+    const [type, id, occurrenceDay] = data.split(':')
 
     function getHours (splitPerMinutes: number) {
       const hours = []
@@ -71,6 +73,11 @@ export default function Day ({ items, dayIndex, date }: { items: CalendarItem[],
 
     const newDate = new Date(Date.UTC(viewDate.getFullYear(), viewDate.getMonth(), newDay, Number(hour), Number(minutes)))
     newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
+
+    if (type === 'routine') {
+      changeRoutineStartTime(newDate, id, new Date(occurrenceDay))
+      return
+    }
 
     // Needed because moving an all-day item to an hour would keep it all-day but starting at that hour.
     // It becomes a normal 1h item instead
