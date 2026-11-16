@@ -32,8 +32,14 @@ function Item ({ item, style }: { item: Event | Task, style: React.CSSProperties
     else deleteEvent(item.id)
   }
 
+  const handleDragStart = (event: any) => {
+    event.dataTransfer?.setData('text/plain', (isTask ? 'task:' : 'event:') + item.id)
+  }
+
   return (
     <li
+      draggable
+      onDragStart={handleDragStart}
       className='text-xs bg-zinc-600 dark:bg-zinc-700/80 dark:hover:bg-zinc-700 transition-colors rounded px-1 cursor-pointer min-w-0'
       onClick={() => dialogRef.current?.showModal()}
       style={style}
@@ -55,6 +61,37 @@ function Item ({ item, style }: { item: Event | Task, style: React.CSSProperties
 }
 
 export default function AllDay ({ days, items }: { days: Date[], items: (Event | Task)[] }) {
+  const { updateEvent, changeEventStartTime } = useEventsStore()
+  const { updateTask, changeTaskStartTime } = useTasksStore()
+
+  const handleDrop = (event: any) => {
+    event.preventDefault()
+    const [type, id] = event.dataTransfer.getData('text/plain').split(':')
+    // Routines and templates aren't in `items`: they can't be all-day
+    const item = items.find(item => item.id === id)
+    if (!item) return
+
+    // The day is found by the pointer position because the drop can land on a bar, not on a column
+    const { left, width } = event.currentTarget.getBoundingClientRect()
+    const column = Math.min(Math.floor((event.clientX - left) / (width / days.length)), days.length - 1)
+    const dayStart = new Date(days[column])
+    dayStart.setHours(0, 0, 0, 0)
+
+    // An all-day item only changes its day, keeping how many days it lasts
+    if (item.allDay) {
+      if (type === 'task') changeTaskStartTime(dayStart, id)
+      else changeEventStartTime(dayStart, id)
+      return
+    }
+
+    // An item with hours becomes all-day on the day it's dropped on
+    const dayEnd = new Date(dayStart)
+    dayEnd.setHours(23, 59, 59, 999)
+    const newRange = { allDay: true, startTime: dayStart, endTime: dayEnd }
+    if (type === 'task') updateTask(id, newRange)
+    else updateEvent(id, newRange)
+  }
+
   // Needed so an item of several days is drawn as one continuous bar instead of one box per day:
   // each item spans from the first to the last column it covers (grid-column), and goes in the first
   // row (lane) where it doesn't overlap another bar
@@ -73,6 +110,8 @@ export default function AllDay ({ days, items }: { days: Date[], items: (Event |
 
   return (
     <ul
+      onDrop={handleDrop}
+      onDragOver={event => event.preventDefault()}
       className='grid h-[52px] gap-y-0.5 p-0.5 border-b border-primary shrink-0 overflow-y-auto content-start'
       style={{ gridTemplateColumns: `repeat(${days.length}, minmax(0, 1fr))` }}
     >
