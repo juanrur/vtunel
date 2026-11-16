@@ -1,7 +1,5 @@
-import SignInButtons from '@ui/shared/components/auth/sing-in-buttons'
+import Login from '@ui/login/components/login'
 
-export default function Login () {
-  return <section className='flex items-center justify-center h-screen gap-4'>
-    <SignInButtons />
-  </section>
+export default function LoginPage () {
+  return <Login />
 }
