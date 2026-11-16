@@ -12,8 +12,15 @@ export default function Routine ({ occurrence, height, margin }: { occurrence: R
   const dialogRef = useRef<HTMLDialogElement>(null)
   const routine = routines.find(r => r.id === occurrence.routineId)
 
+  // The occurrence id carries its day (routineId:day), needed to know which weekday is being moved
+  const handleDragStart = (event: any) => {
+    event.dataTransfer?.setData('text/plain', 'routine:' + occurrence.id)
+  }
+
   return (
     <article
+      draggable
+      onDragStart={handleDragStart}
       onClick={() => dialogRef.current?.showModal()}
       className='bg-indigo-950 dark:bg-indigo-950/80 dark:hover:bg-indigo-950 transition-colors w-3/4 inline-flex gap-1 overflow-hidden py-1 px-1.5 rounded-r-md absolute border-2 border-l-indigo-400 border-[var(--background-color)] cursor-pointer'
       style={{ height: height + 'px', marginTop: margin + 'px' }}
