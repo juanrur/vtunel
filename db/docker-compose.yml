@@ -1,0 +1,19 @@
+# Only the database, for development: the app runs on the host with `npm run dev`.
+# Start it from this folder with `docker compose up --build`.
+# PocketBase listens on 8090 so the POCKETBASE_URL of .env (http://localhost:8090) works as it is.
+services:
+  db:
+    build: .
+    ports:
+      - "8090:8080"
+    volumes:
+      # Local folder (gitignored) so the data survives `docker compose down`
+      - ./pb_data:/pb/pb_data
+      # Mounted instead of using the copy of the image, so a new or changed migration
+      # applies by restarting (`docker compose restart db`), without rebuilding
+      - ./pb_migrations:/pb/pb_migrations
+      # Same for the hooks (the public API /api/v1): PocketBase reloads them when a file changes
+      - ./pb_hooks:/pb/pb_hooks
+    env_file:
+      - ../.env
+    restart: unless-stopped

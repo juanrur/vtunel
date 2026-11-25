@@ -55,6 +55,7 @@ State pattern: Zustand stores are the single source of truth for UI state. They 
 ## PocketBase / backend
 - `db/Dockerfile` downloads PocketBase v0.39.6 and applies migrations from `db/pb_migrations/`.
 - `db/pb_migrations/` is the source of truth for collections.
+- `db/pb_hooks/` holds the public API `/api/v1/{events,tasks,templates,routines}` (auth with the `X-API-Key` header) and `/api/v1/keys` (key management, with the user session). The keys live in the `api_keys` collection (superuser only) and are managed from `/developers`. Docs: `docs/api.md`.
 - Migrations include OAuth setup (`1784000000_configure_oauth.js`) and collections for users, events, tasks, and templates.
 - To run the whole stack: `docker-compose up --build` (app + db).
 - Production variant: `docker-compose -f docker-compose.prod.yml up --build` (no host port exposed for db).

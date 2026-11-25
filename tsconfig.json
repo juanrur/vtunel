@@ -27,7 +27,8 @@
       "@ui/*": ["./modules/ui/*"],
       "@shared/*": ["./modules/shared/*"],
       "@templates/*": ["./modules/templates/*"],
-      "@routines/*": ["./modules/routines/*"]
+      "@routines/*": ["./modules/routines/*"],
+      "@api-keys/*": ["./modules/api-keys/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
