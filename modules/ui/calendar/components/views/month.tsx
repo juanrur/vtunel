@@ -102,18 +102,20 @@ export default function Month ({ events }: {events: EventType[]}) {
       {
         dayNumbers.map(({ day, month }, idx) => {
           // occursOnDay instead of comparing the start day, so events of several days show on every day they cover
+          const isCurrentMonth = month === viewDate.getMonth()
+          const isSelectedDay = new Date(viewDate.getFullYear(), month, day).toDateString() === viewDate.toDateString()
           const matchingItems = events.filter(event => !isMultiDay(event) && occursOnDay(event, new Date(viewDate.getFullYear(), month, day)))
           return (
             <li key={idx}
               // Explicit position so the bars, placed over the cells with the same grid, don't move them
               style={{ gridColumn: idx % 7 + 1, gridRow: Math.floor(idx / 7) + 1 }}
-              className="border border-primary flex items-center justify-start pt-2 pb-4 max-md:pb-1 overflow-hidden flex-col"
+              className={`border border-primary flex items-center justify-start pt-2 pb-4 max-md:pb-1 overflow-hidden flex-col ${isCurrentMonth ? '' : 'dark:bg-black/30'}`}
               onDrop={handleDrop}
               onDragOver={(event) => event.preventDefault()}
               onDragLeave={(event) => event.preventDefault()}
               data-day={day} data-month={month}
             >
-              <h1 className='pb-1 max-md:text-xs max-md:leading-6'>{day}</h1>
+              <h1 className={`mb-1 max-md:text-xs max-md:leading-6 min-w-8 max-md:min-w-6 text-center rounded-full ${isSelectedDay ? 'bg-secondary font-semibold dark:ring-1 dark:ring-indigo-400/50' : ''} ${isCurrentMonth ? '' : 'dark:text-zinc-600'}`}>{day}</h1>
               <ul className='flex-1 w-full flex-grow-0 px-2 space-y-2 max-md:px-0.5 max-md:space-y-0.5' style={{ paddingTop: rowLanes[Math.floor(idx / 7)] * LANE_HEIGHT }}>
                 {
                   matchingItems.map(({ id, name }) => <li draggable onDragStart={(event) => event.dataTransfer?.setData('text/plain', 'event:' + id)} key={id} className="text-xs bg-secondary border p-0.5 px-1 rounded max-md:text-[10px] max-md:truncate max-md:[&:nth-child(n+3)]:hidden">
