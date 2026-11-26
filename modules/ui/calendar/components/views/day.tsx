@@ -12,6 +12,7 @@ import type { CalendarItem } from '@ui/calendar/types'
 import { isRoutineOccurrence } from '@routines/utils'
 import { useRoutinesStore } from '@routines/store'
 import Routine from '../routine'
+import Now from '../now'
 
 // `date` is needed to know which part of an item of several days falls inside this day
 export default function Day ({ items, dayIndex, date }: { items: CalendarItem[], dayIndex?: number, date: Date }) {
@@ -110,7 +111,10 @@ export default function Day ({ items, dayIndex, date }: { items: CalendarItem[],
     event.preventDefault()
   }
 
-  return <ul className='border-r first:border-l border-primary'>
+  const isToday = dayStart.toDateString() === new Date().toDateString()
+
+  return <ul className='relative border-r first:border-l border-primary'>
+    {isToday && <Now />}
     {
       // make a list of 24 hours with x divisions each
       Array.from({ length: 24 * (60 / minutesPerDivision) }).map((_, idx) => {
